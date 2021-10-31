@@ -1,0 +1,51 @@
+{
+  "name": "zoomist",
+  "version": "1.0.0",
+  "description": "A JavaScript library for zooming image.",
+  "main": "dist/zoomist.min.js",
+  "style": "dist/zoomist.min.css",
+  "module": "src/index.js",
+  "directories": {
+    "docs": "docs"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cotton123236/zoomist.git"
+  },
+  "keywords": [
+    "image",
+    "move",
+    "darg",
+    "scale",
+    "zoom",
+    "zoomist",
+    "zoomer",
+    "zooming",
+    "javascript",
+    "front-end"
+  ],
+  "author": "Wilson Wu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cotton123236/zoomist/issues"
+  },
+  "homepage": "https://github.com/cotton123236/zoomist#readme",
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.0",
+    "autoprefixer": "^10.4.0",
+    "change-case": "^4.1.2",
+    "create-banner": "^2.0.0",
+    "node-sass": "^6.0.1",
+    "postcss": "^8.3.11",
+    "rollup": "^2.47.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sass": "^1.2.9",
+    "rollup-plugin-scss": "^3.0.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}

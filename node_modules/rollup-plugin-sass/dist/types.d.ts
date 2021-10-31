@@ -1,0 +1,81 @@
+import { types } from 'sass';
+export interface IdAndContentObject {
+    id?: string;
+    content?: string;
+}
+export declare type RollupPluginSassOutputFn = (styles: string, styleNodes: IdAndContentObject[]) => any;
+export declare type RollupPluginSassProcessorFn<T = string | {
+    css: string;
+}> = (styles: string, id: string) => Promise<T> | T;
+export interface RollupPluginSassOptions {
+    exclude?: string | string[];
+    include?: string | string[];
+    insert?: boolean;
+    options?: SassOptions;
+    processor?: RollupPluginSassProcessorFn;
+    output?: boolean | string | RollupPluginSassOutputFn;
+    runtime?: any;
+}
+export declare type SassImporterResult = null | {
+    file?: string;
+    contents?: string;
+} | Error;
+export declare type SassDoneFn<T extends SassImporterResult = SassImporterResult> = (result: T) => void | T;
+export declare type SassImporter<T extends SassImporterResult = SassImporterResult> = (url: string, prev: string, done: SassDoneFn<T>) => void | T;
+export interface SassFunctionsObject {
+    [index: string]: types.Color | types.Number | types.String | types.List | types.Map | types.Null;
+}
+export interface SassOptions {
+    data?: string;
+    file?: string;
+    functions?: SassFunctionsObject;
+    importer?: SassImporter | SassImporter[];
+    includePaths?: string[];
+    indentType?: 'space' | 'tab';
+    indentWidth?: number;
+    indentedSyntax?: boolean;
+    linefeed?: string;
+    omitSourceMapUrl?: boolean;
+    outFile?: string;
+    outputStyle?: 'compressed' | 'expanded';
+    sourceMapContents?: boolean;
+    sourceMapEmbed?: boolean;
+    sourceMapRoot?: string;
+    sourceMap?: boolean | string | undefined;
+}
+export interface RollupAssetInfo {
+    fileName: string;
+    name?: string;
+    source: string | Uint8Array;
+    type: 'asset';
+}
+export interface RollupChunkInfo {
+    code: string;
+    dynamicImports: string[];
+    exports: string[];
+    facadeModuleId: string | null;
+    fileName: string;
+    implicitlyLoadedBefore: string[];
+    imports: string[];
+    importedBindings: {
+        [imported: string]: string[];
+    };
+    isDynamicEntry: boolean;
+    isEntry: boolean;
+    isImplicitEntry: boolean;
+    map: {
+        [index: string]: string;
+    } | null;
+    modules: {
+        [id: string]: {
+            renderedExports: string[];
+            removedExports: string[];
+            renderedLength: number;
+            originalLength: number;
+            code: string | null;
+        };
+    };
+    name: string;
+    referencedFiles: string[];
+    type: 'chunk';
+}
