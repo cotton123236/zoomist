@@ -17,19 +17,40 @@
       align-items: center;
       min-height: 100vh;
     }
-    .container {
+    .img-container {
       max-width: 1000px;
     }
     img {
       display: block;
       max-width: 100%;
     }
+    .div-container {
+      width: 100%;
+      max-width: 1000px;
+    }
+    .div-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 45%;
+    }
+    .image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- <div data-zoomist-src="./image/cats.jpg"></div> -->
+  <!-- <div class="img-container">
     <img class="" src="./image/cats.jpg" data-zoomist-src="./image/cats.jpg" alt="">
+  </div> -->
+
+  <div class="div-container">
+    <div class="div-wrapper">
+      <div class="image" data-zoomist-src="./image/cats.jpg" alt=""></div>
+    </div>
   </div>
 </body>
 </html>

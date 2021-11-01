@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-10-31T08:29:56.249Z
+ * Date: 2021-11-01T14:43:51.273Z
  */
 
 (function (global, factory) {
@@ -90,6 +90,27 @@
     }
   };
 
+  var bindEvents = (zoomist => {
+    const {
+      parent,
+      data
+    } = zoomist;
+    const {
+      container,
+      wrapper
+    } = data;
+    window.addEventListener('resize', function () {
+      const containerWidth = parent.offsetWidth * container.widthPercentage;
+      const containerHeight = containerWidth / container.ratio;
+      container.width = containerWidth;
+      container.height = containerHeight;
+      setStyle(zoomist.container, {
+        width: containerWidth,
+        height: containerHeight
+      });
+    });
+  });
+
   class Zoomist {
     /**
      * 
@@ -101,13 +122,15 @@
       if (!isElementExist(element)) throw new Error('This element is not exist.');
       this.element = getElement(element);
       this.options = Object.assign({}, DEFAULT_OPTIONS, isPlainObject(options) && options);
+      this.parent = this.element.parentNode;
       this.init();
     }
 
     init() {
       const {
         element,
-        options
+        options,
+        parent
       } = this;
       if (element[NAME]) return;
       element[NAME] = this;
@@ -119,15 +142,16 @@
     create(url) {
       if (!url) return;
       const {
-        element
+        element,
+        parent
       } = this;
       const {
         offsetWidth,
         offsetHeight
       } = element;
       this.url = url;
-      this.style = {};
-      this.style.container = {
+      this.data = {};
+      this.data.container = {
         width: offsetWidth,
         height: offsetHeight,
         ratio: offsetWidth / offsetHeight,
@@ -135,7 +159,8 @@
         top: getStyle(element, 'top'),
         left: getStyle(element, 'left'),
         right: getStyle(element, 'right'),
-        bottom: getStyle(element, 'bottom')
+        bottom: getStyle(element, 'bottom'),
+        widthPercentage: offsetWidth / parent.offsetWidth
       };
 
       if (isImg(element)) {
@@ -154,7 +179,7 @@
     mount() {
       if (this.mounted) return;
       const {
-        style
+        data
       } = this;
       const {
         position,
@@ -164,11 +189,34 @@
         bottom,
         width,
         height
-      } = style.container;
+      } = data.container;
       const template = document.createElement('div');
       template.innerHTML = TEMPLATE(this);
       template.classList.add(CLASS_CONTAINER);
-      setStyle(template, {
+      this.container = template;
+      this.wrapper = template.querySelector(`.${CLASS_WRAPPER}`);
+      this.image = template.querySelector(`.${CLASS_IMAGE}`);
+      const {
+        naturalWidth,
+        naturalHeight
+      } = this.image;
+      this.data.image = {
+        naturalWidth,
+        naturalHeight,
+        ratio: naturalWidth / naturalHeight
+      }; // get base side, if 0 base on width, if 1 base on height
+
+      const baseSide = data.container.ratio > data.image.ratio ? 0 : 1;
+      const wrapperWidth = !baseSide ? data.container.width : height * data.image.ratio;
+      const wrapperHeight = baseSide ? data.container.height : width / data.image.ratio;
+      this.data.wrapper = {
+        width: wrapperWidth,
+        height: wrapperHeight,
+        ratio: data.image.ratio,
+        left: !baseSide ? 0 : -(wrapperWidth - width) / 2,
+        top: baseSide ? 0 : -(wrapperHeight - height) / 2
+      };
+      setStyle(this.container, {
         position,
         top,
         left,
@@ -177,9 +225,13 @@
         width,
         height
       });
-      this.container = template;
-      this.wrapper = template.querySelector(`.${CLASS_WRAPPER}`);
-      this.image = template.querySelector(`.${CLASS_IMAGE}`);
+      setStyle(this.wrapper, {
+        width: data.wrapper.width,
+        height: data.wrapper.height,
+        left: data.wrapper.left,
+        top: data.wrapper.top
+      });
+      bindEvents(this);
       this.mounted = true;
       this.render();
     }
@@ -187,7 +239,8 @@
     render() {
       const {
         element,
-        container
+        container,
+        parent
       } = this;
       element.classList.add(CLASS_HIDE);
       element.parentNode.insertBefore(container, element.nextSibling);

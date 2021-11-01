@@ -1,5 +1,6 @@
 import DEFAULT_OPTIONS from './core/options'
 import TEMPLATE from './core/template'
+import bindEvents from './core/events'
 import {
   isObject,
   isPlainObject,
@@ -32,12 +33,13 @@ class Zoomist {
 
     this.element = getElement(element)
     this.options = Object.assign({}, DEFAULT_OPTIONS, isPlainObject(options) && options)
+    this.parent = this.element.parentNode
     
     this.init()
   }
 
   init() {
-    const { element, options } = this
+    const { element, options, parent } = this
 
     if (element[NAME]) return;
 
@@ -52,12 +54,12 @@ class Zoomist {
   create(url) {
     if (!url) return;
 
-    const { element } = this
+    const { element, parent } = this
     const { offsetWidth, offsetHeight } = element
     
     this.url = url
-    this.style = {}
-    this.style.container = {
+    this.data = {}
+    this.data.container = {
       width: offsetWidth,
       height: offsetHeight,
       ratio: offsetWidth / offsetHeight,
@@ -65,7 +67,8 @@ class Zoomist {
       top: getStyle(element, 'top'),
       left: getStyle(element, 'left'),
       right: getStyle(element, 'right'),
-      bottom: getStyle(element, 'bottom')
+      bottom: getStyle(element, 'bottom'),
+      widthPercentage: offsetWidth / parent.offsetWidth
     }
     
     if(isImg(element)) {
@@ -84,14 +87,39 @@ class Zoomist {
   mount() {
     if (this.mounted) return;
 
-    const { style } = this
-    const { position, top, left, right, bottom, width, height } = style.container
+    const { data } = this
+    const { position, top, left, right, bottom, width, height } = data.container
 
     const template = document.createElement('div')
     template.innerHTML = TEMPLATE(this)
     template.classList.add(CLASS_CONTAINER)
 
-    setStyle(template, {
+    this.container = template
+    this.wrapper = template.querySelector(`.${CLASS_WRAPPER}`)
+    this.image = template.querySelector(`.${CLASS_IMAGE}`)
+
+    const { naturalWidth, naturalHeight } = this.image
+
+    this.data.image = {
+      naturalWidth,
+      naturalHeight,
+      ratio: naturalWidth / naturalHeight
+    }
+
+    // get base side, if 0 base on width, if 1 base on height
+    const baseSide = data.container.ratio > data.image.ratio ? 0 : 1
+    const wrapperWidth = !baseSide ? data.container.width : height * data.image.ratio
+    const wrapperHeight = baseSide ? data.container.height : width / data.image.ratio
+
+    this.data.wrapper = {
+      width: wrapperWidth,
+      height: wrapperHeight,
+      ratio: data.image.ratio,
+      left: !baseSide ? 0 : - (wrapperWidth - width) / 2,
+      top: baseSide ? 0 : - (wrapperHeight - height) / 2
+    }
+
+    setStyle(this.container, {
       position,
       top,
       left,
@@ -101,9 +129,14 @@ class Zoomist {
       height
     })
 
-    this.container = template
-    this.wrapper = template.querySelector(`.${CLASS_WRAPPER}`)
-    this.image = template.querySelector(`.${CLASS_IMAGE}`)
+    setStyle(this.wrapper, {
+      width: data.wrapper.width,
+      height: data.wrapper.height,
+      left: data.wrapper.left,
+      top: data.wrapper.top,
+    })
+
+    bindEvents(this)
 
     this.mounted = true
     
@@ -111,7 +144,7 @@ class Zoomist {
   }
 
   render() {
-    const {element, container} = this
+    const {element, container, parent} = this
 
     element.classList.add(CLASS_HIDE)
     element.parentNode.insertBefore(container, element.nextSibling)
