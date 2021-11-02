@@ -1,6 +1,7 @@
 const zoomist = new Zoomist('[data-zoomist-src]', {
+  fill: 'cover'
   // src: 'data-test-src'
-  // mousewheel: true
+  // wheel: true
 })
 
 console.log(zoomist)

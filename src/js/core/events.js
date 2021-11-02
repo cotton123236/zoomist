@@ -3,19 +3,30 @@ import {
 } from './../shared/utils'
 
 export default (zoomist) => {
-  const { parent, data } = zoomist
-  const { container, wrapper } = data
+  const { element, data } = zoomist
+  const { container, image } = data
   
   window.addEventListener('resize', function() {
-    const containerWidth = parent.offsetWidth * container.widthPercentage
-    const containerHeight = containerWidth / container.ratio
+    const containerWidthRatio = element.offsetWidth / container.width
+    const containerHeightRatio = element.offsetHeight / container.height
+    const imageWidth = image.width * containerWidthRatio
+    const imageHeight = image.height * containerHeightRatio
+    const imageLeft = image.left * containerWidthRatio
+    const imageTop = image.top * containerHeightRatio
 
-    container.width = containerWidth
-    container.height = containerHeight
+    container.width = element.offsetWidth
+    container.height = element.offsetHeight
 
-    setStyle(zoomist.container, {
-      width: containerWidth,
-      height: containerHeight
+    image.width = imageWidth
+    image.height = imageHeight
+    image.left = imageLeft
+    image.top = imageTop
+
+    setStyle(zoomist.image, {
+      width: imageWidth,
+      height: imageHeight,
+      left: imageLeft,
+      top: imageTop,
     })
   })
 }

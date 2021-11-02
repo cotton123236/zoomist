@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-01T14:43:51.273Z
+ * Date: 2021-11-02T14:21:20.260Z
  */
 
 (function (global, factory) {
@@ -15,27 +15,25 @@
 })(this, (function () { 'use strict';
 
   var DEFAULT_OPTIONS = {
+    fill: 'cover',
     src: 'data-zoomist-src',
-    mousewheel: true
+    wheel: true
   };
 
   const NAME = 'zoomist';
   const CLASS_CONTAINER = `${NAME}-container`;
-  const CLASS_WRAPPER = `${NAME}-wrapper`;
   const CLASS_IMAGE = `${NAME}-image`;
-  const CLASS_HIDE = `${NAME}-hide`;
 
-  var TEMPLATE = (zoomist => {
-    const {
-      url,
-      style
-    } = zoomist;
-    return `
-  <div class="${CLASS_WRAPPER}">
-    <img class="${CLASS_IMAGE}" src="${url}" />
-  </div>
-  `;
-  });
+  var methods = {
+    getContainerData() {
+      return this.data.container;
+    },
+
+    getImageData() {
+      return this.data.image;
+    }
+
+  };
 
   // check value is a object and not null
   const isObject = value => {
@@ -76,14 +74,6 @@
   const getElement = value => {
     return value instanceof HTMLElement ? value : document.querySelector(value);
   }; // check value is img tag or not
-
-  const isImg = value => {
-    return isElementExist(value) && getElement(value).tagName === 'IMG';
-  }; // 
-
-  const getStyle = (element, prop) => {
-    return element[prop] || element.style[prop] || window.getComputedStyle(element).getPropertyValue(prop);
-  };
   const setStyle = (element, obj) => {
     for (const [k, v] of Object.entries(obj)) {
       element.style[k] = isNumber(v) ? `${v}px` : v;
@@ -92,21 +82,31 @@
 
   var bindEvents = (zoomist => {
     const {
-      parent,
+      element,
       data
     } = zoomist;
     const {
       container,
-      wrapper
+      image
     } = data;
     window.addEventListener('resize', function () {
-      const containerWidth = parent.offsetWidth * container.widthPercentage;
-      const containerHeight = containerWidth / container.ratio;
-      container.width = containerWidth;
-      container.height = containerHeight;
-      setStyle(zoomist.container, {
-        width: containerWidth,
-        height: containerHeight
+      const containerWidthRatio = element.offsetWidth / container.width;
+      const containerHeightRatio = element.offsetHeight / container.height;
+      const imageWidth = image.width * containerWidthRatio;
+      const imageHeight = image.height * containerHeightRatio;
+      const imageLeft = image.left * containerWidthRatio;
+      const imageTop = image.top * containerHeightRatio;
+      container.width = element.offsetWidth;
+      container.height = element.offsetHeight;
+      image.width = imageWidth;
+      image.height = imageHeight;
+      image.left = imageLeft;
+      image.top = imageTop;
+      setStyle(zoomist.image, {
+        width: imageWidth,
+        height: imageHeight,
+        left: imageLeft,
+        top: imageTop
       });
     });
   });
@@ -122,15 +122,13 @@
       if (!isElementExist(element)) throw new Error('This element is not exist.');
       this.element = getElement(element);
       this.options = Object.assign({}, DEFAULT_OPTIONS, isPlainObject(options) && options);
-      this.parent = this.element.parentNode;
       this.init();
     }
 
     init() {
       const {
         element,
-        options,
-        parent
+        options
       } = this;
       if (element[NAME]) return;
       element[NAME] = this;
@@ -142,8 +140,7 @@
     create(url) {
       if (!url) return;
       const {
-        element,
-        parent
+        element
       } = this;
       const {
         offsetWidth,
@@ -154,83 +151,57 @@
       this.data.container = {
         width: offsetWidth,
         height: offsetHeight,
-        ratio: offsetWidth / offsetHeight,
-        position: getStyle(element, 'position') === 'static' ? 'relative' : getStyle(element, 'position'),
-        top: getStyle(element, 'top'),
-        left: getStyle(element, 'left'),
-        right: getStyle(element, 'right'),
-        bottom: getStyle(element, 'bottom'),
-        widthPercentage: offsetWidth / parent.offsetWidth
+        ratio: offsetWidth / offsetHeight
       };
-
-      if (isImg(element)) {
-        element.onload = () => {
-          const {
-            offsetWidth,
-            offsetHeight
-          } = element;
-          this.style.container.width = offsetWidth;
-          this.style.container.height = offsetHeight;
-          this.mount();
-        };
-      } else this.mount();
+      this.mount();
     }
 
     mount() {
       if (this.mounted) return;
       const {
-        data
+        url,
+        data,
+        options
       } = this;
       const {
-        position,
-        top,
-        left,
-        right,
-        bottom,
-        width,
-        height
-      } = data.container;
-      const template = document.createElement('div');
-      template.innerHTML = TEMPLATE(this);
-      template.classList.add(CLASS_CONTAINER);
-      this.container = template;
-      this.wrapper = template.querySelector(`.${CLASS_WRAPPER}`);
-      this.image = template.querySelector(`.${CLASS_IMAGE}`);
+        container
+      } = data;
+      const {
+        fill
+      } = options;
+      const image = document.createElement('img');
+      image.classList.add(CLASS_IMAGE);
+      image.src = url;
       const {
         naturalWidth,
         naturalHeight
-      } = this.image;
+      } = image;
+      const imageRatio = naturalWidth / naturalHeight;
+      let baseSide;
+      if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover';
+      if (options.fill === 'cover') baseSide = data.container.ratio === imageRatio ? 'both' : data.container.ratio > imageRatio ? 'width' : 'height';
+      if (options.fill === 'contain') baseSide = data.container.ratio === imageRatio ? 'both' : data.container.ratio > imageRatio ? 'height' : 'width';
+      console.log(options.fill, baseSide);
+      const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? container.width : container.height * imageRatio;
+      const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? container.height : container.width / imageRatio;
+      const imageLeft = (container.width - imageWidth) / 2;
+      const imageTop = (container.height - imageHeight) / 2;
       this.data.image = {
         naturalWidth,
         naturalHeight,
-        ratio: naturalWidth / naturalHeight
-      }; // get base side, if 0 base on width, if 1 base on height
-
-      const baseSide = data.container.ratio > data.image.ratio ? 0 : 1;
-      const wrapperWidth = !baseSide ? data.container.width : height * data.image.ratio;
-      const wrapperHeight = baseSide ? data.container.height : width / data.image.ratio;
-      this.data.wrapper = {
-        width: wrapperWidth,
-        height: wrapperHeight,
-        ratio: data.image.ratio,
-        left: !baseSide ? 0 : -(wrapperWidth - width) / 2,
-        top: baseSide ? 0 : -(wrapperHeight - height) / 2
+        width: imageWidth,
+        height: imageHeight,
+        ratio: imageRatio,
+        left: imageLeft,
+        top: imageTop
       };
-      setStyle(this.container, {
-        position,
-        top,
-        left,
-        right,
-        bottom,
-        width,
-        height
+      setStyle(image, {
+        width: imageWidth,
+        height: imageHeight,
+        left: imageLeft,
+        top: imageTop
       });
-      setStyle(this.wrapper, {
-        width: data.wrapper.width,
-        height: data.wrapper.height,
-        left: data.wrapper.left,
-        top: data.wrapper.top
-      });
+      this.image = image;
       bindEvents(this);
       this.mounted = true;
       this.render();
@@ -239,14 +210,15 @@
     render() {
       const {
         element,
-        container,
-        parent
+        image
       } = this;
-      element.classList.add(CLASS_HIDE);
-      element.parentNode.insertBefore(container, element.nextSibling);
+      element.classList.add(CLASS_CONTAINER);
+      element.append(image);
     }
 
   }
+
+  Object.assign(Zoomist.prototype, methods);
 
   return Zoomist;
 

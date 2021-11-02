@@ -31,25 +31,25 @@
     .div-wrapper {
       position: relative;
       width: 100%;
-      padding-bottom: 45%;
+      padding-bottom: 70%;
+      background-color: rgb(255, 134, 134);
     }
-    .image {
+    div[data-zoomist-src] {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
     }
+    div[data-zoomist-src] img {
+      opacity: .7;
+    }
   </style>
 </head>
 <body>
-  <!-- <div class="img-container">
-    <img class="" src="./image/cats.jpg" data-zoomist-src="./image/cats.jpg" alt="">
-  </div> -->
-
   <div class="div-container">
     <div class="div-wrapper">
-      <div class="image" data-zoomist-src="./image/cats.jpg" alt=""></div>
+      <div data-zoomist-src="./image/cats.jpg"></div>
     </div>
   </div>
 </body>

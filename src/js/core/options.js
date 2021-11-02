@@ -1,4 +1,5 @@
 export default {
+  fill: 'cover',
   src: 'data-zoomist-src',
-  mousewheel: true,
+  wheel: true,
 }

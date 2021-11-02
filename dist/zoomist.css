@@ -1,10 +1,9 @@
-.zoomist-hide {
-  display: none !important; }
-
 .zoomist-container {
   overflow: hidden; }
 
-.zoomist-wrapper {
+.zoomist-image {
   position: absolute;
   top: 0;
-  left: 0; }
+  left: 0;
+  max-width: none !important;
+  max-height: none !important; }
