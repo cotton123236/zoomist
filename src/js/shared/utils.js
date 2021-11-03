@@ -1,3 +1,5 @@
+import { IS_TOUCH } from './constants'
+
 // check value is a object and not null
 export const isObject = (value) => {
   return typeof value === 'object' && value !== null;
@@ -14,6 +16,15 @@ export const isPlainObject = (value) => {
   } catch (error) {
     return false
   }
+}
+
+// make a new object from old object
+export const getNewObject = (value) => {
+  const obj = {}
+  for (const [k, v] of Object.entries(value)) {
+    obj[k] = v
+  }
+  return obj
 }
 
 // check value is string and not empty
@@ -41,13 +52,43 @@ export const isImg = (value) => {
   return isElementExist(value) && getElement(value).tagName === 'IMG'
 }
 
-// 
+// get elemant style
 export const getStyle = (element, prop) => {
   return element[prop] || element.style[prop] || window.getComputedStyle(element).getPropertyValue(prop)
 }
 
+// foreach set style
 export const setStyle = (element, obj) => {
   for (const [k, v] of Object.entries(obj)) {
     element.style[k] = isNumber(v) ? `${v}px` : v
   }
 }
+
+// get mouse pageX and pageY
+export const getPointer = (event) => {
+  return {
+    x: !IS_TOUCH ? event.pageX : event.touches[0].pageX,
+    y: !IS_TOUCH ? event.pageY : event.touches[0].pageY,
+    clientX: !IS_TOUCH ? event.clientX : event.touches[0].clientX,
+    clientY: !IS_TOUCH ? event.clientY : event.touches[0].clientY
+  }
+}
+
+// get transformX
+export const getTransformX = (target) => {
+  const transform = getComputedStyle(target).transform
+  let mat = transform.match(/^matrix3d\((.+)\)$/)
+  if (mat) return parseFloat(mat[1].split(', ')[12])
+  mat = transform.match(/^matrix\((.+)\)$/)
+  return mat ? parseFloat(mat[1].split(', ')[4]) : 0
+}
+
+// get transformY
+export const getTransformY = (target) => {
+  const transform = getComputedStyle(target).transform
+  let mat = transform.match(/^matrix3d\((.+)\)$/)
+  if (mat) return parseFloat(mat[1].split(', ')[13])
+  mat = transform.match(/^matrix\((.+)\)$/)
+  return mat ? parseFloat(mat[1].split(', ')[5]) : 0
+}
+

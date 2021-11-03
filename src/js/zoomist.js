@@ -57,7 +57,7 @@ class Zoomist {
     
     this.url = url
     this.data = {}
-    this.data.container = {
+    this.data.containerData = {
       width: offsetWidth,
       height: offsetHeight,
       ratio: offsetWidth / offsetHeight,
@@ -70,7 +70,7 @@ class Zoomist {
     if (this.mounted) return;
 
     const { url, data, options } = this
-    const { container } = data
+    const { containerData } = data
     const { fill } = options
 
     const image = document.createElement('img')
@@ -85,16 +85,16 @@ class Zoomist {
     // get base on width or height
     let baseSide
     if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover'
-    if (options.fill === 'cover') baseSide = data.container.ratio === imageRatio ? 'both' : data.container.ratio > imageRatio ? 'width' : 'height'
-    if (options.fill === 'contain') baseSide = data.container.ratio === imageRatio ? 'both' : data.container.ratio > imageRatio ? 'height' : 'width'
+    if (options.fill === 'cover') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'width' : 'height'
+    if (options.fill === 'contain') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'height' : 'width'
 
     // calculate the image width, height, left, top
-    const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? container.width : container.height * imageRatio
-    const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? container.height : container.width / imageRatio
-    const imageLeft = (container.width - imageWidth) / 2
-    const imageTop = (container.height - imageHeight) / 2
+    const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio
+    const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? containerData.height : containerData.width / imageRatio
+    const imageLeft = (containerData.width - imageWidth) / 2
+    const imageTop = (containerData.height - imageHeight) / 2
 
-    this.data.image = {
+    this.data.imageData = {
       naturalWidth,
       naturalHeight,
       width: imageWidth,

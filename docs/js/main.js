@@ -1,7 +1,8 @@
 const zoomist = new Zoomist('[data-zoomist-src]', {
-  fill: 'cover'
+  fill: 'cover',
   // src: 'data-test-src'
-  // wheel: true
+  // wheelable: true,
+  bounds: true
 })
 
 console.log(zoomist)

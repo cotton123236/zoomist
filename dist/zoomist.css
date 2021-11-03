@@ -6,4 +6,5 @@
   top: 0;
   left: 0;
   max-width: none !important;
-  max-height: none !important; }
+  max-height: none !important;
+  pointer-events: none; }

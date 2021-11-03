@@ -4,6 +4,8 @@ $NAME: zoomist
 //   display: none !important
 
 .#{$NAME}-container
+  // touch-action: none
+  // user-select: none
   overflow: hidden
 
 .#{$NAME}-image
@@ -12,3 +14,6 @@ $NAME: zoomist
   left: 0
   max-width: none !important
   max-height: none !important
+  pointer-events: none
+  // touch-action: none
+  // user-select: none
