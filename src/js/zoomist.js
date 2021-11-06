@@ -1,15 +1,12 @@
 import DEFAULT_OPTIONS from './core/options'
-import TEMPLATE from './core/template'
 import methods from './core/methods'
 import bindEvents from './core/events'
 import {
-  isObject,
   isPlainObject,
   isString,
+  isNumber,
   isElementExist,
   getElement,
-  isImg,
-  getStyle,
   setStyle
 } from './shared/utils'
 import {
@@ -46,12 +43,14 @@ class Zoomist {
     const src = options.src = isString(options.src) ? options.src : DEFAULT_OPTIONS.src
     const url = element.getAttribute(src)
     
+    element.removeAttribute(src)
+    
     this.create(url)
   }
   
   create(url) {
     if (!url) return;
-
+    
     const { element } = this
     const { offsetWidth, offsetHeight } = element
     
@@ -62,67 +61,86 @@ class Zoomist {
       height: offsetHeight,
       ratio: offsetWidth / offsetHeight,
     }
-    
+
     this.mount()
   }
   
   mount() {
     if (this.mounted) return;
 
-    const { url, data, options } = this
+    const { options, data, url } = this
     const { containerData } = data
-    const { fill } = options
+    const { fill, maxRatio } = options
+
+    if (this.image) this.image.remove()
 
     const image = document.createElement('img')
     image.classList.add(CLASS_IMAGE)
     image.src = url
 
-    this.image = image
+    image.onload = () => {
+      this.image = image
+      
+      const { naturalWidth, naturalHeight } = image
+      const imageRatio = naturalWidth / naturalHeight
+  
+      // get base on width or height
+      let baseSide
+      if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover'
+      if (options.fill === 'cover') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'width' : 'height'
+      if (options.fill === 'contain') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'height' : 'width'
+  
+      // calculate the image width, height, left, top
+      const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio
+      const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? containerData.height : containerData.width / imageRatio
+      const imageLeft = (containerData.width - imageWidth) / 2
+      const imageTop = (containerData.height - imageHeight) / 2
 
-    const { naturalWidth, naturalHeight } = image
-    const imageRatio = naturalWidth / naturalHeight
+      this.data.originImageData = {
+        naturalWidth,
+        naturalHeight,
+        width: imageWidth,
+        height: imageHeight,
+        ratio: imageRatio,
+        left: imageLeft,
+        top: imageTop
+      }
+      this.data.imageData = Object.assign({}, this.data.originImageData)
 
-    // get base on width or height
-    let baseSide
-    if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover'
-    if (options.fill === 'cover') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'width' : 'height'
-    if (options.fill === 'contain') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'height' : 'width'
+      // if has maxRatio
+      if (( !isNumber(maxRatio) || maxRatio <= 1 ) && maxRatio !== false) options.maxRatio = false
+      if (options.maxRatio) {
+        const { maxRatio } = options
+        this.data.maxImageData  = {
+          width: imageWidth * maxRatio,
+          height: imageHeight * maxRatio,
+          left: ( containerData.width - imageWidth * maxRatio ) / 2,
+          top: ( containerData.height - imageHeight * maxRatio ) / 2
+        }
+      }
 
-    // calculate the image width, height, left, top
-    const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio
-    const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? containerData.height : containerData.width / imageRatio
-    const imageLeft = (containerData.width - imageWidth) / 2
-    const imageTop = (containerData.height - imageHeight) / 2
+      setStyle(image, {
+        width: imageWidth,
+        height: imageHeight,
+        left: imageLeft,
+        top: imageTop,
+      })
 
-    this.data.imageData = {
-      naturalWidth,
-      naturalHeight,
-      width: imageWidth,
-      height: imageHeight,
-      ratio: imageRatio,
-      left: imageLeft,
-      top: imageTop
+      bindEvents(this)
+  
+      this.mounted = true
+      
+      this.render()
     }
-
-    setStyle(image, {
-      width: imageWidth,
-      height: imageHeight,
-      left: imageLeft,
-      top: imageTop,
-    })
-
-    bindEvents(this)
-
-    this.mounted = true
-    
-    this.render()
   }
 
   render() {
-    const { element, image } = this
+    const { element, image, options } = this
 
     element.classList.add(CLASS_CONTAINER)
     element.append(image)
+
+    // if (options.slider) 
   }
 }
 

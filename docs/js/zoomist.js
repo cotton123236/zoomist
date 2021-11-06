@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-03T15:35:23.529Z
+ * Date: 2021-11-06T10:00:44.282Z
  */
 
 (function (global, factory) {
@@ -19,7 +19,9 @@
     src: 'data-zoomist-src',
     wheelable: true,
     draggable: true,
-    bounds: true
+    bounds: true,
+    zoomRatio: 0.1,
+    maxRatio: false
   };
 
   const NAME = 'zoomist';
@@ -30,6 +32,8 @@
   const EVENT_TOUCH_START = IS_TOUCH ? 'touchstart' : 'mousedown';
   const EVENT_TOUCH_MOVE = IS_TOUCH ? 'touchmove' : 'mousemove';
   const EVENT_TOUCH_END = IS_TOUCH ? 'touchend touchcancel' : 'mouseup';
+  const EVENT_RESIZE = 'resize';
+  const EVENT_WHEEL = 'wheel';
 
   const isObject = value => {
     return typeof value === 'object' && value !== null;
@@ -52,16 +56,18 @@
     } catch (error) {
       return false;
     }
-  }; // make a new object from old object
+  }; // set object key and value
 
-  const getNewObject = value => {
-    const obj = {};
+  const setObject = (obj, value) => {
+    if (!obj) obj = {};
 
     for (const [k, v] of Object.entries(value)) {
       obj[k] = v;
     }
+  }; // make a new object from old object
 
-    return obj;
+  const getNewObject = value => {
+    return Object.assign({}, value);
   }; // check value is string and not empty
 
   const isString = value => {
@@ -110,6 +116,9 @@
     mat = transform.match(/^matrix\((.+)\)$/);
     return mat ? parseFloat(mat[1].split(', ')[5]) : 0;
   };
+  const minmax = (value, min, max) => {
+    return Math.min(Math.max(value, min), max);
+  };
 
   var methods = {
     /**
@@ -135,26 +144,38 @@
     zoom(ratio, pointer) {
       const {
         image,
-        data
+        data,
+        options
       } = this;
+      const {
+        originImageData,
+        maxImageData
+      } = data;
+      const containerData = this.getContainerData();
       const imageData = this.getImageData();
       const imageRect = image.getBoundingClientRect();
-      const newWidth = imageData.width * (ratio + 1);
-      const newHeight = imageData.height * (ratio + 1);
-      const distX = pointer ? (pointer.clientX - imageRect.left) / imageData.width : 0.5;
-      const distY = pointer ? (pointer.clientY - imageRect.top) / imageData.height : 0.5;
-      const newLeft = (imageData.width - newWidth) * distX + imageData.left;
-      const newTop = (imageData.height - newHeight) * distY + imageData.top;
-      data.imageData.width = newWidth;
-      data.imageData.height = newHeight;
-      data.imageData.left = newLeft;
-      data.imageData.top = newTop;
-      setStyle(image, {
+      const calcWidth = imageData.width * (ratio + 1);
+      const calcHeight = imageData.height * (ratio + 1);
+      const isInBounds = options.bounds && calcWidth <= originImageData.width;
+      const isOverMax = options.maxRatio && calcWidth >= maxImageData.width;
+      const newWidth = isInBounds ? originImageData.width : isOverMax ? maxImageData.width : calcWidth;
+      const newHeight = isInBounds ? originImageData.height : isOverMax ? maxImageData.height : calcHeight;
+      const newLeft = isInBounds ? originImageData.left : isOverMax ? maxImageData.left : (containerData.width - calcWidth) / 2;
+      const newTop = isInBounds ? originImageData.top : isOverMax ? maxImageData.top : (containerData.height - calcHeight) / 2;
+      const distanceX = pointer ? (imageData.width / 2 - pointer.clientX + imageRect.left) * ratio + getTransformX(image) : 0;
+      const distanceY = pointer ? (imageData.height / 2 - pointer.clientY + imageRect.top) * ratio + getTransformY(image) : 0;
+      const transformX = options.bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX;
+      const transformY = options.bounds ? minmax(distanceY, newTop, -newTop) : distanceY;
+      const newData = {
         width: newWidth,
         height: newHeight,
         left: newLeft,
         top: newTop
-      }); // console.log(this.getImageData())
+      };
+      setObject(data.imageData, newData);
+      setStyle(image, Object.assign({}, newData, {
+        transform: `translate(${transformX}px, ${transformY}px)`
+      }));
     }
 
   };
@@ -168,31 +189,65 @@
     } = zoomist;
     const {
       containerData,
-      imageData
+      imageData,
+      originImageData,
+      maxImageData
     } = data; // set image size on window resize
 
-    window.addEventListener('resize', function () {
-      const containerWidthRatio = element.offsetWidth / containerData.width;
-      const containerHeightRatio = element.offsetHeight / containerData.height;
-      const imageWidth = imageData.width * containerWidthRatio;
-      const imageHeight = imageData.height * containerHeightRatio;
-      const imageLeft = imageData.left * containerWidthRatio;
-      const imageTop = imageData.top * containerHeightRatio;
-      containerData.width = element.offsetWidth;
-      containerData.height = element.offsetHeight;
-      imageData.width = imageWidth;
-      imageData.height = imageHeight;
-      imageData.left = imageLeft;
-      imageData.top = imageTop;
-      setStyle(zoomist.image, {
+    const resize = () => {
+      const widthRatio = element.offsetWidth / containerData.width;
+      const heightRatio = element.offsetHeight / containerData.height;
+      const originImageWidth = originImageData.width * widthRatio;
+      const originImageHeight = originImageData.height * heightRatio;
+      const originImageLeft = originImageData.left * widthRatio;
+      const originImageTop = originImageData.top * heightRatio;
+      const imageWidth = imageData.width * widthRatio;
+      const imageHeight = imageData.height * heightRatio;
+      const imageLeft = imageData.left * widthRatio;
+      const imageTop = imageData.top * heightRatio;
+      const transformX = getTransformX(image) * widthRatio;
+      const transformY = getTransformY(image) * heightRatio;
+      setObject(containerData, {
+        width: element.offsetWidth,
+        height: element.offsetHeight
+      });
+      setObject(originImageData, {
+        width: originImageWidth,
+        height: originImageHeight,
+        left: originImageLeft,
+        top: originImageTop
+      });
+      setObject(imageData, {
         width: imageWidth,
         height: imageHeight,
         left: imageLeft,
         top: imageTop
       });
-    }); // set image move event
+      setStyle(zoomist.image, {
+        width: imageWidth,
+        height: imageHeight,
+        left: imageLeft,
+        top: imageTop,
+        transform: `translate(${transformX}px, ${transformY}px)`
+      });
 
-    zoomist.isDrag = false;
+      if (maxImageData) {
+        const maxImageWidth = maxImageData.width * widthRatio;
+        const maxImageHeight = maxImageData.height * heightRatio;
+        const maxImageLeft = maxImageData.left * widthRatio;
+        const maxImageTop = maxImageData.top * heightRatio;
+        setObject(maxImageData, {
+          width: maxImageWidth,
+          height: maxImageHeight,
+          left: maxImageLeft,
+          top: maxImageTop
+        });
+      }
+    };
+
+    window.addEventListener(EVENT_RESIZE, resize); // set image drag event
+
+    zoomist.dragging = false;
     zoomist.data.dragData = {
       startX: 0,
       startY: 0,
@@ -204,33 +259,66 @@
       dragData
     } = data;
 
+    const dragstart = e => {
+      if (!options.draggable) return;
+      setObject(dragData, {
+        startX: getPointer(e).x,
+        startY: getPointer(e).y,
+        transX: getTransformX(image),
+        transY: getTransformY(image)
+      });
+      zoomist.dragging = true;
+      document.addEventListener(EVENT_TOUCH_MOVE, dragging);
+      document.addEventListener(EVENT_TOUCH_END, dragend);
+    };
+
     const dragging = e => {
-      if (!zoomist.isDrag) return;
+      if (!zoomist.dragging) return;
       const pageX = getPointer(e).x;
       const pageY = getPointer(e).y;
-      const distanceX = pageX - dragData.startX + dragData.transX;
-      const distanceY = pageY - dragData.startY + dragData.transY;
-      const transformX = options.bounds ? Math.min(Math.max(distanceX, imageData.left), -imageData.left) : distanceX;
-      const transformY = options.bounds ? Math.min(Math.max(distanceY, imageData.top), -imageData.top) : distanceY;
+
+      if (options.bounds) {
+        const minPageX = dragData.startX - (dragData.transX - imageData.left);
+        const maxPageX = dragData.startX - (dragData.transX + imageData.left);
+        const minPageY = dragData.startY - (dragData.transY - imageData.top);
+        const maxPageY = dragData.startY - (dragData.transY + imageData.top);
+        if (pageX < minPageX) dragData.startX += pageX - minPageX;
+        if (pageX > maxPageX) dragData.startX += pageX - maxPageX;
+        if (pageY < minPageY) dragData.startY += pageY - minPageY;
+        if (pageY > maxPageY) dragData.startY += pageY - maxPageY;
+      }
+
+      const transformX = pageX - dragData.startX + dragData.transX;
+      const transformY = pageY - dragData.startY + dragData.transY;
       image.style.transform = `translate(${transformX}px, ${transformY}px)`;
     };
 
     const dragend = () => {
-      zoomist.isDrag = false;
+      zoomist.dragging = false;
       document.removeEventListener(EVENT_TOUCH_MOVE, dragging);
       document.removeEventListener(EVENT_TOUCH_END, dragend);
     };
 
-    element.addEventListener(EVENT_TOUCH_START, function (e) {
-      if (!options.draggable) return;
-      dragData.startX = getPointer(e).x;
-      dragData.startY = getPointer(e).y;
-      dragData.transX = getTransformX(zoomist.image);
-      dragData.transY = getTransformY(zoomist.image);
-      zoomist.isDrag = true;
-      document.addEventListener(EVENT_TOUCH_MOVE, dragging);
-      document.addEventListener(EVENT_TOUCH_END, dragend);
-    });
+    element.addEventListener(EVENT_TOUCH_START, dragstart); // set zomm on mousewheel event
+
+    zoomist.wheeling = false;
+
+    const wheel = e => {
+      const {
+        zoomRatio
+      } = options;
+      if (zoomist.wheeling) return; // prevent wheeling too fast
+
+      zoomist.wheeling = true;
+      setTimeout(() => {
+        zoomist.wheeling = false;
+      }, 30);
+      let delta;
+      if (e.deltaY) delta = e.deltaY > 0 ? -1 : 1;else if (e.wheelDelta) delta = e.wheelDelta / 120;else if (e.detail) delta = e.detail > 0 ? -1 : 1;
+      zoomist.zoom(delta * zoomRatio, getPointer(e));
+    };
+
+    element.addEventListener(EVENT_WHEEL, wheel);
   });
 
   class Zoomist {
@@ -256,6 +344,7 @@
       element[NAME] = this;
       const src = options.src = isString(options.src) ? options.src : DEFAULT_OPTIONS.src;
       const url = element.getAttribute(src);
+      element.removeAttribute(src);
       this.create(url);
     }
 
@@ -281,62 +370,84 @@
     mount() {
       if (this.mounted) return;
       const {
-        url,
+        options,
         data,
-        options
+        url
       } = this;
       const {
         containerData
       } = data;
       const {
-        fill
+        fill,
+        maxRatio
       } = options;
+      if (this.image) this.image.remove();
       const image = document.createElement('img');
       image.classList.add(CLASS_IMAGE);
       image.src = url;
-      this.image = image;
-      const {
-        naturalWidth,
-        naturalHeight
-      } = image;
-      const imageRatio = naturalWidth / naturalHeight; // get base on width or height
 
-      let baseSide;
-      if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover';
-      if (options.fill === 'cover') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'width' : 'height';
-      if (options.fill === 'contain') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'height' : 'width'; // calculate the image width, height, left, top
+      image.onload = () => {
+        this.image = image;
+        const {
+          naturalWidth,
+          naturalHeight
+        } = image;
+        const imageRatio = naturalWidth / naturalHeight; // get base on width or height
 
-      const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio;
-      const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? containerData.height : containerData.width / imageRatio;
-      const imageLeft = (containerData.width - imageWidth) / 2;
-      const imageTop = (containerData.height - imageHeight) / 2;
-      this.data.imageData = {
-        naturalWidth,
-        naturalHeight,
-        width: imageWidth,
-        height: imageHeight,
-        ratio: imageRatio,
-        left: imageLeft,
-        top: imageTop
+        let baseSide;
+        if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover';
+        if (options.fill === 'cover') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'width' : 'height';
+        if (options.fill === 'contain') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'height' : 'width'; // calculate the image width, height, left, top
+
+        const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio;
+        const imageHeight = options.fill === 'none' ? naturalHeight : baseSide === 'both' || baseSide === 'height' ? containerData.height : containerData.width / imageRatio;
+        const imageLeft = (containerData.width - imageWidth) / 2;
+        const imageTop = (containerData.height - imageHeight) / 2;
+        this.data.originImageData = {
+          naturalWidth,
+          naturalHeight,
+          width: imageWidth,
+          height: imageHeight,
+          ratio: imageRatio,
+          left: imageLeft,
+          top: imageTop
+        };
+        this.data.imageData = Object.assign({}, this.data.originImageData); // if has maxRatio
+
+        if ((!isNumber(maxRatio) || maxRatio <= 1) && maxRatio !== false) options.maxRatio = false;
+
+        if (options.maxRatio) {
+          const {
+            maxRatio
+          } = options;
+          this.data.maxImageData = {
+            width: imageWidth * maxRatio,
+            height: imageHeight * maxRatio,
+            left: (containerData.width - imageWidth * maxRatio) / 2,
+            top: (containerData.height - imageHeight * maxRatio) / 2
+          };
+        }
+
+        setStyle(image, {
+          width: imageWidth,
+          height: imageHeight,
+          left: imageLeft,
+          top: imageTop
+        });
+        bindEvents(this);
+        this.mounted = true;
+        this.render();
       };
-      setStyle(image, {
-        width: imageWidth,
-        height: imageHeight,
-        left: imageLeft,
-        top: imageTop
-      });
-      bindEvents(this);
-      this.mounted = true;
-      this.render();
     }
 
     render() {
       const {
         element,
-        image
+        image,
+        options
       } = this;
       element.classList.add(CLASS_CONTAINER);
-      element.append(image);
+      element.append(image); // if (options.slider) 
     }
 
   }

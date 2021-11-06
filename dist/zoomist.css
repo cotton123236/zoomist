@@ -1,4 +1,9 @@
 .zoomist-container {
+  touch-action: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   overflow: hidden; }
 
 .zoomist-image {

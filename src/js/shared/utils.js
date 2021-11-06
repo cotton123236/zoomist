@@ -18,13 +18,17 @@ export const isPlainObject = (value) => {
   }
 }
 
-// make a new object from old object
-export const getNewObject = (value) => {
-  const obj = {}
+// set object key and value
+export const setObject = (obj, value) => {
+  if (!obj) obj = {}
   for (const [k, v] of Object.entries(value)) {
     obj[k] = v
   }
-  return obj
+}
+
+// make a new object from old object
+export const getNewObject = (value) => {
+  return Object.assign({}, value)
 }
 
 // check value is string and not empty
@@ -90,5 +94,9 @@ export const getTransformY = (target) => {
   if (mat) return parseFloat(mat[1].split(', ')[13])
   mat = transform.match(/^matrix\((.+)\)$/)
   return mat ? parseFloat(mat[1].split(', ')[5]) : 0
+}
+
+export const minmax = (value, min, max) => {
+  return Math.min(Math.max(value, min), max)
 }
 
