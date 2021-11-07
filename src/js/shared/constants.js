@@ -1,8 +1,11 @@
 export const NAME = 'zoomist'
 
 export const CLASS_CONTAINER = `${NAME}-container`
+export const CLASS_WRAPPER = `${NAME}-wrapper`
 export const CLASS_IMAGE = `${NAME}-image`
+
 export const CLASS_SLIDER = `${NAME}-slider`
+export const CLASS_SLIDER_MAIN = `${NAME}-slider-main`
 export const CLASS_SLIDER_BAR = `${NAME}-slider-bar`
 export const CLASS_SLIDER_BUTTON = `${NAME}-slider-button`
 

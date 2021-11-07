@@ -16,8 +16,8 @@ import {
 
 
 export default (zoomist) => {
-  const { element, image, options, data } = zoomist
-  const { containerData, imageData, originImageData, maxImageData } = data
+  const { element, wrapper, image, options, data } = zoomist
+  const { containerData, imageData, originImageData } = data
   
   // set image size on window resize
   const resize = () => {
@@ -62,20 +62,6 @@ export default (zoomist) => {
       top: imageTop,
       transform: `translate(${transformX}px, ${transformY}px)`
     })
-
-    if (maxImageData) {
-      const maxImageWidth = maxImageData.width * widthRatio
-      const maxImageHeight = maxImageData.height * heightRatio
-      const maxImageLeft = maxImageData.left * widthRatio
-      const maxImageTop = maxImageData.top * heightRatio
-
-      setObject(maxImageData, {
-        width: maxImageWidth,
-        height: maxImageHeight,
-        left: maxImageLeft,
-        top: maxImageTop
-      })
-    }
   }
   window.addEventListener(EVENT_RESIZE, resize)
 
@@ -95,7 +81,8 @@ export default (zoomist) => {
 
   const dragstart = (e) => {
     if (!options.draggable) return;
-
+    if (e.which !== 1) return;
+    
     setObject(dragData, {
       startX: getPointer(e).x,
       startY: getPointer(e).y,
@@ -134,7 +121,7 @@ export default (zoomist) => {
     document.removeEventListener(EVENT_TOUCH_END, dragend)
   }
 
-  element.addEventListener(EVENT_TOUCH_START, dragstart)
+  wrapper.addEventListener(EVENT_TOUCH_START, dragstart)
 
 
   // set zomm on mousewheel event

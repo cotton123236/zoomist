@@ -1,5 +1,6 @@
 import DEFAULT_OPTIONS from './core/options'
-import methods from './core/methods'
+import METHODS from './core/methods'
+import MODULES from './core/modules'
 import bindEvents from './core/events'
 import {
   isPlainObject,
@@ -12,6 +13,7 @@ import {
 import {
   NAME,
   CLASS_CONTAINER,
+  CLASS_WRAPPER,
   CLASS_IMAGE
 } from './shared/constants'
 
@@ -59,8 +61,9 @@ class Zoomist {
     this.data.containerData = {
       width: offsetWidth,
       height: offsetHeight,
-      ratio: offsetWidth / offsetHeight,
+      aspectRatio: offsetWidth / offsetHeight,
     }
+    this.ratio = 1
 
     this.mount()
   }
@@ -72,13 +75,17 @@ class Zoomist {
     const { containerData } = data
     const { fill, maxRatio } = options
 
-    if (this.image) this.image.remove()
+    if (this.wrapper) this.wrapper.remove()
+
+    const wrapper = document.createElement('div')
+    wrapper.classList.add(CLASS_WRAPPER)
 
     const image = document.createElement('img')
     image.classList.add(CLASS_IMAGE)
     image.src = url
 
     image.onload = () => {
+      this.wrapper = wrapper
       this.image = image
       
       const { naturalWidth, naturalHeight } = image
@@ -87,8 +94,8 @@ class Zoomist {
       // get base on width or height
       let baseSide
       if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover'
-      if (options.fill === 'cover') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'width' : 'height'
-      if (options.fill === 'contain') baseSide = containerData.ratio === imageRatio ? 'both' : containerData.ratio > imageRatio ? 'height' : 'width'
+      if (options.fill === 'cover') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height'
+      if (options.fill === 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'height' : 'width'
   
       // calculate the image width, height, left, top
       const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio
@@ -99,32 +106,23 @@ class Zoomist {
       this.data.originImageData = {
         naturalWidth,
         naturalHeight,
+        aspectRatio: imageRatio,
         width: imageWidth,
         height: imageHeight,
-        ratio: imageRatio,
         left: imageLeft,
         top: imageTop
       }
       this.data.imageData = Object.assign({}, this.data.originImageData)
-
-      // if has maxRatio
-      if (( !isNumber(maxRatio) || maxRatio <= 1 ) && maxRatio !== false) options.maxRatio = false
-      if (options.maxRatio) {
-        const { maxRatio } = options
-        this.data.maxImageData  = {
-          width: imageWidth * maxRatio,
-          height: imageHeight * maxRatio,
-          left: ( containerData.width - imageWidth * maxRatio ) / 2,
-          top: ( containerData.height - imageHeight * maxRatio ) / 2
-        }
-      }
-
+      
       setStyle(image, {
         width: imageWidth,
         height: imageHeight,
         left: imageLeft,
         top: imageTop,
       })
+
+      // if has maxRatio
+      if (( !isNumber(maxRatio) || maxRatio <= 1 ) && maxRatio !== false) options.maxRatio = false
 
       bindEvents(this)
   
@@ -135,15 +133,16 @@ class Zoomist {
   }
 
   render() {
-    const { element, image, options } = this
+    const { element, wrapper, image, options } = this
 
     element.classList.add(CLASS_CONTAINER)
-    element.append(image)
+    wrapper.append(image)
+    element.append(wrapper)
 
-    // if (options.slider) 
+    if (options.slider) this.createSlider()
   }
 }
 
-Object.assign(Zoomist.prototype, methods)
+Object.assign(Zoomist.prototype, METHODS, MODULES)
 
 export default Zoomist
