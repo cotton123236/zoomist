@@ -9,7 +9,8 @@ export default {
 }
 
 export const DEFAULT_SLIDER_OPTIONS = {
-  direction: 'horizontal', // 'vertical'
+  direction: 'horizontal', // 'vertical',
+  maxRatio: 2
 }
 
 export const DEFAULT_ZOOMER_OPTIONS = {

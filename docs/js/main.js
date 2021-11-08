@@ -4,11 +4,12 @@ const zoomist = new Zoomist('[data-zoomist]', {
   draggable: true,
   bounds: true,
   zoomRatio: 0.1,
-  maxRatio: 2,
+  maxRatio: 3,
   wheel: {
     // zoomRatio: 0.1
   },
   slider: {
+    // direction: 'vertical'
     // el: '.custom-slider'
     // zoomRatio: 0.1,
   },

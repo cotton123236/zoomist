@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-07T14:37:30.762Z
+ * Date: 2021-11-08T16:09:34.266Z
  */
 
 (function (global, factory) {
@@ -24,8 +24,9 @@
     wheel: true
   };
   const DEFAULT_SLIDER_OPTIONS = {
-    direction: 'horizontal' // 'vertical'
-
+    direction: 'horizontal',
+    // 'vertical',
+    maxRatio: 2
   };
 
   const NAME = 'zoomist';
@@ -124,7 +125,12 @@
     if (mat) return parseFloat(mat[1].split(', ')[13]);
     mat = transform.match(/^matrix\((.+)\)$/);
     return mat ? parseFloat(mat[1].split(', ')[5]) : 0;
-  };
+  }; // like .toFixed(2)
+
+  const roundToTwo = value => {
+    return +(Math.round(value + "e+2") + "e-2");
+  }; // limit value
+
   const minmax = (value, min, max) => {
     return Math.min(Math.max(value, min), max);
   };
@@ -148,7 +154,9 @@
 
     /**
      * zoom
-     * @param {Number} 
+     * zoomRatio - zoomin when pass a positive number, zoomout when pass a negative number
+     * pointer - a object which return from getPoiner()
+     * @param {Number, Object} 
      */
     zoom(zoomRatio, pointer) {
       const {
@@ -165,15 +173,15 @@
       const containerData = this.getContainerData();
       const imageData = this.getImageData();
       const imageRect = image.getBoundingClientRect();
-      const calcRatio = ratio * (zoomRatio + 1);
+      const calcRatio = roundToTwo(ratio * (zoomRatio + 1));
       const newRatio = options.bounds && calcRatio < 1 ? 1 : options.maxRatio && calcRatio > options.maxRatio ? options.maxRatio : calcRatio;
       const newZoomRatio = newRatio / ratio - 1;
       const newWidth = originImageData.width * newRatio;
       const newHeight = originImageData.height * newRatio;
       const newLeft = (containerData.width - newWidth) / 2;
       const newTop = (containerData.height - newHeight) / 2;
-      const distanceX = pointer ? (imageData.width / 2 - pointer.clientX + imageRect.left) * newZoomRatio + getTransformX(image) : 0;
-      const distanceY = pointer ? (imageData.height / 2 - pointer.clientY + imageRect.top) * newZoomRatio + getTransformY(image) : 0;
+      const distanceX = pointer ? (imageData.width / 2 - pointer.clientX + imageRect.left) * newZoomRatio + getTransformX(image) : getTransformX(image);
+      const distanceY = pointer ? (imageData.height / 2 - pointer.clientY + imageRect.top) * newZoomRatio + getTransformY(image) : getTransformY(image);
       const transformX = options.bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX;
       const transformY = options.bounds ? minmax(distanceY, newTop, -newTop) : distanceY;
       const newData = {
@@ -187,6 +195,53 @@
         transform: `translate(${transformX}px, ${transformY}px)`
       }));
       this.ratio = newRatio;
+
+      if (options.slider) {
+        const {
+          slider
+        } = options;
+        const ratioPercentage = roundToTwo(1 - (slider.maxRatio - newRatio) / (slider.maxRatio - 1)) * 100;
+        this.slideTo(ratioPercentage);
+      }
+
+      return this;
+    },
+
+    /**
+     * zoomTo (zoom to a specific ratio)
+     * zoomRatio - zoomin when pass a number more than 1, zoomout when pass a number less than 1
+     * @param {Number} 
+     */
+    zoomTo(zoomRatio) {
+      const {
+        ratio
+      } = this;
+
+      if (zoomRatio !== ratio) {
+        const calcRatio = zoomRatio / ratio - 1;
+        this.zoom(calcRatio);
+      }
+
+      return this;
+    },
+
+    /**
+     * slideTo (only work on the slider)
+     * value - a numer between 0-100
+     * @param {Number}
+     */
+    slideTo(value) {
+      const {
+        options
+      } = this;
+      if (!options.slider) return;
+      const {
+        slider
+      } = options;
+      const position = slider.direction === 'horizontal' ? 'left' : 'top';
+      const distance = minmax(value, 0, 100);
+      slider.sliderButton.style[position] = `${distance}%`;
+      return this;
     }
 
   };
@@ -201,13 +256,27 @@
   var MODULES = {
     createSlider() {
       const {
-        element,
         options
       } = this;
       options.slider = Object.assign(DEFAULT_SLIDER_OPTIONS, options.slider);
       const {
         slider
       } = options;
+      if (options.maxRatio) Object.assign(options.slider, {
+        maxRatio: options.maxRatio
+      });
+      if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal';
+      this.mountSlider();
+    },
+
+    mountSlider() {
+      const {
+        options
+      } = this;
+      const {
+        slider
+      } = options;
+      if (slider.mounted) return;
       const sliderEl = slider.el && isElementExist(slider.el) ? getElement(slider.el) : document.createElement('div');
 
       if (!slider.el || !isElementExist(slider.el)) {
@@ -219,12 +288,50 @@
       slider.sliderMain = sliderEl.querySelector(`.${CLASS_SLIDER_MAIN}`);
       slider.sliderBar = sliderEl.querySelector(`.${CLASS_SLIDER_BAR}`);
       slider.sliderButton = sliderEl.querySelector(`.${CLASS_SLIDER_BUTTON}`);
-      sliderEl.addEventListener('click', function (e) {
-        console.log('test');
-        e.stopPropagation();
-      });
-      element.append(sliderEl);
-      console.log(sliderEl);
+      slider.sliderMain.classList.add(`${CLASS_SLIDER}-${slider.direction}`); // events
+
+      slider.sliding = false;
+      const isHorizontal = slider.direction === 'horizontal';
+
+      const slideHandler = e => {
+        const rect = slider.sliderMain.getBoundingClientRect();
+        const mousePoint = isHorizontal ? getPointer(e).clientX : getPointer(e).clientY;
+        const sliderTotal = isHorizontal ? rect.width : rect.height;
+        const sliderStart = isHorizontal ? rect.left : rect.top;
+        const percentage = minmax(roundToTwo((mousePoint - sliderStart) / sliderTotal), 0, 1);
+        const ratio = (slider.maxRatio - 1) * percentage + 1;
+        this.zoomTo(ratio);
+      };
+
+      const slideStart = e => {
+        slideHandler(e);
+        slider.sliding = true;
+        document.addEventListener(EVENT_TOUCH_MOVE, slideMove);
+        document.addEventListener(EVENT_TOUCH_END, slideEnd);
+      };
+
+      const slideMove = e => {
+        if (!slider.sliding) return;
+        slideHandler(e);
+      };
+
+      const slideEnd = e => {
+        slider.sliding = false;
+        document.removeEventListener(EVENT_TOUCH_MOVE, slideMove);
+        document.removeEventListener(EVENT_TOUCH_END, slideEnd);
+      };
+
+      slider.sliderMain.addEventListener(EVENT_TOUCH_START, slideStart);
+      slider.mounted = true;
+      this.renderSlider();
+    },
+
+    renderSlider() {
+      const {
+        element,
+        options
+      } = this;
+      element.append(options.slider.el);
     }
 
   };
@@ -295,7 +402,7 @@
       dragData
     } = data;
 
-    const dragstart = e => {
+    const dragStart = e => {
       if (!options.draggable) return;
       if (e.which !== 1) return;
       setObject(dragData, {
@@ -305,11 +412,11 @@
         transY: getTransformY(image)
       });
       zoomist.dragging = true;
-      document.addEventListener(EVENT_TOUCH_MOVE, dragging);
-      document.addEventListener(EVENT_TOUCH_END, dragend);
+      document.addEventListener(EVENT_TOUCH_MOVE, dragMove);
+      document.addEventListener(EVENT_TOUCH_END, dragEnd);
     };
 
-    const dragging = e => {
+    const dragMove = e => {
       if (!zoomist.dragging) return;
       const pageX = getPointer(e).x;
       const pageY = getPointer(e).y;
@@ -330,13 +437,13 @@
       image.style.transform = `translate(${transformX}px, ${transformY}px)`;
     };
 
-    const dragend = () => {
+    const dragEnd = () => {
       zoomist.dragging = false;
-      document.removeEventListener(EVENT_TOUCH_MOVE, dragging);
-      document.removeEventListener(EVENT_TOUCH_END, dragend);
+      document.removeEventListener(EVENT_TOUCH_MOVE, dragMove);
+      document.removeEventListener(EVENT_TOUCH_END, dragEnd);
     };
 
-    wrapper.addEventListener(EVENT_TOUCH_START, dragstart); // set zomm on mousewheel event
+    wrapper.addEventListener(EVENT_TOUCH_START, dragStart); // set zomm on mousewheel event
 
     zoomist.wheeling = false;
 

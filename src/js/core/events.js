@@ -3,8 +3,7 @@ import {
   setObject,
   getPointer,
   getTransformX,
-  getTransformY,
-  minmax
+  getTransformY
 } from './../shared/utils'
 import {
   EVENT_TOUCH_START,
@@ -79,7 +78,7 @@ export default (zoomist) => {
 
   const { dragData } = data
 
-  const dragstart = (e) => {
+  const dragStart = (e) => {
     if (!options.draggable) return;
     if (e.which !== 1) return;
     
@@ -91,10 +90,10 @@ export default (zoomist) => {
     })
 
     zoomist.dragging = true
-    document.addEventListener(EVENT_TOUCH_MOVE, dragging)
-    document.addEventListener(EVENT_TOUCH_END, dragend)
+    document.addEventListener(EVENT_TOUCH_MOVE, dragMove)
+    document.addEventListener(EVENT_TOUCH_END, dragEnd)
   }
-  const dragging = (e) => {
+  const dragMove = (e) => {
     if (!zoomist.dragging) return;
 
     const pageX = getPointer(e).x
@@ -114,14 +113,14 @@ export default (zoomist) => {
 
     image.style.transform = `translate(${transformX}px, ${transformY}px)`
   }
-  const dragend = () => {
+  const dragEnd = () => {
     zoomist.dragging = false
 
-    document.removeEventListener(EVENT_TOUCH_MOVE, dragging)
-    document.removeEventListener(EVENT_TOUCH_END, dragend)
+    document.removeEventListener(EVENT_TOUCH_MOVE, dragMove)
+    document.removeEventListener(EVENT_TOUCH_END, dragEnd)
   }
 
-  wrapper.addEventListener(EVENT_TOUCH_START, dragstart)
+  wrapper.addEventListener(EVENT_TOUCH_START, dragStart)
 
 
   // set zomm on mousewheel event

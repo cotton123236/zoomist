@@ -96,6 +96,12 @@ export const getTransformY = (target) => {
   return mat ? parseFloat(mat[1].split(', ')[5]) : 0
 }
 
+// like .toFixed(2)
+export const roundToTwo = (value) => {
+  return +(Math.round(value + "e+2")  + "e-2")
+}
+
+// limit value
 export const minmax = (value, min, max) => {
   return Math.min(Math.max(value, min), max)
 }
