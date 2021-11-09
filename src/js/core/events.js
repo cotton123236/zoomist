@@ -3,7 +3,9 @@ import {
   setObject,
   getPointer,
   getTransformX,
-  getTransformY
+  getTransformY,
+  roundToTwo,
+  minmax
 } from './../shared/utils'
 import {
   EVENT_TOUCH_START,
@@ -11,6 +13,7 @@ import {
   EVENT_TOUCH_END,
   EVENT_RESIZE,
   EVENT_WHEEL,
+  CLASS_ZOOMER_DISABLE
 } from './../shared/constants'
 
 
@@ -144,4 +147,62 @@ export default (zoomist) => {
   }
 
   element.addEventListener(EVENT_WHEEL, wheel)
+}
+
+
+// slider events
+export const sliderEvents = (zoomist) => {
+  const { slider } = zoomist.options
+
+  // events
+  slider.sliding = false
+  const isHorizontal = slider.direction === 'horizontal'
+
+  const slideHandler = (e) => {
+    const rect = slider.sliderMain.getBoundingClientRect()
+
+    const mousePoint = isHorizontal ? getPointer(e).clientX : getPointer(e).clientY
+    const sliderTotal = isHorizontal ? rect.width : rect.height
+    const sliderStart = isHorizontal ? rect.left : rect.top
+    const percentage = minmax(roundToTwo(( mousePoint - sliderStart ) / sliderTotal), 0, 1)
+    const ratio = ( slider.maxRatio - 1 ) * percentage + 1
+
+    zoomist.zoomTo(ratio)
+  }
+  const slideStart = (e) => {
+    slideHandler(e)
+
+    slider.sliding = true
+    document.addEventListener(EVENT_TOUCH_MOVE, slideMove)
+    document.addEventListener(EVENT_TOUCH_END, slideEnd)
+  }
+  const slideMove = (e) => {
+    if (!slider.sliding) return;
+
+    slideHandler(e)
+  }
+  const slideEnd = (e) => {
+    slider.sliding = false
+
+    document.removeEventListener(EVENT_TOUCH_MOVE, slideMove)
+    document.removeEventListener(EVENT_TOUCH_END, slideEnd)
+  }
+  slider.sliderMain.addEventListener(EVENT_TOUCH_START, slideStart)
+}
+
+
+// zoomer events
+export const zoomerEvents = (zoomist) => {
+  const { options } = zoomist
+  const { zoomer, zoomRatio, bounds, maxRatio } = options
+
+  zoomer.zoomerInEl.addEventListener('click', () => {
+    zoomist.zoom(zoomRatio)
+    console.log(zoomist.ratio, maxRatio)
+    // if (zoomist.ratio === maxRatio) zoomer.zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE)
+  })
+  zoomer.zoomerOutEl.addEventListener('click', () => {
+    zoomist.zoom(-zoomRatio)
+    // if (bounds && zoomist.ratio === 1) zoomer.zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE)
+  })
 }

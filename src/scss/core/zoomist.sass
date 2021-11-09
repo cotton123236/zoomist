@@ -23,17 +23,25 @@ $NAME: zoomist
   pointer-events: none
 
 // module elements
+// slider
 .#{$NAME}-slider
   position: absolute
   top: 0
   left: 0
+  background-color: rgba(255, 255, 255, .8)
+  border-radius: 0 0 5px 0
 
 .#{$NAME}-slider-main
   position: relative
+  &:hover
+    .#{$NAME}-slider-bar
+      background-color: #aaa
+    .#{$NAME}-slider-button::before
+      box-shadow: 0 0 10px rgba(0, 0, 0, .6)
   &.zoomist-slider-horizontal
     width: 150px
-    padding: 10px 0
-    margin: 0 10px
+    padding: 20px 0
+    margin: 0 20px
     .#{$NAME}-slider-bar
       top: calc( 50% - 1px )
       left: 0
@@ -41,8 +49,8 @@ $NAME: zoomist
       height: 2px
   &.zoomist-slider-vertical
     height: 150px
-    padding: 0 10px
-    margin: 10px 0
+    padding: 0 20px
+    margin: 20px 0
     .#{$NAME}-slider-bar
       top: 0
       left: calc( 50% - 1px )
@@ -54,7 +62,8 @@ $NAME: zoomist
   position: absolute
   z-index: 0
   border-radius: 1px
-  background-color: #999
+  background-color: #ccc
+  transition: background-color .3s
 
 .#{$NAME}-slider-button
   display: block
@@ -66,11 +75,56 @@ $NAME: zoomist
     position: absolute
     display: block
     content: ''
-    left: -4px
-    top: -4px
-    width: 8px
-    height: 8px
-    background-color: #333
+    left: -5px
+    top: -5px
+    width: 10px
+    height: 10px
+    background-color: #fff
     border-radius: 50%
+    box-shadow: 0 0 5px rgba(0, 0, 0, .4)
+    transition: box-shadow .3s
 
+// zoomer
+.#{$NAME}-zoomer
+  display: flex
+  position: absolute
+  top: 0
+  right: 0
+  border-radius: 0 0 0 5px
+  overflow: hidden
 
+.#{$NAME}-in-zoomer, .#{$NAME}-out-zoomer
+  position: relative
+  width: 50px
+  height: 50px
+  cursor: pointer
+  background-color: rgba(255, 255, 255, .8)
+  transition: background-color .3s
+  &:hover
+    background-color: rgba(255, 255, 255, .9)
+  &::before
+    position: absolute
+    content: ''
+    display: block
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    width: 12px
+    height: 1px
+    background-color: #333
+
+.#{$NAME}-in-zoomer
+  &::after
+    position: absolute
+    content: ''
+    display: block
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    width: 1px
+    height: 12px
+    background-color: #333
+
+.#{$NAME}-zoomer-disable
+  pointer-events: none
+  opacity: .6

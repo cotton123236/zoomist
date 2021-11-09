@@ -9,9 +9,9 @@ const zoomist = new Zoomist('[data-zoomist]', {
     // zoomRatio: 0.1
   },
   slider: {
+    // el: '.custom-slider',
     // direction: 'vertical'
-    // el: '.custom-slider'
-    // zoomRatio: 0.1,
+    // maxRatio: 3
   },
   zoomer: {
     inEl: '',

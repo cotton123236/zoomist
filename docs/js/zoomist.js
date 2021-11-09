@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-08T16:09:34.266Z
+ * Date: 2021-11-09T15:29:38.387Z
  */
 
 (function (global, factory) {
@@ -28,8 +28,10 @@
     // 'vertical',
     maxRatio: 2
   };
+  const DEFAULT_ZOOMER_OPTIONS = {};
 
   const NAME = 'zoomist';
+  const MODULES$1 = ['slider', 'zoomer'];
   const CLASS_CONTAINER = `${NAME}-container`;
   const CLASS_WRAPPER = `${NAME}-wrapper`;
   const CLASS_IMAGE = `${NAME}-image`;
@@ -37,6 +39,9 @@
   const CLASS_SLIDER_MAIN = `${NAME}-slider-main`;
   const CLASS_SLIDER_BAR = `${NAME}-slider-bar`;
   const CLASS_SLIDER_BUTTON = `${NAME}-slider-button`;
+  const CLASS_ZOOMER = `${NAME}-zoomer`;
+  const CLASS_ZOOMER_IN = `${NAME}-in-zoomer`;
+  const CLASS_ZOOMER_OUT = `${NAME}-out-zoomer`;
   const IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
   const IS_TOUCH = IS_BROWSER && window.document.documentElement ? 'ontouchstart' in window.document.documentElement : false;
   const EVENT_TOUCH_START = IS_TOUCH ? 'touchstart' : 'mousedown';
@@ -133,6 +138,10 @@
 
   const minmax = (value, min, max) => {
     return Math.min(Math.max(value, min), max);
+  }; // first letter to uppercase
+
+  const upperFirstLetter = value => {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
   var METHODS = {
@@ -242,96 +251,6 @@
       const distance = minmax(value, 0, 100);
       slider.sliderButton.style[position] = `${distance}%`;
       return this;
-    }
-
-  };
-
-  const sliderTemp = `
-  <div class="${CLASS_SLIDER_MAIN}">
-    <span class="${CLASS_SLIDER_BAR}"></span>
-    <span class="${CLASS_SLIDER_BUTTON}"></span>
-  </div>
-`;
-
-  var MODULES = {
-    createSlider() {
-      const {
-        options
-      } = this;
-      options.slider = Object.assign(DEFAULT_SLIDER_OPTIONS, options.slider);
-      const {
-        slider
-      } = options;
-      if (options.maxRatio) Object.assign(options.slider, {
-        maxRatio: options.maxRatio
-      });
-      if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal';
-      this.mountSlider();
-    },
-
-    mountSlider() {
-      const {
-        options
-      } = this;
-      const {
-        slider
-      } = options;
-      if (slider.mounted) return;
-      const sliderEl = slider.el && isElementExist(slider.el) ? getElement(slider.el) : document.createElement('div');
-
-      if (!slider.el || !isElementExist(slider.el)) {
-        sliderEl.classList.add(CLASS_SLIDER);
-      }
-
-      sliderEl.innerHTML = sliderTemp;
-      slider.el = sliderEl;
-      slider.sliderMain = sliderEl.querySelector(`.${CLASS_SLIDER_MAIN}`);
-      slider.sliderBar = sliderEl.querySelector(`.${CLASS_SLIDER_BAR}`);
-      slider.sliderButton = sliderEl.querySelector(`.${CLASS_SLIDER_BUTTON}`);
-      slider.sliderMain.classList.add(`${CLASS_SLIDER}-${slider.direction}`); // events
-
-      slider.sliding = false;
-      const isHorizontal = slider.direction === 'horizontal';
-
-      const slideHandler = e => {
-        const rect = slider.sliderMain.getBoundingClientRect();
-        const mousePoint = isHorizontal ? getPointer(e).clientX : getPointer(e).clientY;
-        const sliderTotal = isHorizontal ? rect.width : rect.height;
-        const sliderStart = isHorizontal ? rect.left : rect.top;
-        const percentage = minmax(roundToTwo((mousePoint - sliderStart) / sliderTotal), 0, 1);
-        const ratio = (slider.maxRatio - 1) * percentage + 1;
-        this.zoomTo(ratio);
-      };
-
-      const slideStart = e => {
-        slideHandler(e);
-        slider.sliding = true;
-        document.addEventListener(EVENT_TOUCH_MOVE, slideMove);
-        document.addEventListener(EVENT_TOUCH_END, slideEnd);
-      };
-
-      const slideMove = e => {
-        if (!slider.sliding) return;
-        slideHandler(e);
-      };
-
-      const slideEnd = e => {
-        slider.sliding = false;
-        document.removeEventListener(EVENT_TOUCH_MOVE, slideMove);
-        document.removeEventListener(EVENT_TOUCH_END, slideEnd);
-      };
-
-      slider.sliderMain.addEventListener(EVENT_TOUCH_START, slideStart);
-      slider.mounted = true;
-      this.renderSlider();
-    },
-
-    renderSlider() {
-      const {
-        element,
-        options
-      } = this;
-      element.append(options.slider.el);
     }
 
   };
@@ -463,7 +382,148 @@
     };
 
     element.addEventListener(EVENT_WHEEL, wheel);
-  });
+  }); // slider events
+
+  const sliderEvents = zoomist => {
+    const {
+      slider
+    } = zoomist.options; // events
+
+    slider.sliding = false;
+    const isHorizontal = slider.direction === 'horizontal';
+
+    const slideHandler = e => {
+      const rect = slider.sliderMain.getBoundingClientRect();
+      const mousePoint = isHorizontal ? getPointer(e).clientX : getPointer(e).clientY;
+      const sliderTotal = isHorizontal ? rect.width : rect.height;
+      const sliderStart = isHorizontal ? rect.left : rect.top;
+      const percentage = minmax(roundToTwo((mousePoint - sliderStart) / sliderTotal), 0, 1);
+      const ratio = (slider.maxRatio - 1) * percentage + 1;
+      zoomist.zoomTo(ratio);
+    };
+
+    const slideStart = e => {
+      slideHandler(e);
+      slider.sliding = true;
+      document.addEventListener(EVENT_TOUCH_MOVE, slideMove);
+      document.addEventListener(EVENT_TOUCH_END, slideEnd);
+    };
+
+    const slideMove = e => {
+      if (!slider.sliding) return;
+      slideHandler(e);
+    };
+
+    const slideEnd = e => {
+      slider.sliding = false;
+      document.removeEventListener(EVENT_TOUCH_MOVE, slideMove);
+      document.removeEventListener(EVENT_TOUCH_END, slideEnd);
+    };
+
+    slider.sliderMain.addEventListener(EVENT_TOUCH_START, slideStart);
+  }; // zoomer events
+
+  const zoomerEvents = zoomist => {
+    const {
+      options
+    } = zoomist;
+    const {
+      zoomer,
+      zoomRatio,
+      bounds,
+      maxRatio
+    } = options;
+    zoomer.zoomerInEl.addEventListener('click', () => {
+      zoomist.zoom(zoomRatio);
+      console.log(zoomist.ratio, maxRatio); // if (zoomist.ratio === maxRatio) zoomer.zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE)
+    });
+    zoomer.zoomerOutEl.addEventListener('click', () => {
+      zoomist.zoom(-zoomRatio); // if (bounds && zoomist.ratio === 1) zoomer.zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE)
+    });
+  };
+
+  const sliderTemp = `
+  <div class="${CLASS_SLIDER_MAIN}">
+    <span class="${CLASS_SLIDER_BAR}"></span>
+    <span class="${CLASS_SLIDER_BUTTON}"></span>
+  </div>
+`;
+
+  var MODULES = {
+    createModules() {
+      const {
+        options
+      } = this;
+      MODULES$1.forEach(module => {
+        if (options[module]) this[`create${upperFirstLetter(module)}`]();
+      });
+    },
+
+    createSlider() {
+      const {
+        element,
+        options
+      } = this;
+      options.slider = Object.assign(DEFAULT_SLIDER_OPTIONS, options.slider);
+      const {
+        slider
+      } = options;
+      if (options.maxRatio) Object.assign(options.slider, {
+        maxRatio: options.maxRatio
+      });
+      if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal'; // mount
+
+      if (slider.mounted) slider.sliderMain.remove();
+      const isCustomEl = slider.el && isElementExist(slider.el);
+      const sliderEl = isCustomEl ? getElement(slider.el) : document.createElement('div');
+      if (!isCustomEl) sliderEl.classList.add(CLASS_SLIDER);
+      sliderEl.innerHTML = sliderTemp;
+      slider.sliderEl = sliderEl;
+      slider.sliderMain = sliderEl.querySelector(`.${CLASS_SLIDER_MAIN}`);
+      slider.sliderBar = sliderEl.querySelector(`.${CLASS_SLIDER_BAR}`);
+      slider.sliderButton = sliderEl.querySelector(`.${CLASS_SLIDER_BUTTON}`);
+      slider.sliderMain.classList.add(`${CLASS_SLIDER}-${slider.direction}`); // events
+
+      sliderEvents(this);
+      slider.mounted = true; // render
+
+      if (!isCustomEl) element.append(sliderEl);
+    },
+
+    createZoomer() {
+      const {
+        element,
+        options
+      } = this;
+      options.zoomer = Object.assign(DEFAULT_ZOOMER_OPTIONS, options.zoomer);
+      const {
+        zoomer
+      } = options; // mount
+
+      if (zoomer.mounted && zoomer.zoomerEl) zoomer.sliderMain.remove();
+      const isCustomInEl = zoomer.inEl && isElementExist(zoomer.inEl);
+      const isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl);
+      const zoomerInEl = isCustomInEl ? getElement(zoomer.inEl) : document.createElement('div');
+      const zoomerOutEl = isCustomOutEl ? getElement(zoomer.outEl) : document.createElement('div');
+      if (!isCustomInEl) zoomerInEl.classList.add(CLASS_ZOOMER_IN);
+      if (!isCustomOutEl) zoomerOutEl.classList.add(CLASS_ZOOMER_OUT);
+      zoomer.zoomerInEl = zoomerInEl;
+      zoomer.zoomerOutEl = zoomerOutEl; // events
+
+      zoomerEvents(this);
+      zoomer.mounted = true; // render
+
+      if (!isCustomInEl || !isCustomOutEl) {
+        const zoomerEl = document.createElement('div');
+        zoomerEl.classList.add(CLASS_ZOOMER);
+        if (!isCustomInEl) zoomerEl.append(zoomerInEl);
+        if (!isCustomOutEl) zoomerEl.append(zoomerOutEl);
+        zoomer.zoomerEl = zoomerEl;
+        element.append(zoomerEl);
+      }
+    }
+
+  };
 
   class Zoomist {
     /**
@@ -585,7 +645,7 @@
       element.classList.add(CLASS_CONTAINER);
       wrapper.append(image);
       element.append(wrapper);
-      if (options.slider) this.createSlider();
+      this.createModules();
     }
 
   }

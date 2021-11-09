@@ -1,5 +1,7 @@
 export const NAME = 'zoomist'
 
+export const MODULES = ['slider', 'zoomer']
+
 export const CLASS_CONTAINER = `${NAME}-container`
 export const CLASS_WRAPPER = `${NAME}-wrapper`
 export const CLASS_IMAGE = `${NAME}-image`
@@ -8,6 +10,11 @@ export const CLASS_SLIDER = `${NAME}-slider`
 export const CLASS_SLIDER_MAIN = `${NAME}-slider-main`
 export const CLASS_SLIDER_BAR = `${NAME}-slider-bar`
 export const CLASS_SLIDER_BUTTON = `${NAME}-slider-button`
+
+export const CLASS_ZOOMER = `${NAME}-zoomer`
+export const CLASS_ZOOMER_IN = `${NAME}-in-zoomer`
+export const CLASS_ZOOMER_OUT = `${NAME}-out-zoomer`
+export const CLASS_ZOOMER_DISABLE = `${NAME}-zoomer-disable`
 
 export const IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined'
 export const IS_TOUCH = IS_BROWSER && window.document.documentElement ? 'ontouchstart' in window.document.documentElement : false

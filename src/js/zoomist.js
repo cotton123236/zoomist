@@ -139,7 +139,7 @@ class Zoomist {
     wrapper.append(image)
     element.append(wrapper)
 
-    if (options.slider) this.createSlider()
+    this.createModules()
   }
 }
 

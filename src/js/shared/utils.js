@@ -106,3 +106,8 @@ export const minmax = (value, min, max) => {
   return Math.min(Math.max(value, min), max)
 }
 
+// first letter to uppercase
+export const upperFirstLetter = (value) => {
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
