@@ -7,6 +7,9 @@ import {
   roundToTwo,
   minmax
 } from './../shared/utils'
+import {
+  CLASS_ZOOMER_DISABLE
+} from './../shared/constants'
 
 export default {
   /**
@@ -23,6 +26,14 @@ export default {
    */
   getImageData() {
     return getNewObject(this.data.imageData)
+  },
+
+  /**
+   * get slider value
+   * @returns {Number}
+   */
+  getSliderValue() {
+    return this.options.slider.value
   },
 
   /**
@@ -73,8 +84,18 @@ export default {
     if (options.slider) {
       const { slider } = options
       const ratioPercentage = roundToTwo(1 - ( slider.maxRatio - newRatio ) / ( slider.maxRatio - 1 )) * 100
-      
+
+      slider.value = ratioPercentage
+
       this.slideTo(ratioPercentage)
+    }
+
+    if (options.zoomer.disableOnBounds) {
+      const { zoomer, bounds, maxRatio } = options
+      const { zoomerInEl, zoomerOutEl } = zoomer
+      
+      bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE)
+      this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE)
     }
 
     return this

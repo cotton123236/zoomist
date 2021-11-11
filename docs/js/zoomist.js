@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-09T15:29:38.387Z
+ * Date: 2021-11-11T15:23:34.942Z
  */
 
 (function (global, factory) {
@@ -13,22 +13,6 @@
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Zoomist = factory());
 })(this, (function () { 'use strict';
-
-  var DEFAULT_OPTIONS = {
-    fill: 'cover',
-    src: 'data-zoomist-src',
-    draggable: true,
-    bounds: true,
-    zoomRatio: 0.1,
-    maxRatio: false,
-    wheel: true
-  };
-  const DEFAULT_SLIDER_OPTIONS = {
-    direction: 'horizontal',
-    // 'vertical',
-    maxRatio: 2
-  };
-  const DEFAULT_ZOOMER_OPTIONS = {};
 
   const NAME = 'zoomist';
   const MODULES$1 = ['slider', 'zoomer'];
@@ -42,6 +26,7 @@
   const CLASS_ZOOMER = `${NAME}-zoomer`;
   const CLASS_ZOOMER_IN = `${NAME}-in-zoomer`;
   const CLASS_ZOOMER_OUT = `${NAME}-out-zoomer`;
+  const CLASS_ZOOMER_DISABLE = `${NAME}-zoomer-disable`;
   const IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
   const IS_TOUCH = IS_BROWSER && window.document.documentElement ? 'ontouchstart' in window.document.documentElement : false;
   const EVENT_TOUCH_START = IS_TOUCH ? 'touchstart' : 'mousedown';
@@ -49,6 +34,27 @@
   const EVENT_TOUCH_END = IS_TOUCH ? 'touchend touchcancel' : 'mouseup';
   const EVENT_RESIZE = 'resize';
   const EVENT_WHEEL = 'wheel';
+
+  var DEFAULT_OPTIONS = {
+    fill: 'cover',
+    src: 'data-zoomist-src',
+    draggable: true,
+    bounds: true,
+    zoomRatio: 0.1,
+    maxRatio: false,
+    wheel: true
+  };
+  const DEFAULT_SLIDER_OPTIONS = {
+    el: CLASS_SLIDER,
+    direction: 'horizontal',
+    // 'vertical',
+    maxRatio: 2
+  };
+  const DEFAULT_ZOOMER_OPTIONS = {
+    inEl: CLASS_ZOOMER_IN,
+    outEl: CLASS_ZOOMER_OUT,
+    disableOnBounds: true
+  };
 
   const isObject = value => {
     return typeof value === 'object' && value !== null;
@@ -162,6 +168,14 @@
     },
 
     /**
+     * get slider value
+     * @returns {Number}
+     */
+    getSliderValue() {
+      return this.options.slider.value;
+    },
+
+    /**
      * zoom
      * zoomRatio - zoomin when pass a positive number, zoomout when pass a negative number
      * pointer - a object which return from getPoiner()
@@ -210,7 +224,22 @@
           slider
         } = options;
         const ratioPercentage = roundToTwo(1 - (slider.maxRatio - newRatio) / (slider.maxRatio - 1)) * 100;
+        slider.value = ratioPercentage;
         this.slideTo(ratioPercentage);
+      }
+
+      if (options.zoomer.disableOnBounds) {
+        const {
+          zoomer,
+          bounds,
+          maxRatio
+        } = options;
+        const {
+          zoomerInEl,
+          zoomerOutEl
+        } = zoomer;
+        bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE);
+        this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE);
       }
 
       return this;
@@ -367,6 +396,7 @@
     zoomist.wheeling = false;
 
     const wheel = e => {
+      if (!options.wheelable) return;
       const {
         zoomRatio
       } = options;
@@ -398,7 +428,9 @@
       const sliderTotal = isHorizontal ? rect.width : rect.height;
       const sliderStart = isHorizontal ? rect.left : rect.top;
       const percentage = minmax(roundToTwo((mousePoint - sliderStart) / sliderTotal), 0, 1);
-      const ratio = (slider.maxRatio - 1) * percentage + 1;
+      const minRatio = zoomist.ratio < 1 ? zoomist.ratio : 1;
+      const maxRatio = zoomist.ratio > slider.maxRatio ? zoomist.ratio : slider.maxRatio;
+      const ratio = (maxRatio - minRatio) * percentage + minRatio;
       zoomist.zoomTo(ratio);
     };
 
@@ -435,10 +467,9 @@
     } = options;
     zoomer.zoomerInEl.addEventListener('click', () => {
       zoomist.zoom(zoomRatio);
-      console.log(zoomist.ratio, maxRatio); // if (zoomist.ratio === maxRatio) zoomer.zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE)
     });
     zoomer.zoomerOutEl.addEventListener('click', () => {
-      zoomist.zoom(-zoomRatio); // if (bounds && zoomist.ratio === 1) zoomer.zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE)
+      zoomist.zoom(-zoomRatio);
     });
   };
 
@@ -471,7 +502,8 @@
       if (options.maxRatio) Object.assign(options.slider, {
         maxRatio: options.maxRatio
       });
-      if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal'; // mount
+      if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal';
+      slider.value = 0; // mount
 
       if (slider.mounted) slider.sliderMain.remove();
       const isCustomEl = slider.el && isElementExist(slider.el);
@@ -508,7 +540,17 @@
       if (!isCustomInEl) zoomerInEl.classList.add(CLASS_ZOOMER_IN);
       if (!isCustomOutEl) zoomerOutEl.classList.add(CLASS_ZOOMER_OUT);
       zoomer.zoomerInEl = zoomerInEl;
-      zoomer.zoomerOutEl = zoomerOutEl; // events
+      zoomer.zoomerOutEl = zoomerOutEl;
+
+      if (zoomer.disableOnBounds) {
+        const {
+          bounds,
+          maxRatio
+        } = options;
+        if (bounds && this.ratio === 1) zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE);
+        if (this.ratio === maxRatio) zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE);
+      } // events
+
 
       zoomerEvents(this);
       zoomer.mounted = true; // render
@@ -604,7 +646,7 @@
 
         let baseSide;
         if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover';
-        if (options.fill === 'cover') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height';
+        if (options.fill !== 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height';
         if (options.fill === 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'height' : 'width'; // calculate the image width, height, left, top
 
         const imageWidth = options.fill === 'none' ? naturalWidth : baseSide === 'both' || baseSide === 'width' ? containerData.width : containerData.height * imageRatio;

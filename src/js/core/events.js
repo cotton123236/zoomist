@@ -130,6 +130,7 @@ export default (zoomist) => {
   zoomist.wheeling = false
 
   const wheel = (e) => {
+    if (!options.wheelable) return;
     const { zoomRatio } = options
 
     if (zoomist.wheeling) return;
@@ -165,7 +166,10 @@ export const sliderEvents = (zoomist) => {
     const sliderTotal = isHorizontal ? rect.width : rect.height
     const sliderStart = isHorizontal ? rect.left : rect.top
     const percentage = minmax(roundToTwo(( mousePoint - sliderStart ) / sliderTotal), 0, 1)
-    const ratio = ( slider.maxRatio - 1 ) * percentage + 1
+
+    const minRatio = zoomist.ratio < 1 ? zoomist.ratio : 1
+    const maxRatio = zoomist.ratio > slider.maxRatio ? zoomist.ratio : slider.maxRatio
+    const ratio = ( maxRatio - minRatio ) * percentage + minRatio
 
     zoomist.zoomTo(ratio)
   }
@@ -198,11 +202,8 @@ export const zoomerEvents = (zoomist) => {
 
   zoomer.zoomerInEl.addEventListener('click', () => {
     zoomist.zoom(zoomRatio)
-    console.log(zoomist.ratio, maxRatio)
-    // if (zoomist.ratio === maxRatio) zoomer.zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE)
   })
   zoomer.zoomerOutEl.addEventListener('click', () => {
     zoomist.zoom(-zoomRatio)
-    // if (bounds && zoomist.ratio === 1) zoomer.zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE)
   })
 }

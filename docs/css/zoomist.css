@@ -82,7 +82,6 @@
     transition: box-shadow .3s; }
 
 .zoomist-zoomer {
-  display: flex;
   position: absolute;
   top: 0;
   right: 0;

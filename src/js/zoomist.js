@@ -90,11 +90,11 @@ class Zoomist {
       
       const { naturalWidth, naturalHeight } = image
       const imageRatio = naturalWidth / naturalHeight
-  
+
       // get base on width or height
       let baseSide
       if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover'
-      if (options.fill === 'cover') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height'
+      if (options.fill !== 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height'
       if (options.fill === 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'height' : 'width'
   
       // calculate the image width, height, left, top

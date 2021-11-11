@@ -13,6 +13,7 @@
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -33,7 +34,7 @@
       position: relative;
       width: 100%;
       padding-bottom: 55%;
-      background-color: rgb(255, 134, 134);
+      /* background-color: rgb(255, 134, 134); */
     }
     div[data-zoomist] {
       position: absolute;
@@ -42,6 +43,27 @@
       width: 100%;
       height: 100%;
     }
+    /* custom */
+    .custom-modules {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 50px;
+      display: none;
+    }
+    .custom-in-zoomer, .custom-out-zoomer {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      box-shadow: 3px 3px 7px rgba(0, 0, 0, .4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -50,6 +72,10 @@
       <div data-zoomist data-zoomist-src="./image/cats.jpg"></div>
     </div>
   </div>
-  <div class="custom-slider"></div>
+  <div class="custom-modules">
+    <div class="custom-out-zoomer">-</div>
+    <div class="custom-slider"></div>
+    <div class="custom-in-zoomer">+</div>
+  </div>
 </body>
 </html>

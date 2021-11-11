@@ -10,7 +10,8 @@ import {
   CLASS_SLIDER_BUTTON,
   CLASS_ZOOMER,
   CLASS_ZOOMER_IN,
-  CLASS_ZOOMER_OUT
+  CLASS_ZOOMER_OUT,
+  CLASS_ZOOMER_DISABLE
 } from './../shared/constants'
 import {
   isElementExist,
@@ -39,8 +40,9 @@ export default {
     
     const { slider } = options
     
-    if (options.maxRatio) Object.assign(options.slider, {maxRatio: options.maxRatio})
+    if (options.maxRatio) Object.assign(options.slider, { maxRatio: options.maxRatio })
     if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal'
+    slider.value = 0
 
     // mount
     if (slider.mounted) slider.sliderMain.remove()
@@ -82,6 +84,13 @@ export default {
 
     zoomer.zoomerInEl = zoomerInEl
     zoomer.zoomerOutEl = zoomerOutEl
+
+    if (zoomer.disableOnBounds) {
+      const { bounds, maxRatio } = options
+
+      if (bounds && this.ratio === 1) zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE)
+      if (this.ratio === maxRatio) zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE)
+    }
 
     // events
     zoomerEvents(this)
