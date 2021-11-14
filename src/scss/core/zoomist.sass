@@ -8,11 +8,13 @@ $NAME: zoomist
 
 .#{$NAME}-wrapper
   position: absolute
+  z-index: 1
   top: 0
   left: 0
   right: 0
   bottom: 0
   overflow: hidden
+  background-color: #f4f4f4
 
 .#{$NAME}-image
   position: absolute
@@ -26,6 +28,7 @@ $NAME: zoomist
 // slider
 .#{$NAME}-slider
   position: absolute
+  z-index: 2
   top: 0
   left: 0
   background-color: rgba(255, 255, 255, .8)
@@ -87,6 +90,7 @@ $NAME: zoomist
 // zoomer
 .#{$NAME}-zoomer
   position: absolute
+  z-index: 2
   top: 0
   right: 0
   border-radius: 0 0 0 5px

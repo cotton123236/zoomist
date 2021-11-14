@@ -56,6 +56,11 @@ export const isImg = (value) => {
   return isElementExist(value) && getElement(value).tagName === 'IMG'
 }
 
+// check value is a function
+export const isFunction = (value) => {
+  return typeof value === 'function';
+}
+
 // get elemant style
 export const getStyle = (element, prop) => {
   return element[prop] || element.style[prop] || window.getComputedStyle(element).getPropertyValue(prop)

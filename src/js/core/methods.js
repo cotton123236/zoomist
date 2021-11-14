@@ -1,13 +1,17 @@
 import {
+  isString,
   setStyle,
   setObject,
   getNewObject,
   getTransformX,
   getTransformY,
   roundToTwo,
-  minmax
+  minmax,
+  isFunction
 } from './../shared/utils'
 import {
+  NAME,
+  CLASS_CONTAINER,
   CLASS_ZOOMER_DISABLE
 } from './../shared/constants'
 
@@ -33,7 +37,15 @@ export default {
    * @returns {Number}
    */
   getSliderValue() {
-    return this.options.slider.value
+    return this.__modules__.slider?.value
+  },
+
+  /**
+   * get now zoom ratio
+   * @returns {Number}
+   */
+  getZoomRatio() {
+    return this.ratio
   },
 
   /**
@@ -65,35 +77,40 @@ export default {
     const distanceY = pointer ? ( imageData.height / 2 - pointer.clientY + imageRect.top ) * newZoomRatio + getTransformY(image) : getTransformY(image)
     const transformX = options.bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX
     const transformY = options.bounds ? minmax(distanceY, newTop, -newTop) : distanceY
-    
+
     const newData = {
       width: newWidth,
       height: newHeight,
       left: newLeft,
       top: newTop
     }
-    
+
     setObject(data.imageData, newData)
-    
-    setStyle(image, Object.assign({}, newData, {
+
+    setStyle(image, {
+      ...newData,
       transform: `translate(${transformX}px, ${transformY}px)`
-    }))
+    })
 
     this.ratio = newRatio
 
+    this.emit('zoom', newRatio)
+
+    // if has slider
     if (options.slider) {
-      const { slider } = options
+      const { slider } = this.__modules__
       const ratioPercentage = roundToTwo(1 - ( slider.maxRatio - newRatio ) / ( slider.maxRatio - 1 )) * 100
 
       slider.value = ratioPercentage
 
-      this.slideTo(ratioPercentage)
+      this.slideTo(ratioPercentage, true)
     }
 
+    // if zoomer disableOnBounds
     if (options.zoomer.disableOnBounds) {
-      const { zoomer, bounds, maxRatio } = options
-      const { zoomerInEl, zoomerOutEl } = zoomer
-      
+      const { bounds, maxRatio } = options
+      const { zoomerInEl, zoomerOutEl } = this.__modules__.zoomer
+
       bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE)
       this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE)
     }
@@ -122,17 +139,112 @@ export default {
    * value - a numer between 0-100
    * @param {Number}
    */
-  slideTo(value) {
-    const { options } = this
+  slideTo(value, onlySlide) {
+    const { __modules__ } = this
 
-    if (!options.slider) return;
+    if (!__modules__.slider) return;
 
-    const { slider } = options
+    const { slider } = __modules__
 
     const position = slider.direction === 'horizontal' ? 'left' : 'top'
     const distance = minmax(value, 0, 100)
 
     slider.sliderButton.style[position] = `${distance}%`
+
+    if (!onlySlide) {
+      const percentage = distance / 100
+      const minRatio = this.ratio < 1 ? this.ratio : 1
+      const maxRatio = this.ratio > slider.maxRatio ? this.ratio : slider.maxRatio
+      const ratio = ( maxRatio - minRatio ) * percentage + minRatio
+
+      this.zoomTo(ratio)
+    }
+
+    return this
+  },
+
+  /**
+   * reset image to initial status
+   */
+  reset() {
+    const { image } = this
+
+    this.zoomTo(1)
+
+    setStyle(image, {
+      transform: 'translate(0, 0)'
+    })
+
+    this.emit('reset')
+    
+    return this
+  },
+  
+  /**
+   * destory the instance of zoomist
+   */
+  destroy() {
+    const { element, wrapper } = this
+    const { slider, zoomer } = this.__modules__
+
+    element[NAME] = undefined
+    this.mounted = false
+
+    if (slider) this.destroySlider()
+    if (zoomer) this.destroyZoomer()
+
+    wrapper.remove()
+    element.classList.remove(CLASS_CONTAINER)
+
+    this.emit('destroy')
+
+    return this
+  },
+
+  /**
+   * a syntactic sugar of destroy and init
+   */
+  update() {
+    this.destroy().init()
+
+    this.emit('update')
+
+    return this
+  },
+
+  /**
+   * add handler on __events__
+   * @param {String} events 
+   * @param {Function} handler 
+   */
+  on(events, handler) {
+    if (!isFunction(handler)) return this;
+
+    const { __events__ } = this
+
+    events.split(' ').forEach(evt => {
+      if (!__events__[evt]) __events__[evt] = []
+      __events__[evt].push(handler)
+    })
+
+    return this
+  },
+
+  /**
+   * invoke handlers in __events__[event]
+   * @param  {String, ...} args 
+   */
+  emit(...args) {
+    const { __events__ } = this
+
+    const event = args[0]
+    const data = args.slice(1, args.length)
+
+    if (!__events__[event]) return this
+
+    __events__[event].forEach(handler => {
+      if (isFunction(handler)) handler.apply(this, data)
+    })
 
     return this
   }

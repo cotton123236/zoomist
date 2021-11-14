@@ -1,12 +1,14 @@
-import DEFAULT_OPTIONS from './core/options'
+import DEFAULT_OPTIONS, { EVENTS } from './core/options'
 import METHODS from './core/methods'
 import MODULES from './core/modules'
 import bindEvents from './core/events'
 import {
   isPlainObject,
+  isImg,
   isString,
   isNumber,
   isElementExist,
+  isFunction,
   getElement,
   setStyle
 } from './shared/utils'
@@ -37,23 +39,24 @@ class Zoomist {
 
   init() {
     const { element, options } = this
+    const { src } = options
 
     if (element[NAME]) return;
 
     element[NAME] = this
-    
-    const src = options.src = isString(options.src) ? options.src : DEFAULT_OPTIONS.src
-    const url = element.getAttribute(src)
-    
-    element.removeAttribute(src)
-    
+
+    const source = options.src = isString(src) || isImg(src) ? src : DEFAULT_OPTIONS.src
+    const url = isImg(source) ? source.src : element.getAttribute(source)
+
+    if (!url) throw new Error(`Cannot find src from ${source}`)
+
     this.create(url)
   }
   
   create(url) {
     if (!url) return;
     
-    const { element } = this
+    const { element, options } = this
     const { offsetWidth, offsetHeight } = element
     
     this.url = url
@@ -64,6 +67,11 @@ class Zoomist {
       aspectRatio: offsetWidth / offsetHeight,
     }
     this.ratio = 1
+
+    this.__events__ = EVENTS
+    for (const [k, v] of Object.entries(options.on)) {
+      this.__events__[k] = [v]
+    }
 
     this.mount()
   }
@@ -133,13 +141,16 @@ class Zoomist {
   }
 
   render() {
-    const { element, wrapper, image, options } = this
+    const { element, wrapper, image } = this
 
     element.classList.add(CLASS_CONTAINER)
+
     wrapper.append(image)
     element.append(wrapper)
 
     this.createModules()
+
+    this.emit('ready')
   }
 }
 

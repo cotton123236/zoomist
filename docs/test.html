@@ -7,9 +7,8 @@
   <title>Document</title>
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/zoomist.css">
-  <link rel="stylesheet" href="./css/style.css">
   <script src="./js/zoomist.js"></script>
-  <script defer src="./js/main.js"></script>
+  <script defer src="./js/test.js"></script>
   <style>
     body {
       display: flex;
@@ -18,6 +17,9 @@
       align-items: center;
       min-height: 100vh;
       padding: 60px;
+    }
+    .custom-image {
+      display: none;
     }
     .img-container {
       max-width: 1000px;
@@ -67,6 +69,7 @@
   </style>
 </head>
 <body>
+  <img class="custom-image" src="./image/cats.jpg" alt="">
   <div class="div-container">
     <div class="div-wrapper">
       <div data-zoomist data-zoomist-src="./image/cats.jpg"></div>

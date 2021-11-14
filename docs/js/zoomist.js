@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-11T15:23:34.942Z
+ * Date: 2021-11-14T02:41:53.627Z
  */
 
 (function (global, factory) {
@@ -36,24 +36,64 @@
   const EVENT_WHEEL = 'wheel';
 
   var DEFAULT_OPTIONS = {
+    // {String} set initial image status
     fill: 'cover',
+    // {String / querySelector} the attribute of image source or a image element
     src: 'data-zoomist-src',
+    // {Boolean} set is draggable or not
     draggable: true,
+    // {Boolean} set is wheelable or not
+    wheelable: true,
+    // {Boolean} set image can be drag out of the bounds (it will set to false when fill is contain)
     bounds: true,
+    // {Number} the ratio of zoom at one time
     zoomRatio: 0.1,
-    maxRatio: false,
-    wheel: true
+    // {Number > 1, False} the max ratio of the image (compare to the initial image status)
+    maxRatio: false
   };
   const DEFAULT_SLIDER_OPTIONS = {
+    // {String / querySelector} the css selector string or a element of the slider
     el: CLASS_SLIDER,
+    // {String} the direction of the slider 'horizontal' or 'vertical'
     direction: 'horizontal',
-    // 'vertical',
+    // {Number} the max ratio of the slider (only work on options.maxRatio = false)
     maxRatio: 2
   };
   const DEFAULT_ZOOMER_OPTIONS = {
+    // {String / querySelector} the css selector string or a element of the in zoomer
     inEl: CLASS_ZOOMER_IN,
+    // {String / querySelector} the css selector string or a element of the out zoomer
     outEl: CLASS_ZOOMER_OUT,
+    // {Boolean} in zoomer and out zoomer will be disabled when image comes to maximin or minimum
     disableOnBounds: true
+  };
+  const EVENTS = {
+    // invoked when zoomist instance ready
+    ready: null,
+    // invoked when image is zooming
+    zoom: null,
+    // invoked when wheeling
+    wheel: null,
+    // invoked when mousedown on wrapper
+    dragStart: null,
+    // invoked when dragging the image
+    drag: null,
+    // invoked when mouseup on wrapper
+    dragEnd: null,
+    // invoked when mousedown on slider
+    slideStart: null,
+    // invoked when sliding the slider
+    slide: null,
+    // invoked when mouseup on slider
+    slideEnd: null,
+    // invoked when image changes it's size
+    resize: null,
+    // invoked when reset methods be used
+    reset: null,
+    // invoked when destroy methods be used
+    destroy: null,
+    // invoked when update methods be used
+    update: null
   };
 
   const isObject = value => {
@@ -106,6 +146,14 @@
   const getElement = value => {
     return value instanceof HTMLElement ? value : document.querySelector(value);
   }; // check value is img tag or not
+
+  const isImg = value => {
+    return isElementExist(value) && getElement(value).tagName === 'IMG';
+  }; // check value is a function
+
+  const isFunction = value => {
+    return typeof value === 'function';
+  }; // get elemant style
 
   const setStyle = (element, obj) => {
     for (const [k, v] of Object.entries(obj)) {
@@ -172,7 +220,15 @@
      * @returns {Number}
      */
     getSliderValue() {
-      return this.options.slider.value;
+      return this.__modules__.slider?.value;
+    },
+
+    /**
+     * get now zoom ratio
+     * @returns {Number}
+     */
+    getZoomRatio() {
+      return this.ratio;
     },
 
     /**
@@ -214,30 +270,31 @@
         top: newTop
       };
       setObject(data.imageData, newData);
-      setStyle(image, Object.assign({}, newData, {
+      setStyle(image, { ...newData,
         transform: `translate(${transformX}px, ${transformY}px)`
-      }));
+      });
       this.ratio = newRatio;
+      this.emit('zoom', newRatio); // if has slider
 
       if (options.slider) {
         const {
           slider
-        } = options;
+        } = this.__modules__;
         const ratioPercentage = roundToTwo(1 - (slider.maxRatio - newRatio) / (slider.maxRatio - 1)) * 100;
         slider.value = ratioPercentage;
-        this.slideTo(ratioPercentage);
-      }
+        this.slideTo(ratioPercentage, true);
+      } // if zoomer disableOnBounds
+
 
       if (options.zoomer.disableOnBounds) {
         const {
-          zoomer,
           bounds,
           maxRatio
         } = options;
         const {
           zoomerInEl,
           zoomerOutEl
-        } = zoomer;
+        } = this.__modules__.zoomer;
         bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE);
         this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE);
       }
@@ -268,17 +325,109 @@
      * value - a numer between 0-100
      * @param {Number}
      */
-    slideTo(value) {
+    slideTo(value, onlySlide) {
       const {
-        options
+        __modules__
       } = this;
-      if (!options.slider) return;
+      if (!__modules__.slider) return;
       const {
         slider
-      } = options;
+      } = __modules__;
       const position = slider.direction === 'horizontal' ? 'left' : 'top';
       const distance = minmax(value, 0, 100);
       slider.sliderButton.style[position] = `${distance}%`;
+
+      if (!onlySlide) {
+        const percentage = distance / 100;
+        const minRatio = this.ratio < 1 ? this.ratio : 1;
+        const maxRatio = this.ratio > slider.maxRatio ? this.ratio : slider.maxRatio;
+        const ratio = (maxRatio - minRatio) * percentage + minRatio;
+        this.zoomTo(ratio);
+      }
+
+      return this;
+    },
+
+    /**
+     * reset image to initial status
+     */
+    reset() {
+      const {
+        image
+      } = this;
+      this.zoomTo(1);
+      setStyle(image, {
+        transform: 'translate(0, 0)'
+      });
+      this.emit('reset');
+      return this;
+    },
+
+    /**
+     * destory the instance of zoomist
+     */
+    destroy() {
+      const {
+        element,
+        wrapper
+      } = this;
+      const {
+        slider,
+        zoomer
+      } = this.__modules__;
+      element[NAME] = undefined;
+      this.mounted = false;
+      if (slider) this.destroySlider();
+      if (zoomer) this.destroyZoomer();
+      wrapper.remove();
+      element.classList.remove(CLASS_CONTAINER);
+      this.emit('destroy');
+      return this;
+    },
+
+    /**
+     * a syntactic sugar of destroy and init
+     */
+    update() {
+      this.destroy().init();
+      this.emit('update');
+      return this;
+    },
+
+    /**
+     * add handler on __events__
+     * @param {String} events 
+     * @param {Function} handler 
+     */
+    on(events, handler) {
+      if (!isFunction(handler)) return this;
+      const {
+        __events__
+      } = this;
+      events.split(' ').forEach(evt => {
+        if (!__events__[evt]) __events__[evt] = [];
+
+        __events__[evt].push(handler);
+      });
+      return this;
+    },
+
+    /**
+     * invoke handlers in __events__[event]
+     * @param  {String, ...} args 
+     */
+    emit(...args) {
+      const {
+        __events__
+      } = this;
+      const event = args[0];
+      const data = args.slice(1, args.length);
+      if (!__events__[event]) return this;
+
+      __events__[event].forEach(handler => {
+        if (isFunction(handler)) handler.apply(this, data);
+      });
+
       return this;
     }
 
@@ -299,6 +448,7 @@
     } = data; // set image size on window resize
 
     const resize = () => {
+      if (containerData.width === element.offsetWidth) return;
       const widthRatio = element.offsetWidth / containerData.width;
       const heightRatio = element.offsetHeight / containerData.height;
       const originImageWidth = originImageData.width * widthRatio;
@@ -334,6 +484,7 @@
         top: imageTop,
         transform: `translate(${transformX}px, ${transformY}px)`
       });
+      zoomist.emit('resize');
     };
 
     window.addEventListener(EVENT_RESIZE, resize); // set image drag event
@@ -360,6 +511,10 @@
         transY: getTransformY(image)
       });
       zoomist.dragging = true;
+      zoomist.emit('dragStart', {
+        x: dragData.transX,
+        y: dragData.transY
+      }, e);
       document.addEventListener(EVENT_TOUCH_MOVE, dragMove);
       document.addEventListener(EVENT_TOUCH_END, dragEnd);
     };
@@ -380,13 +535,21 @@
         if (pageY > maxPageY) dragData.startY += pageY - maxPageY;
       }
 
-      const transformX = pageX - dragData.startX + dragData.transX;
-      const transformY = pageY - dragData.startY + dragData.transY;
+      const transformX = roundToTwo(pageX - dragData.startX + dragData.transX);
+      const transformY = roundToTwo(pageY - dragData.startY + dragData.transY);
       image.style.transform = `translate(${transformX}px, ${transformY}px)`;
+      zoomist.emit('drag', {
+        x: transformX,
+        y: transformY
+      }, e);
     };
 
-    const dragEnd = () => {
+    const dragEnd = e => {
       zoomist.dragging = false;
+      zoomist.emit('dragEnd', {
+        x: getTransformX(image),
+        y: getTransformY(image)
+      }, e);
       document.removeEventListener(EVENT_TOUCH_MOVE, dragMove);
       document.removeEventListener(EVENT_TOUCH_END, dragEnd);
     };
@@ -409,6 +572,7 @@
       let delta;
       if (e.deltaY) delta = e.deltaY > 0 ? -1 : 1;else if (e.wheelDelta) delta = e.wheelDelta / 120;else if (e.detail) delta = e.detail > 0 ? -1 : 1;
       zoomist.zoom(delta * zoomRatio, getPointer(e));
+      zoomist.emit('wheel', e);
     };
 
     element.addEventListener(EVENT_WHEEL, wheel);
@@ -417,7 +581,7 @@
   const sliderEvents = zoomist => {
     const {
       slider
-    } = zoomist.options; // events
+    } = zoomist.__modules__; // events
 
     slider.sliding = false;
     const isHorizontal = slider.direction === 'horizontal';
@@ -437,6 +601,7 @@
     const slideStart = e => {
       slideHandler(e);
       slider.sliding = true;
+      zoomist.emit('slideStart', zoomist.getSliderValue(), e);
       document.addEventListener(EVENT_TOUCH_MOVE, slideMove);
       document.addEventListener(EVENT_TOUCH_END, slideEnd);
     };
@@ -444,33 +609,36 @@
     const slideMove = e => {
       if (!slider.sliding) return;
       slideHandler(e);
+      zoomist.emit('slide', zoomist.getSliderValue(), e);
     };
 
     const slideEnd = e => {
       slider.sliding = false;
+      zoomist.emit('slideEnd', zoomist.getSliderValue(), e);
       document.removeEventListener(EVENT_TOUCH_MOVE, slideMove);
       document.removeEventListener(EVENT_TOUCH_END, slideEnd);
     };
 
     slider.sliderMain.addEventListener(EVENT_TOUCH_START, slideStart);
+    slider.sliderMain.event = slideStart;
   }; // zoomer events
 
   const zoomerEvents = zoomist => {
     const {
-      options
-    } = zoomist;
+      zoomRatio
+    } = zoomist.options;
     const {
-      zoomer,
-      zoomRatio,
-      bounds,
-      maxRatio
-    } = options;
-    zoomer.zoomerInEl.addEventListener('click', () => {
-      zoomist.zoom(zoomRatio);
-    });
-    zoomer.zoomerOutEl.addEventListener('click', () => {
-      zoomist.zoom(-zoomRatio);
-    });
+      zoomer
+    } = zoomist.__modules__;
+
+    const zoomInHandler = () => zoomist.zoom(zoomRatio);
+
+    const zoomOutHandler = () => zoomist.zoom(-zoomRatio);
+
+    zoomer.zoomerInEl.addEventListener('click', zoomInHandler);
+    zoomer.zoomerOutEl.addEventListener('click', zoomOutHandler);
+    zoomer.zoomerInEl.event = zoomInHandler;
+    zoomer.zoomerOutEl.event = zoomOutHandler;
   };
 
   const sliderTemp = `
@@ -481,32 +649,40 @@
 `;
 
   var MODULES = {
+    /**
+     * create all modules
+     */
     createModules() {
       const {
         options
       } = this;
+      this.__modules__ = {};
       MODULES$1.forEach(module => {
         if (options[module]) this[`create${upperFirstLetter(module)}`]();
       });
     },
 
+    /**
+     * create slider module
+     */
     createSlider() {
       const {
         element,
-        options
+        options,
+        __modules__
       } = this;
-      options.slider = Object.assign(DEFAULT_SLIDER_OPTIONS, options.slider);
+      __modules__.slider = Object.assign({}, DEFAULT_SLIDER_OPTIONS, options.slider);
       const {
         slider
-      } = options;
-      if (options.maxRatio) Object.assign(options.slider, {
+      } = __modules__;
+      if (options.maxRatio) Object.assign(slider, {
         maxRatio: options.maxRatio
       });
       if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal';
       slider.value = 0; // mount
 
       if (slider.mounted) slider.sliderMain.remove();
-      const isCustomEl = slider.el && isElementExist(slider.el);
+      const isCustomEl = slider.isCustomEl = slider.el && isElementExist(slider.el);
       const sliderEl = isCustomEl ? getElement(slider.el) : document.createElement('div');
       if (!isCustomEl) sliderEl.classList.add(CLASS_SLIDER);
       sliderEl.innerHTML = sliderTemp;
@@ -522,19 +698,35 @@
       if (!isCustomEl) element.append(sliderEl);
     },
 
+    /**
+     * destroy slider module
+     */
+    destroySlider() {
+      const {
+        slider
+      } = this.__modules__;
+      if (!slider || !slider.mounted) return;
+      if (slider.isCustomEl) slider.sliderMain.remove();else slider.sliderEl.remove();
+      slider.mounted = false;
+    },
+
+    /**
+     * create zoomer module
+     */
     createZoomer() {
       const {
         element,
-        options
+        options,
+        __modules__
       } = this;
-      options.zoomer = Object.assign(DEFAULT_ZOOMER_OPTIONS, options.zoomer);
+      __modules__.zoomer = Object.assign({}, DEFAULT_ZOOMER_OPTIONS, options.zoomer);
       const {
         zoomer
-      } = options; // mount
+      } = __modules__; // mount
 
       if (zoomer.mounted && zoomer.zoomerEl) zoomer.sliderMain.remove();
-      const isCustomInEl = zoomer.inEl && isElementExist(zoomer.inEl);
-      const isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl);
+      const isCustomInEl = zoomer.isCustomInEl = zoomer.inEl && isElementExist(zoomer.inEl);
+      const isCustomOutEl = zoomer.isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl);
       const zoomerInEl = isCustomInEl ? getElement(zoomer.inEl) : document.createElement('div');
       const zoomerOutEl = isCustomOutEl ? getElement(zoomer.outEl) : document.createElement('div');
       if (!isCustomInEl) zoomerInEl.classList.add(CLASS_ZOOMER_IN);
@@ -563,6 +755,26 @@
         zoomer.zoomerEl = zoomerEl;
         element.append(zoomerEl);
       }
+    },
+
+    /**
+     * destroy zoomer module
+     */
+    destroyZoomer() {
+      const {
+        zoomer
+      } = this.__modules__;
+      if (!zoomer || !zoomer.mounted) return;
+
+      const unbindZoomer = target => {
+        target.removeEventListener('click', target.event);
+        target.event = undefined;
+        target.classList.remove(CLASS_ZOOMER_DISABLE);
+      };
+
+      if (zoomer.isCustomInEl) unbindZoomer(zoomer.zoomerInEl);else zoomer.zoomerInEl.remove();
+      if (zoomer.isCustomOutEl) unbindZoomer(zoomer.zoomerOutEl);else zoomer.zoomerOutEl.remove();
+      zoomer.mounted = false;
     }
 
   };
@@ -586,18 +798,22 @@
         element,
         options
       } = this;
+      const {
+        src
+      } = options;
       if (element[NAME]) return;
       element[NAME] = this;
-      const src = options.src = isString(options.src) ? options.src : DEFAULT_OPTIONS.src;
-      const url = element.getAttribute(src);
-      element.removeAttribute(src);
+      const source = options.src = isString(src) || isImg(src) ? src : DEFAULT_OPTIONS.src;
+      const url = isImg(source) ? source.src : element.getAttribute(source);
+      if (!url) throw new Error(`Cannot find src from ${source}`);
       this.create(url);
     }
 
     create(url) {
       if (!url) return;
       const {
-        element
+        element,
+        options
       } = this;
       const {
         offsetWidth,
@@ -611,6 +827,12 @@
         aspectRatio: offsetWidth / offsetHeight
       };
       this.ratio = 1;
+      this.__events__ = EVENTS;
+
+      for (const [k, v] of Object.entries(options.on)) {
+        this.__events__[k] = [v];
+      }
+
       this.mount();
     }
 
@@ -681,13 +903,13 @@
       const {
         element,
         wrapper,
-        image,
-        options
+        image
       } = this;
       element.classList.add(CLASS_CONTAINER);
       wrapper.append(image);
       element.append(wrapper);
       this.createModules();
+      this.emit('ready');
     }
 
   }

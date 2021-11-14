@@ -13,7 +13,6 @@ import {
   EVENT_TOUCH_END,
   EVENT_RESIZE,
   EVENT_WHEEL,
-  CLASS_ZOOMER_DISABLE
 } from './../shared/constants'
 
 
@@ -23,6 +22,8 @@ export default (zoomist) => {
   
   // set image size on window resize
   const resize = () => {
+    if (containerData.width === element.offsetWidth) return;
+
     const widthRatio = element.offsetWidth / containerData.width
     const heightRatio = element.offsetHeight / containerData.height
 
@@ -64,7 +65,10 @@ export default (zoomist) => {
       top: imageTop,
       transform: `translate(${transformX}px, ${transformY}px)`
     })
+
+    zoomist.emit('resize')
   }
+
   window.addEventListener(EVENT_RESIZE, resize)
 
 
@@ -93,6 +97,9 @@ export default (zoomist) => {
     })
 
     zoomist.dragging = true
+
+    zoomist.emit('dragStart', {x: dragData.transX, y: dragData.transY}, e)
+
     document.addEventListener(EVENT_TOUCH_MOVE, dragMove)
     document.addEventListener(EVENT_TOUCH_END, dragEnd)
   }
@@ -111,13 +118,17 @@ export default (zoomist) => {
       if (pageY < minPageY) dragData.startY += pageY - minPageY
       if (pageY > maxPageY) dragData.startY += pageY - maxPageY
     }
-    const transformX = pageX - dragData.startX + dragData.transX
-    const transformY = pageY - dragData.startY + dragData.transY
+    const transformX = roundToTwo(pageX - dragData.startX + dragData.transX)
+    const transformY = roundToTwo(pageY - dragData.startY + dragData.transY)
 
     image.style.transform = `translate(${transformX}px, ${transformY}px)`
+
+    zoomist.emit('drag', {x: transformX, y: transformY}, e)
   }
-  const dragEnd = () => {
+  const dragEnd = (e) => {
     zoomist.dragging = false
+
+    zoomist.emit('dragEnd', {x: getTransformX(image), y: getTransformY(image)}, e)
 
     document.removeEventListener(EVENT_TOUCH_MOVE, dragMove)
     document.removeEventListener(EVENT_TOUCH_END, dragEnd)
@@ -145,6 +156,8 @@ export default (zoomist) => {
     else if (e.detail) delta = e.detail > 0 ? -1 : 1
 
     zoomist.zoom(delta * zoomRatio, getPointer(e))
+
+    zoomist.emit('wheel', e)
   }
 
   element.addEventListener(EVENT_WHEEL, wheel)
@@ -153,7 +166,7 @@ export default (zoomist) => {
 
 // slider events
 export const sliderEvents = (zoomist) => {
-  const { slider } = zoomist.options
+  const { slider } = zoomist.__modules__
 
   // events
   slider.sliding = false
@@ -177,6 +190,9 @@ export const sliderEvents = (zoomist) => {
     slideHandler(e)
 
     slider.sliding = true
+
+    zoomist.emit('slideStart', zoomist.getSliderValue(), e)
+
     document.addEventListener(EVENT_TOUCH_MOVE, slideMove)
     document.addEventListener(EVENT_TOUCH_END, slideEnd)
   }
@@ -184,26 +200,33 @@ export const sliderEvents = (zoomist) => {
     if (!slider.sliding) return;
 
     slideHandler(e)
+
+    zoomist.emit('slide', zoomist.getSliderValue(), e)
   }
   const slideEnd = (e) => {
     slider.sliding = false
 
+    zoomist.emit('slideEnd', zoomist.getSliderValue(), e)
+
     document.removeEventListener(EVENT_TOUCH_MOVE, slideMove)
     document.removeEventListener(EVENT_TOUCH_END, slideEnd)
   }
+
   slider.sliderMain.addEventListener(EVENT_TOUCH_START, slideStart)
+  slider.sliderMain.event = slideStart
 }
 
 
 // zoomer events
 export const zoomerEvents = (zoomist) => {
-  const { options } = zoomist
-  const { zoomer, zoomRatio, bounds, maxRatio } = options
+  const { zoomRatio } = zoomist.options
+  const { zoomer } = zoomist.__modules__
 
-  zoomer.zoomerInEl.addEventListener('click', () => {
-    zoomist.zoom(zoomRatio)
-  })
-  zoomer.zoomerOutEl.addEventListener('click', () => {
-    zoomist.zoom(-zoomRatio)
-  })
+  const zoomInHandler = () => zoomist.zoom(zoomRatio)
+  const zoomOutHandler = () => zoomist.zoom(-zoomRatio)
+
+  zoomer.zoomerInEl.addEventListener('click', zoomInHandler)
+  zoomer.zoomerOutEl.addEventListener('click', zoomOutHandler)
+  zoomer.zoomerInEl.event = zoomInHandler
+  zoomer.zoomerOutEl.event = zoomOutHandler
 }

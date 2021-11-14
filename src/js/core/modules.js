@@ -27,27 +27,35 @@ import {
 } from './template'
 
 export default {
+  /**
+   * create all modules
+   */
   createModules() {
     const { options } = this
 
+    this.__modules__ = {}
     MODULES.forEach(module => {
       if (options[module]) this[`create${upperFirstLetter(module)}`]()
     })
   },
+
+  /**
+   * create slider module
+   */
   createSlider() {
-    const { element, options } = this
-    options.slider = Object.assign(DEFAULT_SLIDER_OPTIONS, options.slider)
+    const { element, options, __modules__ } = this
+    __modules__.slider = Object.assign({}, DEFAULT_SLIDER_OPTIONS, options.slider)
     
-    const { slider } = options
+    const { slider } = __modules__
     
-    if (options.maxRatio) Object.assign(options.slider, { maxRatio: options.maxRatio })
+    if (options.maxRatio) Object.assign(slider, { maxRatio: options.maxRatio })
     if (slider.direction !== 'horizontal' && slider.direction !== 'vertical') slider.direction = 'horizontal'
     slider.value = 0
 
     // mount
     if (slider.mounted) slider.sliderMain.remove()
 
-    const isCustomEl = slider.el && isElementExist(slider.el)
+    const isCustomEl = slider.isCustomEl = slider.el && isElementExist(slider.el)
     const sliderEl = isCustomEl ? getElement(slider.el) : document.createElement('div')
     if (!isCustomEl) sliderEl.classList.add(CLASS_SLIDER)
     sliderEl.innerHTML = sliderTemp
@@ -66,17 +74,35 @@ export default {
     // render
     if (!isCustomEl) element.append(sliderEl)
   },
-  createZoomer() {
-    const { element, options } = this
-    options.zoomer = Object.assign(DEFAULT_ZOOMER_OPTIONS, options.zoomer)
 
-    const { zoomer } = options
+  /**
+   * destroy slider module
+   */
+  destroySlider() {
+    const { slider } = this.__modules__
+
+    if (!slider || !slider.mounted) return;
+
+    if (slider.isCustomEl) slider.sliderMain.remove()
+    else slider.sliderEl.remove()
+
+    slider.mounted = false
+  },
+
+  /**
+   * create zoomer module
+   */
+  createZoomer() {
+    const { element, options, __modules__ } = this
+    __modules__.zoomer = Object.assign({}, DEFAULT_ZOOMER_OPTIONS, options.zoomer)
+
+    const { zoomer } = __modules__
 
     // mount
     if (zoomer.mounted && zoomer.zoomerEl) zoomer.sliderMain.remove()
 
-    const isCustomInEl = zoomer.inEl && isElementExist(zoomer.inEl)
-    const isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl)
+    const isCustomInEl = zoomer.isCustomInEl = zoomer.inEl && isElementExist(zoomer.inEl)
+    const isCustomOutEl = zoomer.isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl)
     const zoomerInEl = isCustomInEl ? getElement(zoomer.inEl) : document.createElement('div')
     const zoomerOutEl = isCustomOutEl ? getElement(zoomer.outEl) : document.createElement('div')
     if (!isCustomInEl) zoomerInEl.classList.add(CLASS_ZOOMER_IN)
@@ -109,5 +135,27 @@ export default {
 
       element.append(zoomerEl)
     }
+  },
+
+  /**
+   * destroy zoomer module
+   */
+  destroyZoomer() {
+    const { zoomer } = this.__modules__
+
+    if (!zoomer || !zoomer.mounted) return;
+
+    const unbindZoomer = (target) => {
+      target.removeEventListener('click', target.event)
+      target.event = undefined
+      target.classList.remove(CLASS_ZOOMER_DISABLE)
+    }
+
+    if (zoomer.isCustomInEl) unbindZoomer(zoomer.zoomerInEl)
+    else zoomer.zoomerInEl.remove()
+    if (zoomer.isCustomOutEl) unbindZoomer(zoomer.zoomerOutEl)
+    else zoomer.zoomerOutEl.remove()
+
+    zoomer.mounted = false
   }
 }
