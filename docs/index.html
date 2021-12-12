@@ -6,12 +6,173 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zoomist.js</title>
   <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/highlight.css">
   <link rel="stylesheet" href="./css/zoomist.css">
   <link rel="stylesheet" href="./css/style.css">
+  <script src="./js/highlight.js"></script>
   <script src="./js/zoomist.js"></script>
   <script defer src="./js/main.js"></script>
 </head>
 <body>
-  
+  <!-- aside -->
+  <aside>
+    <div class="sidebar">
+      <!-- sidebar-group -->
+      <ul class="sidebar-group">
+        <li>
+          <p><a href="#started">Getting Started</a></p>
+          <ul class="sidebar-item">
+            <li><a href="#download">Download</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#usage">Basic Usage</a></li>
+          </ul>
+        </li>
+        <li>
+          <p><a href="#documentation">Documentation</a></p>
+          <ul class="sidebar-item">
+            <li><a href="#parameters">Parameters</a></li>
+            <li><a href="#methods">Methods</a></li>
+            <li><a href="#callbacks">Events</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="github" target="_blank" href="https://github.com/cotton123236/CottonJS"><img src="./image/github-white.png" alt="github-icon">GITHUB</a>
+    </div>
+  </aside>
+
+  <!-- main -->
+  <main>
+
+    <section class="content-block">
+      <!-- #started -->
+      <article>
+        <h2 id="started" data-ids><a class="hash" href="#started" data-cursor-model>Getting Started</a></h2>
+        <hr>
+        <!-- download -->
+        <div class="content-wrap">
+          <h3 id="download" data-ids><a class="hash" href="#download" data-cursor-model>Download</a></h3>
+          <h4>Via npm</h4>
+          <pre><code>npm install zoomist</code></pre>
+          <h4>Manual download</h4>
+          <div class="btn-wrap"><a class="pill-btn hollow" data-cursor-model data-cursor-color="white" href="https://github.com/cotton123236/zoomist/archive/refs/heads/main.zip">Download ZIP</a></div>
+        </div>
+        <!-- installation -->
+        <div class="content-wrap">
+          <h3 id="installation" data-ids><a class="hash" href="#installation" data-cursor-model>Installation</a></h3>
+          <h4>ES modules</h4>
+          <p>If you download the files via npm, you just need to import <span class="bold">Zoomist</span> in your own project :</p>
+          <pre><code class="language-javascript">import Zoomist from 'zoomist'</code></pre>
+          <h4>Script tag include</h4>
+          <p> If you include zoomist with tag, you need to add CSS as well.</p>
+          <pre><code class="language-html">&lt;link rel="stylesheet" src="zoomist.min.css"/>
+
+&lt;script src="zoomist.min.js">&lt;/script></code></pre>
+          <p>or using CDN</p>
+          <pre><code class="language-html">&lt;link rel="stylesheet" src="zoomist.min.css"/>
+            
+&lt;script src="https://cdn.jsdelivr.net/gh/cotton123236/cottonjs@latest/lib/cotton.min.js">&lt;/script></code></pre>
+        </div>
+        <!-- usage -->
+        <div class="content-wrap">
+          <h3 id="usage" data-ids><a class="hash" href="#usage" data-cursor-model>Basic Usage</a></h3>
+          <h4>HTML</h4>
+          <p>Create an container and set <span class="hilite">data-zoomist-src</span> attribute with image URL for Zoomist.</p>
+          <pre><code class="language-html">&lt;div id="zoomist" data-zoomist-src="./image.png">&lt;/div></code></pre>
+          <h4>JavaScript</h4>
+          <p>Initialize Zoomist in JavaScript.</p>
+          <pre><code class="language-javascript">// syntax
+new Zoomist(element[, options])
+
+// for example
+new Zoomist('#zoomist')
+
+// advanced usage
+const zoomistElement = document.querySelector('#zoomist')
+new Cotton(zoomistElement, {
+  // optional parameters
+  maxRatio: 4,
+  height: '60%',
+  // if you need silder
+  slider: true,
+  // if you need zoomer
+  zoomer: true,
+  // callbacks
+  on: {
+    ready() {
+      console.log('Zoomist ready!')
+    }
+  }
+})
+</code></pre>
+          <p>See some <a href="#demos">DEMOS</a> directly.</p>
+        </div>
+      </article>
+
+      <!-- #documentation -->
+      <article>
+        <h2 id="documentation" data-ids><a class="hash" href="#documentation" data-cursor-model>Documentation</a></h2>
+        <hr>
+        <!-- parameters -->
+        <div class="content-wrap">
+          <h3 id="parameters" data-ids><a class="hash" href="#parameters" data-cursor-model>Parameters</a></h3>
+          <p>All available parameters :</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="w-20 ter-color bold mono">fill</td>
+                <td class="w-15 gray-color bold mono">'cover' | 'contain' | 'none'</td>
+                <td class="w-20 ter-color bold mono">'cover'</td>
+                <td class="w-45 thin">Set the image fill type.</td>
+              </tr>
+              <tr>
+                <td class="w-20 ter-color bold mono">draggable</td>
+                <td class="w-15 gray-color bold mono">boolean</td>
+                <td class="w-20 ter-color bold mono">true</td>
+                <td class="w-45 thin">Set image is draggable or not.</td>
+              </tr>
+              <tr>
+                <td class="w-20 ter-color bold mono">wheelable</td>
+                <td class="w-15 gray-color bold mono">boolean</td>
+                <td class="w-20 ter-color bold mono">true</td>
+                <td class="w-45 thin">Set image is zoomable when mouse wheeling.</td>
+              </tr>
+              <tr>
+                <td class="w-20 ter-color bold mono">bounds</td>
+                <td class="w-15 gray-color bold mono">boolean</td>
+                <td class="w-20 ter-color bold mono">true</td>
+                <td class="w-45 thin">Set image can be drag out of bounds or not.<p class="tips">if set <span class="hilite">fill</span> to <span class="hilite">'contain'</span>,the value of <span class="hilite">bounds</span> will be set to <span class="hilite">false</span>.</p></td>
+              </tr>
+              <tr>
+                <td class="w-20 ter-color bold mono">zoomRatio</td>
+                <td class="w-15 gray-color bold mono">number</td>
+                <td class="w-20 ter-color bold mono">0.1</td>
+                <td class="w-45 thin">Set the ratio of a zoom.</td>
+              </tr>
+              <tr>
+                <td class="w-20 ter-color bold mono">maxRatio</td>
+                <td class="w-15 gray-color bold mono">number | false</td>
+                <td class="w-20 ter-color bold mono">false</td>
+                <td class="w-45 thin">Set the max ratio of the image.<br><p class="tips">the value of <span class="hilite">maxRatio</span> can't less than <span class="hilite">1</span>.</p></td>
+              </tr>
+              <tr>
+                <td class="w-20 ter-color bold mono">height</td>
+                <td class="w-15 gray-color bold mono">'auto' | '...%' | number | false</td>
+                <td class="w-20 ter-color bold mono">'auto'</td>
+                <td class="w-45 thin">Set the height of the container.<br>If value is a<span class="hilite">Number</span> - will set a static height <span class="hilite">px</span>.<br>If value is a<span class="hilite">percentage string</span> - will set a percentage height.<br>If value is <span class="hilite">'auto'</span> - will set a percentage height just like image.<br>If value is <span class="hilite">false</span> - won't set height to the container.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
 </body>
 </html>

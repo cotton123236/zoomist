@@ -61,6 +61,11 @@ export const isFunction = (value) => {
   return typeof value === 'function';
 }
 
+// check value is percentage
+export const isPercentage = (value) => {
+  return value.indexOf('%') > -1
+}
+
 // get elemant style
 export const getStyle = (element, prop) => {
   return element[prop] || element.style[prop] || window.getComputedStyle(element).getPropertyValue(prop)

@@ -6,6 +6,7 @@ const zoomist = new Zoomist('[data-zoomist]', {
   bounds: true,
   zoomRatio: 0.1,
   maxRatio: 3,
+  // height: false,
   slider: {
     // el: '.custom-slider',
     // direction: 'vertical',

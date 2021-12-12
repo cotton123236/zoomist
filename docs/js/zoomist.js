@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-11-14T02:41:53.627Z
+ * Date: 2021-12-05T07:22:29.807Z
  */
 
 (function (global, factory) {
@@ -49,7 +49,9 @@
     // {Number} the ratio of zoom at one time
     zoomRatio: 0.1,
     // {Number > 1, False} the max ratio of the image (compare to the initial image status)
-    maxRatio: false
+    maxRatio: false,
+    // {Boolean / String}
+    height: 'auto'
   };
   const DEFAULT_SLIDER_OPTIONS = {
     // {String / querySelector} the css selector string or a element of the slider
@@ -153,6 +155,10 @@
 
   const isFunction = value => {
     return typeof value === 'function';
+  }; // check value is percentage
+
+  const isPercentage = value => {
+    return value.indexOf('%') > -1;
   }; // get elemant style
 
   const setStyle = (element, obj) => {
@@ -812,20 +818,10 @@
     create(url) {
       if (!url) return;
       const {
-        element,
         options
       } = this;
-      const {
-        offsetWidth,
-        offsetHeight
-      } = element;
       this.url = url;
       this.data = {};
-      this.data.containerData = {
-        width: offsetWidth,
-        height: offsetHeight,
-        aspectRatio: offsetWidth / offsetHeight
-      };
       this.ratio = 1;
       this.__events__ = EVENTS;
 
@@ -839,16 +835,15 @@
     mount() {
       if (this.mounted) return;
       const {
+        element,
         options,
         data,
         url
       } = this;
       const {
-        containerData
-      } = data;
-      const {
         fill,
-        maxRatio
+        maxRatio,
+        height
       } = options;
       if (this.wrapper) this.wrapper.remove();
       const wrapper = document.createElement('div');
@@ -864,8 +859,34 @@
           naturalWidth,
           naturalHeight
         } = image;
-        const imageRatio = naturalWidth / naturalHeight; // get base on width or height
+        const imageRatio = naturalWidth / naturalHeight; // set container height
 
+        if (height) {
+          setStyle(element, {
+            width: '100%'
+          });
+          if (height === 'auto') setStyle(element, {
+            paddingBottom: `${roundToTwo(naturalHeight / naturalWidth * 100)}%`
+          });else if (isNumber(height)) setStyle(element, {
+            height: height
+          });else if (isPercentage(height)) setStyle(element, {
+            paddingBottom: height
+          });
+        }
+
+        const {
+          offsetWidth,
+          offsetHeight
+        } = element;
+        this.data.containerData = {
+          width: offsetWidth,
+          height: offsetHeight,
+          aspectRatio: offsetWidth / offsetHeight
+        }; // get base on width or height
+
+        const {
+          containerData
+        } = data;
         let baseSide;
         if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover';
         if (options.fill !== 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height';

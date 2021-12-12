@@ -8,9 +8,10 @@ import {
   isString,
   isNumber,
   isElementExist,
-  isFunction,
   getElement,
-  setStyle
+  setStyle,
+  isPercentage,
+  roundToTwo
 } from './shared/utils'
 import {
   NAME,
@@ -56,16 +57,10 @@ class Zoomist {
   create(url) {
     if (!url) return;
     
-    const { element, options } = this
-    const { offsetWidth, offsetHeight } = element
+    const { options } = this
     
     this.url = url
     this.data = {}
-    this.data.containerData = {
-      width: offsetWidth,
-      height: offsetHeight,
-      aspectRatio: offsetWidth / offsetHeight,
-    }
     this.ratio = 1
 
     this.__events__ = EVENTS
@@ -79,27 +74,42 @@ class Zoomist {
   mount() {
     if (this.mounted) return;
 
-    const { options, data, url } = this
-    const { containerData } = data
-    const { fill, maxRatio } = options
-
+    const { element, options, data, url } = this
+    const { fill, maxRatio, height } = options
+    
     if (this.wrapper) this.wrapper.remove()
 
     const wrapper = document.createElement('div')
     wrapper.classList.add(CLASS_WRAPPER)
-
+    
     const image = document.createElement('img')
     image.classList.add(CLASS_IMAGE)
     image.src = url
-
+    
     image.onload = () => {
       this.wrapper = wrapper
       this.image = image
       
       const { naturalWidth, naturalHeight } = image
       const imageRatio = naturalWidth / naturalHeight
+      
+      // set container height
+      if (height) {
+        setStyle(element, { width: '100%' })
+        if (height === 'auto') setStyle(element, { paddingBottom: `${roundToTwo(naturalHeight / naturalWidth * 100)}%` })
+        else if (isNumber(height)) setStyle(element, { height: height })
+        else if (isPercentage(height)) setStyle(element, { paddingBottom: height })
+      }
+      
+      const { offsetWidth, offsetHeight } = element
+      this.data.containerData = {
+        width: offsetWidth,
+        height: offsetHeight,
+        aspectRatio: offsetWidth / offsetHeight,
+      }
 
       // get base on width or height
+      const { containerData } = data
       let baseSide
       if (fill !== 'cover' && fill !== 'contain' && fill !== 'none') options.fill = 'cover'
       if (options.fill !== 'contain') baseSide = containerData.aspectRatio === imageRatio ? 'both' : containerData.aspectRatio > imageRatio ? 'width' : 'height'

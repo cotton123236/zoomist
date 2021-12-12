@@ -19,6 +19,8 @@ export default {
   zoomRatio: 0.1,
   // {Number > 1, False} the max ratio of the image (compare to the initial image status)
   maxRatio: false,
+  // {Boolean / String}
+  height: 'auto'
 }
 
 export const DEFAULT_SLIDER_OPTIONS = {
