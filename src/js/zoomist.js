@@ -64,8 +64,10 @@ class Zoomist {
     this.ratio = 1
 
     this.__events__ = EVENTS
-    for (const [k, v] of Object.entries(options.on)) {
-      this.__events__[k] = [v]
+    if (options.on) {
+      for (const [k, v] of Object.entries(options.on)) {
+        this.__events__[k] = [v]
+      }
     }
 
     this.mount()

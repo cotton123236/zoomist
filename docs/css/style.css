@@ -4,7 +4,8 @@
 :root {
   scroll-padding-top: 50px;
   --primary-color: #333;
-  --tertiary-color: #666;
+  --secondary-color: #666;
+  --tertiary-color: #78A960;
 }
 
 body {
@@ -39,7 +40,7 @@ h2 {
   font-size: 32px;
   font-weight: 600;
   margin-bottom: 20px;
-  color: var(--tertiary-color);
+  color: var(--secondary-color);
 }
 h3 {
   font-size: 24px;
@@ -130,6 +131,15 @@ table {
 }
 tr {
   border-bottom: 1px solid #e5e7eb;
+}
+tr.large-border {
+  border-bottom: 2px solid #999;
+}
+tr.none-border {
+  border-bottom: none;
+}
+tr.sec-options td:first-child {
+  padding-left: 20px;
 }
 th, td {
   text-align: left;
@@ -296,6 +306,18 @@ main {
     width: 100%;
   }
 }
+
+/* intro-block */
+.intro-block {
+  width: 100%;
+  padding: 0 60px;
+}
+.intro-block .block-content {
+  width: 100%;
+  height: 100vh;
+  border-bottom: 2px solid #666;
+}
+
 
 /* content-block */
 section.content-block {

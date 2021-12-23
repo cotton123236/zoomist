@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-12-05T07:22:29.807Z
+ * Date: 2021-12-23T13:33:10.363Z
  */
 
 (function (global, factory) {
@@ -292,7 +292,7 @@
       } // if zoomer disableOnBounds
 
 
-      if (options.zoomer.disableOnBounds) {
+      if (options.zoomer?.disableOnBounds) {
         const {
           bounds,
           maxRatio
@@ -825,8 +825,10 @@
       this.ratio = 1;
       this.__events__ = EVENTS;
 
-      for (const [k, v] of Object.entries(options.on)) {
-        this.__events__[k] = [v];
+      if (options.on) {
+        for (const [k, v] of Object.entries(options.on)) {
+          this.__events__[k] = [v];
+        }
       }
 
       this.mount();

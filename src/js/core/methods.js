@@ -1,5 +1,4 @@
 import {
-  isString,
   setStyle,
   setObject,
   getNewObject,
@@ -107,7 +106,7 @@ export default {
     }
 
     // if zoomer disableOnBounds
-    if (options.zoomer.disableOnBounds) {
+    if (options.zoomer?.disableOnBounds) {
       const { bounds, maxRatio } = options
       const { zoomerInEl, zoomerOutEl } = this.__modules__.zoomer
 

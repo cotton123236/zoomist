@@ -32,7 +32,7 @@
           <ul class="sidebar-item">
             <li><a href="#parameters">Parameters</a></li>
             <li><a href="#methods">Methods</a></li>
-            <li><a href="#callbacks">Events</a></li>
+            <li><a href="#events">Events</a></li>
           </ul>
         </li>
       </ul>
@@ -42,6 +42,17 @@
 
   <!-- main -->
   <main>
+    <!-- intro-block -->
+    <section class="intro-block">
+      <div class="block-content">
+        <p>Zoomist.js is a JavaScript library for zooming image.</p>
+        <div class="btn-wrap">
+          <a class="pill-btn hollow" href="#demos">Demos</a>
+          <a class="pill-btn solid" href="#started">Getting Started</a>
+        </div>
+      </div>
+      <!-- <div id="intro-zoomist" data-zoomist-src="./image/cats.jpg"></div> -->
+    </section>
 
     <section class="content-block">
       <!-- #started -->
@@ -54,7 +65,7 @@
           <h4>Via npm</h4>
           <pre><code>npm install zoomist</code></pre>
           <h4>Manual download</h4>
-          <div class="btn-wrap"><a class="pill-btn hollow" data-cursor-model data-cursor-color="white" href="https://github.com/cotton123236/zoomist/archive/refs/heads/main.zip">Download ZIP</a></div>
+          <div class="btn-wrap"><a class="pill-btn hollow" href="https://github.com/cotton123236/zoomist/archive/refs/heads/main.zip">Download ZIP</a></div>
         </div>
         <!-- installation -->
         <div class="content-wrap">
@@ -77,17 +88,17 @@
           <h3 id="usage" data-ids><a class="hash" href="#usage" data-cursor-model>Basic Usage</a></h3>
           <h4>HTML</h4>
           <p>Create an container and set <span class="hilite">data-zoomist-src</span> attribute with image URL for Zoomist.</p>
-          <pre><code class="language-html">&lt;div id="zoomist" data-zoomist-src="./image.png">&lt;/div></code></pre>
+          <pre><code class="language-html">&lt;div id="my-zoomist" data-zoomist-src="./image.png">&lt;/div></code></pre>
           <h4>JavaScript</h4>
           <p>Initialize Zoomist in JavaScript.</p>
           <pre><code class="language-javascript">// syntax
 new Zoomist(element[, options])
 
 // for example
-new Zoomist('#zoomist')
+new Zoomist('#my-zoomist')
 
 // advanced usage
-const zoomistElement = document.querySelector('#zoomist')
+const myZoomist = document.querySelector('#my-zoomist')
 new Cotton(zoomistElement, {
   // optional parameters
   maxRatio: 4,
@@ -127,6 +138,12 @@ new Cotton(zoomistElement, {
             </thead>
             <tbody>
               <tr>
+                <td class="w-20 ter-color bold mono">src</td>
+                <td class="w-15 gray-color bold mono">string | IMG element</td>
+                <td class="w-20 ter-color bold mono">'data-zoomist-src'</td>
+                <td class="w-45 thin">Set the url attribute of image. (Or you can set value as a HTML IMG element.)</td>
+              </tr>
+              <tr>
                 <td class="w-20 ter-color bold mono">fill</td>
                 <td class="w-15 gray-color bold mono">'cover' | 'contain' | 'none'</td>
                 <td class="w-20 ter-color bold mono">'cover'</td>
@@ -148,7 +165,7 @@ new Cotton(zoomistElement, {
                 <td class="w-20 ter-color bold mono">bounds</td>
                 <td class="w-15 gray-color bold mono">boolean</td>
                 <td class="w-20 ter-color bold mono">true</td>
-                <td class="w-45 thin">Set image can be drag out of bounds or not.<p class="tips">if set <span class="hilite">fill</span> to <span class="hilite">'contain'</span>,the value of <span class="hilite">bounds</span> will be set to <span class="hilite">false</span>.</p></td>
+                <td class="w-45 thin">Set image can be drag out of bounds or not.<p class="tips">If set <span class="hilite">fill</span> to <span class="hilite">'contain'</span>, the value of <span class="hilite">bounds</span> will be set to <span class="hilite">false</span>.</p></td>
               </tr>
               <tr>
                 <td class="w-20 ter-color bold mono">zoomRatio</td>
@@ -160,13 +177,272 @@ new Cotton(zoomistElement, {
                 <td class="w-20 ter-color bold mono">maxRatio</td>
                 <td class="w-15 gray-color bold mono">number | false</td>
                 <td class="w-20 ter-color bold mono">false</td>
-                <td class="w-45 thin">Set the max ratio of the image.<br><p class="tips">the value of <span class="hilite">maxRatio</span> can't less than <span class="hilite">1</span>.</p></td>
+                <td class="w-45 thin">Set the max ratio of the image.<br><p class="tips">The value of <span class="hilite">maxRatio</span> can't less than <span class="hilite">1</span>.</p></td>
               </tr>
-              <tr>
+              <tr class="large-border">
                 <td class="w-20 ter-color bold mono">height</td>
                 <td class="w-15 gray-color bold mono">'auto' | '...%' | number | false</td>
                 <td class="w-20 ter-color bold mono">'auto'</td>
-                <td class="w-45 thin">Set the height of the container.<br>If value is a<span class="hilite">Number</span> - will set a static height <span class="hilite">px</span>.<br>If value is a<span class="hilite">percentage string</span> - will set a percentage height.<br>If value is <span class="hilite">'auto'</span> - will set a percentage height just like image.<br>If value is <span class="hilite">false</span> - won't set height to the container.</td>
+                <td class="w-45 thin">Set the height of the container.<br>If value is a <span class="hilite">Number</span> - will set a static height <span class="hilite">px</span>.<br>If value is a <span class="hilite">percentage string</span> - will set a percentage height.<br>If value is <span class="hilite">'auto'</span> - will set a percentage height just like image.<br>If value is <span class="hilite">false</span> - won't set height to the container.</td>
+              </tr>
+              <tr class="none-border">
+                <td class="w-20 ter-color bold mono">slider</td>
+                <td class="w-15 gray-color bold mono">boolean | sliderOptions</td>
+                <td class="w-20 ter-color bold mono"></td>
+                <td class="w-45 thin">Object with slider parameters or boolean <span class="hilite">true</span> to enable with default settings.
+                  <pre><code>const myZoomist = new Zoomist('#my-zoomist', {
+  slider: {
+    el: '.custom-slider',
+    direction: 'vertical'
+  }
+})
+</code></pre>
+                </td>
+              </tr>
+              <tr class="none-border">
+                <td>{</td>
+              </tr>
+              <tr class="sec-options">
+                <td class="w-20 ter-color bold mono">el</td>
+                <td class="w-15 gray-color bold mono">string | querySelector</td>
+                <td class="w-20 ter-color bold mono">null</td>
+                <td class="w-45 thin">String with CSS selector or querySelector of slider. If el set to <span class="hilite">false</span> zoomist will create a silder for you.</td>
+              </tr>
+              <tr class="sec-options">
+                <td class="w-20 ter-color bold mono">direction</td>
+                <td class="w-15 gray-color bold mono">'horizontal' | 'vertical'</td>
+                <td class="w-20 ter-color bold mono">'horizontal'</td>
+                <td class="w-45 thin">Set the direction of slider.</td>
+              </tr>
+              <tr class="none-border sec-options">
+                <td class="w-20 ter-color bold mono">maxRatio</td>
+                <td class="w-15 gray-color bold mono">number</td>
+                <td class="w-20 ter-color bold mono">2</td>
+                <td class="w-45 thin">Set the max ratio of image when slider value is 100.<br><p class="tips">Only works on <span class="hilite">options.maxRatio</span> is <span class="hilite">false</span></p></td>
+              </tr>
+              <tr class="large-border">
+                <td>}</td>
+              </tr>
+              <tr class="none-border">
+                <td class="w-20 ter-color bold mono">zoomer</td>
+                <td class="w-15 gray-color bold mono">boolean | zoomerOptions</td>
+                <td class="w-20 ter-color bold mono"></td>
+                <td class="w-45 thin">Object with zoomer parameters or boolean <span class="hilite">true</span> to enable with default settings.
+                  <pre><code>const myZoomist = new Zoomist('#my-zoomist', {
+  zoomer: {
+    inEl: '.custom-in-zoomer',
+    outEl: '.custom-out-zoomer',
+    disableOnBounds: false
+  }
+})
+</code></pre>
+                </td>
+              </tr>
+              <tr class="none-border">
+                <td>{</td>
+              </tr>
+              <tr class="sec-options">
+                <td class="w-20 ter-color bold mono">inEl</td>
+                <td class="w-15 gray-color bold mono">string | querySelector</td>
+                <td class="w-20 ter-color bold mono">null</td>
+                <td class="w-45 thin">String with CSS selector or querySelector of zoom in element. If set to <span class="hilite">false</span> zoomist will create a zoom in element for you.</td>
+              </tr>
+              <tr class="sec-options">
+                <td class="w-20 ter-color bold mono">outEl</td>
+                <td class="w-15 gray-color bold mono">string | querySelector</td>
+                <td class="w-20 ter-color bold mono">null</td>
+                <td class="w-45 thin">String with CSS selector or querySelector of zoom out element. If set to <span class="hilite">false</span> zoomist will create a zoom out element for you.</td>
+              </tr>
+              <tr class="none-border sec-options">
+                <td class="w-20 ter-color bold mono">disableOnBounds</td>
+                <td class="w-15 gray-color bold mono">boolean</td>
+                <td class="w-20 ter-color bold mono">true</td>
+                <td class="w-45 thin">zoomer will be disabled when image can't be larger or smaller.</td>
+              </tr>
+              <tr>
+                <td>}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- methods -->
+        <div class="content-wrap">
+          <h3 id="methods" data-ids><a class="hash" href="#methods" data-cursor-model>Methods</a></h3>
+          <p>After you initialize Zoomist you have its initialized instance in variable with these methods. As the following example :</p>
+              <pre><code class="language-javascript">const myZoomist = new Zoomist('#my-zoomist')
+
+// 
+myZoomist.zoom(0.5)</code></pre>
+              <p>All available methods :</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Methods</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">getContainerData</span>()</td>
+                <td class="w-65 thin">Get the <span class="hilite">{ width, height, aspectRatio }</span> of the container (initial-element).</td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">getImageData</span>()</td>
+                <td class="w-65 thin">Get the <span class="hilite">{ width, height, aspectRatio, top, left, naturalWidth, naturalHeight }</span> of the image.</td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">getSliderValue</span>()</td>
+                <td class="w-65 thin">Get the current value of the slider.</td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">getZoomRatio</span>()</td>
+                <td class="w-65 thin">Get the current value of zoom ratio.</td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">zoom</span>(ratio)</td>
+                <td class="w-65 thin">Zoom the image with a relative ratio.<br><p class="tips">Zoom in - requires a positive number. (ratio > 0)<br>Zoom out - requires a negative number. (ratio < 0)</p>
+                  <pre><code>// ex: 
+zoomist.zoom(0.1)
+zoomist.zoom(-0.1)
+</code></pre>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">zoomTo</span>(ratio)</td>
+                <td class="w-65 thin">Zoom the image with a absolute ratio.<br><p class="tips">Requires a positive number. (ratio > 0)</p>
+                  <pre><code>// ex: 
+zoomist.zoomTo(2)
+</code></pre>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">slideTo</span>(value, isOnlySlide)</td>
+                <td class="w-65 thin">Set the slider to a specific value.<br><p class="tips">If the second argument is <span class="hilite">true</span>, zoomist will only set the slider value.</p>
+                  <pre><code>// ex: 
+zoomist.slideTo(50)
+</code></pre>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">on</span>(event, handler)</td>
+                <td class="w-65 thin">Add event handler.
+                  <pre><code>// ex: 
+zoomist.on('ready', function() {
+  console.log('Zoomist is ready !')
+})
+</code></pre>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">reset</span>()</td>
+                <td class="w-65 thin">Reset the image to initial state.</td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">update</span>()</td>
+                <td class="w-65 thin">The shortcut of zoomist.destroy() and zoomist.init().</td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">destroy</span>()</td>
+                <td class="w-65 thin">Destroy the zoomist and remove all events listeners.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- events -->
+        <div class="content-wrap">
+          <h3 id="callbacks" data-ids><a class="hash" href="#events" data-cursor-model>Events</a></h3>
+          <p>Zoomist provides several useful events you can listen. Events can be assigned in two ways:</p><br>
+          <p>1. Using <span class="hilite">on</span> parameter before initialization.</p>
+          <pre><code>const zoomist = new Zoomist('#my-zoomist', {
+  // ...
+  on: {
+    ready() {
+      console.log('Zoomist is ready !')
+    }
+  }
+})</code></pre>
+          <p>2. Using <span class="hilite">on</span> method after initialization.</p>
+          <pre><code>const zoomist = new Zoomist('#my-zoomist', {
+  // ...
+})
+
+zoomist.on('ready', function() {
+  console.log('Zoomist is ready !')
+})
+</code></pre><br>
+          <p class="tips">The keyword <span class="hilite">this</span> within event handler always points to Zoomist instance.</p><br>
+          <p>All available events :</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Events</th>
+                <th>Arguments</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">ready</td>
+                <td class="w-15 f-50 gray-color bold mono">()</td>
+                <td class="w-65 thin">Event will fire when the zoomist instance is ready.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">zoom</td>
+                <td class="w-15 f-50 gray-color bold mono">(ratio)</td>
+                <td class="w-65 thin">Event will fire when zooming.<br>The first argument is the ratio of the image.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">wheel</td>
+                <td class="w-15 f-50 gray-color bold mono">(event)</td>
+                <td class="w-65 thin">Event will fire when wheeling.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">dragStart</td>
+                <td class="w-15 f-50 gray-color bold mono">(transform, event)</td>
+                <td class="w-65 thin">Event will fire when mouse down to the image.<br>The first argument is the trasform value (x, y) of the image.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">drag</td>
+                <td class="w-15 f-50 gray-color bold mono">(transform, event)</td>
+                <td class="w-65 thin">Event will fire when the image is dragging.<br>The first argument is the trasform value (x, y) of the image.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">dragEnd</td>
+                <td class="w-15 f-50 gray-color bold mono">(transform, event)</td>
+                <td class="w-65 thin">Event will fire when mouse up to the image.<br>The first argument is the trasform value (x, y) of the image.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">slideStart</td>
+                <td class="w-15 f-50 gray-color bold mono">(value, event)</td>
+                <td class="w-65 thin">Event will fire when mouse down to the slider.<br>The first argument is the trasform value of the slider.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">slide</td>
+                <td class="w-15 f-50 gray-color bold mono">(value, event)</td>
+                <td class="w-65 thin">Event will fire when sliding the slider.<br>The first argument is the trasform value of the slider.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">slideEnd</td>
+                <td class="w-15 f-50 gray-color bold mono">(value, event)</td>
+                <td class="w-65 thin">Event will fire when mouse up to the slider.<br>The first argument is the trasform value of the slider.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">resize</td>
+                <td class="w-15 f-50 gray-color bold mono">()</td>
+                <td class="w-65 thin">Event will fire when zoomist is resizing.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">reset</td>
+                <td class="w-15 f-50 gray-color bold mono">()</td>
+                <td class="w-65 thin">Event will fire when using <span class="hilite">reset()</span> method.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">destroy</td>
+                <td class="w-15 f-50 gray-color bold mono">()</td>
+                <td class="w-65 thin">Event will fire when using <span class="hilite">destroy()</span> method.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">update</td>
+                <td class="w-15 f-50 gray-color bold mono">()</td>
+                <td class="w-65 thin">Event will fire when using <span class="hilite">update()</span> method.</td>
               </tr>
             </tbody>
           </table>
