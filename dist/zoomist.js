@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-12-23T13:33:10.363Z
+ * Date: 2021-12-24T09:07:41.298Z
  */
 
 (function (global, factory) {
@@ -287,22 +287,28 @@
           slider
         } = this.__modules__;
         const ratioPercentage = roundToTwo(1 - (slider.maxRatio - newRatio) / (slider.maxRatio - 1)) * 100;
-        slider.value = ratioPercentage;
+        slider.value = minmax(ratioPercentage, 0, 100);
         this.slideTo(ratioPercentage, true);
       } // if zoomer disableOnBounds
 
 
-      if (options.zoomer?.disableOnBounds) {
+      if (options.zoomer) {
         const {
-          bounds,
-          maxRatio
-        } = options;
-        const {
-          zoomerInEl,
-          zoomerOutEl
-        } = this.__modules__.zoomer;
-        bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE);
-        this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE);
+          zoomer
+        } = this.__modules__;
+
+        if (zoomer.disableOnBounds) {
+          const {
+            bounds,
+            maxRatio
+          } = options;
+          const {
+            zoomerInEl,
+            zoomerOutEl
+          } = this.__modules__.zoomer;
+          bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE);
+          this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE);
+        }
       }
 
       return this;
@@ -340,8 +346,9 @@
         slider
       } = __modules__;
       const position = slider.direction === 'horizontal' ? 'left' : 'top';
+      const symbol = slider.direction === 'horizontal' ? '' : '-';
       const distance = minmax(value, 0, 100);
-      slider.sliderButton.style[position] = `${distance}%`;
+      slider.sliderButton.style[position] = `${symbol}${distance}%`;
 
       if (!onlySlide) {
         const percentage = distance / 100;
@@ -386,6 +393,8 @@
       if (slider) this.destroySlider();
       if (zoomer) this.destroyZoomer();
       wrapper.remove();
+      element.style.removeProperty('width');
+      element.style.removeProperty('padding-bottom');
       element.classList.remove(CLASS_CONTAINER);
       this.emit('destroy');
       return this;
@@ -566,6 +575,7 @@
 
     const wheel = e => {
       if (!options.wheelable) return;
+      e.preventDefault();
       const {
         zoomRatio
       } = options;
@@ -594,9 +604,9 @@
 
     const slideHandler = e => {
       const rect = slider.sliderMain.getBoundingClientRect();
-      const mousePoint = isHorizontal ? getPointer(e).clientX : getPointer(e).clientY;
+      const mousePoint = isHorizontal ? getPointer(e).clientX : -getPointer(e).clientY;
       const sliderTotal = isHorizontal ? rect.width : rect.height;
-      const sliderStart = isHorizontal ? rect.left : rect.top;
+      const sliderStart = isHorizontal ? rect.left : -rect.bottom;
       const percentage = minmax(roundToTwo((mousePoint - sliderStart) / sliderTotal), 0, 1);
       const minRatio = zoomist.ratio < 1 ? zoomist.ratio : 1;
       const maxRatio = zoomist.ratio > slider.maxRatio ? zoomist.ratio : slider.maxRatio;
@@ -652,6 +662,16 @@
     <span class="${CLASS_SLIDER_BAR}"></span>
     <span class="${CLASS_SLIDER_BUTTON}"></span>
   </div>
+`;
+  const inZoomerIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 12 12">
+  <polygon points="12,5.5 6.5,5.5 6.5,0 5.5,0 5.5,5.5 0,5.5 0,6.5 5.5,6.5 5.5,12 6.5,12 6.5,6.5 12,6.5 "/>
+</svg>
+`;
+  const outZoomerIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 12 12">
+  <rect y="5.5" width="12" height="1"/>
+</svg>
 `;
 
   var MODULES = {
@@ -735,8 +755,17 @@
       const isCustomOutEl = zoomer.isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl);
       const zoomerInEl = isCustomInEl ? getElement(zoomer.inEl) : document.createElement('div');
       const zoomerOutEl = isCustomOutEl ? getElement(zoomer.outEl) : document.createElement('div');
-      if (!isCustomInEl) zoomerInEl.classList.add(CLASS_ZOOMER_IN);
-      if (!isCustomOutEl) zoomerOutEl.classList.add(CLASS_ZOOMER_OUT);
+
+      if (!isCustomInEl) {
+        zoomerInEl.classList.add(CLASS_ZOOMER_IN);
+        zoomerInEl.innerHTML = inZoomerIcon;
+      }
+
+      if (!isCustomOutEl) {
+        zoomerOutEl.classList.add(CLASS_ZOOMER_OUT);
+        zoomerOutEl.innerHTML = outZoomerIcon;
+      }
+
       zoomer.zoomerInEl = zoomerInEl;
       zoomer.zoomerOutEl = zoomerOutEl;
 
@@ -780,6 +809,7 @@
 
       if (zoomer.isCustomInEl) unbindZoomer(zoomer.zoomerInEl);else zoomer.zoomerInEl.remove();
       if (zoomer.isCustomOutEl) unbindZoomer(zoomer.zoomerOutEl);else zoomer.zoomerOutEl.remove();
+      if (zoomer.zoomerEl) zoomer.zoomerEl.remove();
       zoomer.mounted = false;
     }
 

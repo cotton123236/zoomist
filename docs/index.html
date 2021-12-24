@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./css/highlight.css">
   <link rel="stylesheet" href="./css/zoomist.css">
   <link rel="stylesheet" href="./css/style.css">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js' integrity='sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==' crossorigin='anonymous'></script>
   <script src="./js/highlight.js"></script>
   <script src="./js/zoomist.js"></script>
   <script defer src="./js/main.js"></script>
@@ -45,13 +46,15 @@
     <!-- intro-block -->
     <section class="intro-block">
       <div class="block-content">
-        <p>Zoomist.js is a JavaScript library for zooming image.</p>
-        <div class="btn-wrap">
-          <a class="pill-btn hollow" href="#demos">Demos</a>
-          <a class="pill-btn solid" href="#started">Getting Started</a>
+        <div class="text-wrap">
+          <div id="intro-zoomist" data-zoomist-src="./image/logo.svg"></div>
+          <p>Zoomist.js is a JavaScript library for <span class="pri-color bold">zomming image</span>.</p>
+          <div class="btn-wrap">
+            <a class="pill-btn hollow" href="#demos">Demos</a>
+            <a class="pill-btn solid" href="#started">Getting Started</a>
+          </div>
         </div>
       </div>
-      <!-- <div id="intro-zoomist" data-zoomist-src="./image/cats.jpg"></div> -->
     </section>
 
     <section class="content-block">
@@ -448,6 +451,114 @@ zoomist.on('ready', function() {
           </table>
         </div>
       </article>
+      
+          <!-- #demos -->
+          <article>
+            <h2 id="demos" data-ids><a class="hash" href="#demos" data-cursor-model>Demos</a></h2>
+            <hr>
+            <!-- simple -->
+            <div class="content-wrap">
+              <h3 id="simple" data-ids><a class="hash" href="#simple" data-cursor-model>Simple Usage</a></h3>
+              <div class="demo-box">
+                <ul class="tabs">
+                  <a href="javascript:;" data-tab-for="demo" data-cursor-model class="active">Demo</a>
+                  <a href="javascript:;" data-tab-for="html" data-cursor-model data-cursor-color="white">HTML</a>
+                  <a href="javascript:;" data-tab-for="css" data-cursor-model data-cursor-color="white">CSS</a>
+                  <a href="javascript:;" data-tab-for="js" data-cursor-model data-cursor-color="white">JS</a>
+                </ul>
+                <div class="views">
+                  <div class="demo show" data-cursor-model data-cursor-color="none">
+                    <div class="demo-inner">
+                      <div id="my-zoomist" data-zoomist-src="./image/cats.jpg"></div>
+                      <div class="zoomist-data">{x: 0, y: 0}</div>
+                    </div>
+                    <div class="demo-tools">
+                      <ul class="option-tools">
+                        <li>
+                          <label><div class="title">fill</div>
+                            <select id="fill">
+                              <option value="cover" selected>cover</option>
+                              <option value="contain">contain</option>
+                              <option value="none">none</option>
+                            </select>
+                          </label>
+                        </li>
+                        <li>
+                          <label><div class="title">draggable</div><input id="draggable" type="checkbox" checked /><div class="checkball"></div></label>
+                        </li>
+                        <li>
+                          <label><div class="title">wheelable</div><input id="wheelable" type="checkbox" checked /><div class="checkball"></div></label>
+                        </li>
+                        <li>
+                          <label><div class="title">bounds</div><input id="bounds" type="checkbox" checked /><div class="checkball"></div></label>
+                        </li>
+                        <li>
+                          <label><div class="title">zoomRatio</div><input id="zoomRatio" type="text" value="0.1" /></label>
+                        </li>
+                        <li>
+                          <label><div class="title">maxRatio</div><input id="maxRatio" type="checkbox" /><div class="checkball"></div><input id="maxRatioValue" type="text" value="3" /></label>
+                        </li>
+                        <li>
+                          <label><div class="title">slider.direction</div>
+                            <select id="direction">
+                              <option value="horizontal" selected>horizontal</option>
+                              <option value="vertical">vertical</option>
+                            </select>
+                          </label>
+                        </li>
+                        <li>
+                          <label><div class="title">zoomer.disableOnBounds</div><input id="disableOnBounds" type="checkbox" checked /><div class="checkball"></div></label>
+                        </li>
+                      </ul>
+                      <ul class="method-tools">
+                        <li>
+                          <button id="getContainerData">getContainerData()</button>
+                        </li>
+                        <li>
+                          <button id="getImageData">getImageData()</button>
+                        </li>
+                        <li>
+                          <button id="getSliderValue">getSliderValue()</button>
+                        </li>
+                        <li>
+                          <button id="getZoomRatio">getZoomRatio()</button>
+                        </li>
+                        <li>
+                          <button id="reset">reset()</button>
+                        </li>
+                        <li>
+                          <button id="update">update()</button>
+                        </li>
+                        <li>
+                          <button id="destroy">destroy()</button>
+                        </li>
+                        <li>
+                          <button id="zoom">zoom(<span class="val ter-color">0.1</span>)</button><input id="zoomValue" type="text" value="0.1" />
+                        </li>
+                        <li>
+                          <button id="zoomTo">zoomTo(<span class="val ter-color">2</span>)</button><input id="zoomToValue" type="text" value="2" />
+                        </li>
+                        <li>
+                          <button id="slideTo">slideTo(<span class="val ter-color">50</span>)</button><input id="slideToValue" type="text" value="50" />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="html">
+                    <pre><code class="language-html">&lt;div id="my-zoomist" data-zoomist-src="./image/cats.jpg">&lt;/div></code></pre>
+                  </div>
+                  <div class="css">
+                    <pre><code>
+</code></pre>
+                  </div>
+                  <div class="js">
+                    <pre><code>// init
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
     </section>
   </main>
 </body>

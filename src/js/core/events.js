@@ -142,6 +142,8 @@ export default (zoomist) => {
 
   const wheel = (e) => {
     if (!options.wheelable) return;
+    e.preventDefault()
+
     const { zoomRatio } = options
 
     if (zoomist.wheeling) return;
@@ -175,9 +177,9 @@ export const sliderEvents = (zoomist) => {
   const slideHandler = (e) => {
     const rect = slider.sliderMain.getBoundingClientRect()
 
-    const mousePoint = isHorizontal ? getPointer(e).clientX : getPointer(e).clientY
+    const mousePoint = isHorizontal ? getPointer(e).clientX : -getPointer(e).clientY
     const sliderTotal = isHorizontal ? rect.width : rect.height
-    const sliderStart = isHorizontal ? rect.left : rect.top
+    const sliderStart = isHorizontal ? rect.left : -rect.bottom
     const percentage = minmax(roundToTwo(( mousePoint - sliderStart ) / sliderTotal), 0, 1)
 
     const minRatio = zoomist.ratio < 1 ? zoomist.ratio : 1

@@ -23,7 +23,9 @@ import {
   zoomerEvents
 } from './events'
 import {
-  sliderTemp
+  sliderTemp,
+  inZoomerIcon,
+  outZoomerIcon
 } from './template'
 
 export default {
@@ -105,8 +107,14 @@ export default {
     const isCustomOutEl = zoomer.isCustomOutEl = zoomer.outEl && isElementExist(zoomer.outEl)
     const zoomerInEl = isCustomInEl ? getElement(zoomer.inEl) : document.createElement('div')
     const zoomerOutEl = isCustomOutEl ? getElement(zoomer.outEl) : document.createElement('div')
-    if (!isCustomInEl) zoomerInEl.classList.add(CLASS_ZOOMER_IN)
-    if (!isCustomOutEl) zoomerOutEl.classList.add(CLASS_ZOOMER_OUT)
+    if (!isCustomInEl) {
+      zoomerInEl.classList.add(CLASS_ZOOMER_IN)
+      zoomerInEl.innerHTML = inZoomerIcon
+    }
+    if (!isCustomOutEl) {
+      zoomerOutEl.classList.add(CLASS_ZOOMER_OUT)
+      zoomerOutEl.innerHTML = outZoomerIcon
+    }
 
     zoomer.zoomerInEl = zoomerInEl
     zoomer.zoomerOutEl = zoomerOutEl
@@ -155,6 +163,7 @@ export default {
     else zoomer.zoomerInEl.remove()
     if (zoomer.isCustomOutEl) unbindZoomer(zoomer.zoomerOutEl)
     else zoomer.zoomerOutEl.remove()
+    if (zoomer.zoomerEl) zoomer.zoomerEl.remove()
 
     zoomer.mounted = false
   }

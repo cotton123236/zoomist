@@ -100,18 +100,21 @@ export default {
       const { slider } = this.__modules__
       const ratioPercentage = roundToTwo(1 - ( slider.maxRatio - newRatio ) / ( slider.maxRatio - 1 )) * 100
 
-      slider.value = ratioPercentage
+      slider.value = minmax(ratioPercentage, 0, 100)
 
       this.slideTo(ratioPercentage, true)
     }
 
     // if zoomer disableOnBounds
-    if (options.zoomer?.disableOnBounds) {
-      const { bounds, maxRatio } = options
-      const { zoomerInEl, zoomerOutEl } = this.__modules__.zoomer
-
-      bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE)
-      this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE)
+    if (options.zoomer) {
+      const { zoomer } = this.__modules__
+      if (zoomer.disableOnBounds) {
+        const { bounds, maxRatio } = options
+        const { zoomerInEl, zoomerOutEl } = this.__modules__.zoomer
+  
+        bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE)
+        this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE)
+      }
     }
 
     return this
@@ -146,9 +149,10 @@ export default {
     const { slider } = __modules__
 
     const position = slider.direction === 'horizontal' ? 'left' : 'top'
+    const symbol = slider.direction === 'horizontal' ? '' : '-'
     const distance = minmax(value, 0, 100)
 
-    slider.sliderButton.style[position] = `${distance}%`
+    slider.sliderButton.style[position] = `${symbol}${distance}%`
 
     if (!onlySlide) {
       const percentage = distance / 100
@@ -188,11 +192,13 @@ export default {
 
     element[NAME] = undefined
     this.mounted = false
-
+    
     if (slider) this.destroySlider()
     if (zoomer) this.destroyZoomer()
-
+    
     wrapper.remove()
+    element.style.removeProperty('width')
+    element.style.removeProperty('padding-bottom')
     element.classList.remove(CLASS_CONTAINER)
 
     this.emit('destroy')

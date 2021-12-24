@@ -9,13 +9,13 @@ const zoomist = new Zoomist('[data-zoomist]', {
   // height: false,
   slider: {
     // el: '.custom-slider',
-    // direction: 'vertical',
+    direction: 'vertical',
     // maxRatio: 3
   },
   zoomer: {
     // inEl: '.custom-in-zoomer',
     // outEl: '.custom-out-zoomer',
-    disableOnBounds: true
+    // disableOnBounds: true
   },
   on: {
     ready() {
