@@ -67,7 +67,7 @@ new Zoomist('#my-zoomist')
 
 // advanced usage
 const myZoomist = document.querySelector('#my-zoomist')
-new Cotton(zoomistElement, {
+new Zoomist(zoomistElement, {
   // optional parameters
   maxRatio: 4,
   height: '60%',
