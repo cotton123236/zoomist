@@ -422,7 +422,7 @@ ul.tabs {
 }
 ul.tabs a {
   display: block;
-  width: 25%;
+  width: 100%;
   text-align: center;
   color: #fff;
   border-bottom: 1px solid #999;
@@ -444,7 +444,7 @@ ul.tabs a.active {
   border-top: none;
   width: 100%;
 }
-.views > div:not(.demo) {
+.views > div:not(.show) {
   position: absolute;
   top: 0;
   left: 0;
@@ -463,7 +463,7 @@ ul.tabs a.active {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 40px 60px;
+  padding: 50px;
 }
 .demo .demo-inner {
   position: relative;
@@ -475,16 +475,18 @@ ul.tabs a.active {
 }
 .demo .zoomist-data {
   position: absolute;
-  bottom: -50px;
+  top: calc(100% + 20px);
   left: 50%;
   transform: translateX(-50%);
+  max-width: 100%;
+  word-break: break-all;
   font-weight: 300;
   font-size: 14px;
   letter-spacing: .05em;
   color: #fff;
   background-color: var(--primary-color);
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 10px 30px;
+  border-radius: 50px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 2s;

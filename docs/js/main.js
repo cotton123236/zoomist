@@ -34,7 +34,7 @@ const tabSwitch = () => {
 const demoHandler = () => {
   // demo zoomist
   const demoZoomist = new Zoomist('#my-zoomist', {
-    height: 'auto',
+    height: '75%',
     slider: {},
     zoomer: {}
   })

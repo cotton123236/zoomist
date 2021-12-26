@@ -36,6 +36,12 @@
             <li><a href="#events">Events</a></li>
           </ul>
         </li>
+        <li>
+          <p><a href="#demo">Demo</a></p>
+          <ul class="sidebar-item">
+            <li><a href="#simple">Simple usage</a></li>
+          </ul>
+        </li>
       </ul>
       <a class="github" target="_blank" href="https://github.com/cotton123236/CottonJS"><img src="./image/github-white.png" alt="github-icon">GITHUB</a>
     </div>
@@ -48,9 +54,9 @@
       <div class="block-content">
         <div class="text-wrap">
           <div id="intro-zoomist" data-zoomist-src="./image/logo.svg"></div>
-          <p>Zoomist.js is a JavaScript library for <span class="pri-color bold">zomming image</span>.</p>
+          <p>Zoomist.js is a JavaScript library for <span class="pri-color bold">zooming image</span>.</p>
           <div class="btn-wrap">
-            <a class="pill-btn hollow" href="#demos">Demos</a>
+            <a class="pill-btn hollow" href="#demo">Demo</a>
             <a class="pill-btn solid" href="#started">Getting Started</a>
           </div>
         </div>
@@ -60,11 +66,11 @@
     <section class="content-block">
       <!-- #started -->
       <article>
-        <h2 id="started" data-ids><a class="hash" href="#started" data-cursor-model>Getting Started</a></h2>
+        <h2 id="started" data-ids><a class="hash" href="#started">Getting Started</a></h2>
         <hr>
         <!-- download -->
         <div class="content-wrap">
-          <h3 id="download" data-ids><a class="hash" href="#download" data-cursor-model>Download</a></h3>
+          <h3 id="download" data-ids><a class="hash" href="#download">Download</a></h3>
           <h4>Via npm</h4>
           <pre><code>npm install zoomist</code></pre>
           <h4>Manual download</h4>
@@ -72,23 +78,23 @@
         </div>
         <!-- installation -->
         <div class="content-wrap">
-          <h3 id="installation" data-ids><a class="hash" href="#installation" data-cursor-model>Installation</a></h3>
+          <h3 id="installation" data-ids><a class="hash" href="#installation">Installation</a></h3>
           <h4>ES modules</h4>
           <p>If you download the files via npm, you just need to import <span class="bold">Zoomist</span> in your own project :</p>
           <pre><code class="language-javascript">import Zoomist from 'zoomist'</code></pre>
           <h4>Script tag include</h4>
-          <p> If you include zoomist with tag, you need to add CSS as well.</p>
+          <p>If you include zoomist with tag, you need to add CSS as well.</p>
           <pre><code class="language-html">&lt;link rel="stylesheet" src="zoomist.min.css"/>
 
 &lt;script src="zoomist.min.js">&lt;/script></code></pre>
           <p>or using CDN</p>
-          <pre><code class="language-html">&lt;link rel="stylesheet" src="zoomist.min.css"/>
+          <pre><code class="language-html">&lt;link rel="stylesheet" src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.css"/>
             
-&lt;script src="https://cdn.jsdelivr.net/gh/cotton123236/cottonjs@latest/lib/cotton.min.js">&lt;/script></code></pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.js">&lt;/script></code></pre>
         </div>
         <!-- usage -->
         <div class="content-wrap">
-          <h3 id="usage" data-ids><a class="hash" href="#usage" data-cursor-model>Basic Usage</a></h3>
+          <h3 id="usage" data-ids><a class="hash" href="#usage">Basic Usage</a></h3>
           <h4>HTML</h4>
           <p>Create an container and set <span class="hilite">data-zoomist-src</span> attribute with image URL for Zoomist.</p>
           <pre><code class="language-html">&lt;div id="my-zoomist" data-zoomist-src="./image.png">&lt;/div></code></pre>
@@ -110,7 +116,7 @@ new Cotton(zoomistElement, {
   slider: true,
   // if you need zoomer
   zoomer: true,
-  // callbacks
+  // event
   on: {
     ready() {
       console.log('Zoomist ready!')
@@ -118,17 +124,17 @@ new Cotton(zoomistElement, {
   }
 })
 </code></pre>
-          <p>See some <a href="#demos">DEMOS</a> directly.</p>
+          <p>See some <a href="#demo>DEMO</a> directly.</p>
         </div>
       </article>
 
       <!-- #documentation -->
       <article>
-        <h2 id="documentation" data-ids><a class="hash" href="#documentation" data-cursor-model>Documentation</a></h2>
+        <h2 id="documentation" data-ids><a class="hash" href="#documentation">Documentation</a></h2>
         <hr>
         <!-- parameters -->
         <div class="content-wrap">
-          <h3 id="parameters" data-ids><a class="hash" href="#parameters" data-cursor-model>Parameters</a></h3>
+          <h3 id="parameters" data-ids><a class="hash" href="#parameters">Parameters</a></h3>
           <p>All available parameters :</p>
           <table>
             <thead>
@@ -270,7 +276,7 @@ new Cotton(zoomistElement, {
         </div>
         <!-- methods -->
         <div class="content-wrap">
-          <h3 id="methods" data-ids><a class="hash" href="#methods" data-cursor-model>Methods</a></h3>
+          <h3 id="methods" data-ids><a class="hash" href="#methods">Methods</a></h3>
           <p>After you initialize Zoomist you have its initialized instance in variable with these methods. As the following example :</p>
               <pre><code class="language-javascript">const myZoomist = new Zoomist('#my-zoomist')
 
@@ -351,7 +357,7 @@ zoomist.on('ready', function() {
         </div>
         <!-- events -->
         <div class="content-wrap">
-          <h3 id="callbacks" data-ids><a class="hash" href="#events" data-cursor-model>Events</a></h3>
+          <h3 id="events" data-ids><a class="hash" href="#events">Events</a></h3>
           <p>Zoomist provides several useful events you can listen. Events can be assigned in two ways:</p><br>
           <p>1. Using <span class="hilite">on</span> parameter before initialization.</p>
           <pre><code>const zoomist = new Zoomist('#my-zoomist', {
@@ -452,22 +458,21 @@ zoomist.on('ready', function() {
         </div>
       </article>
       
-          <!-- #demos -->
+          <!-- #demo -->
           <article>
-            <h2 id="demos" data-ids><a class="hash" href="#demos" data-cursor-model>Demos</a></h2>
+            <h2 id="demo" data-ids><a class="hash" href="#demo">Demo</a></h2>
             <hr>
             <!-- simple -->
             <div class="content-wrap">
-              <h3 id="simple" data-ids><a class="hash" href="#simple" data-cursor-model>Simple Usage</a></h3>
+              <h3 id="simple" data-ids><a class="hash" href="#simple">Simple usage</a></h3>
               <div class="demo-box">
                 <ul class="tabs">
-                  <a href="javascript:;" data-tab-for="demo" data-cursor-model class="active">Demo</a>
-                  <a href="javascript:;" data-tab-for="html" data-cursor-model data-cursor-color="white">HTML</a>
-                  <a href="javascript:;" data-tab-for="css" data-cursor-model data-cursor-color="white">CSS</a>
-                  <a href="javascript:;" data-tab-for="js" data-cursor-model data-cursor-color="white">JS</a>
+                  <a href="javascript:;" data-tab-for="demo" class="active">Demo</a>
+                  <a href="javascript:;" data-tab-for="html">HTML</a>
+                  <a href="javascript:;" data-tab-for="js">JS</a>
                 </ul>
                 <div class="views">
-                  <div class="demo show" data-cursor-model data-cursor-color="none">
+                  <div class="demo show">
                     <div class="demo-inner">
                       <div id="my-zoomist" data-zoomist-src="./image/cats.jpg"></div>
                       <div class="zoomist-data">{x: 0, y: 0}</div>
@@ -512,6 +517,15 @@ zoomist.on('ready', function() {
                       </ul>
                       <ul class="method-tools">
                         <li>
+                          <button id="zoom">zoom(<span class="val ter-color">0.1</span>)</button><input id="zoomValue" type="text" value="0.1" />
+                        </li>
+                        <li>
+                          <button id="zoomTo">zoomTo(<span class="val ter-color">2</span>)</button><input id="zoomToValue" type="text" value="2" />
+                        </li>
+                        <li>
+                          <button id="slideTo">slideTo(<span class="val ter-color">50</span>)</button><input id="slideToValue" type="text" value="50" />
+                        </li>
+                        <li>
                           <button id="getContainerData">getContainerData()</button>
                         </li>
                         <li>
@@ -532,27 +546,19 @@ zoomist.on('ready', function() {
                         <li>
                           <button id="destroy">destroy()</button>
                         </li>
-                        <li>
-                          <button id="zoom">zoom(<span class="val ter-color">0.1</span>)</button><input id="zoomValue" type="text" value="0.1" />
-                        </li>
-                        <li>
-                          <button id="zoomTo">zoomTo(<span class="val ter-color">2</span>)</button><input id="zoomToValue" type="text" value="2" />
-                        </li>
-                        <li>
-                          <button id="slideTo">slideTo(<span class="val ter-color">50</span>)</button><input id="slideToValue" type="text" value="50" />
-                        </li>
                       </ul>
                     </div>
                   </div>
                   <div class="html">
                     <pre><code class="language-html">&lt;div id="my-zoomist" data-zoomist-src="./image/cats.jpg">&lt;/div></code></pre>
                   </div>
-                  <div class="css">
-                    <pre><code>
-</code></pre>
-                  </div>
                   <div class="js">
                     <pre><code>// init
+new Zoomist('#my-zoomist', {
+  height: '75%'
+  slider: true,
+  zoomer: true
+})
 </code></pre>
                   </div>
                 </div>
