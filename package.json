@@ -1,6 +1,6 @@
 {
   "name": "zoomist",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JavaScript library for zooming image.",
   "main": "dist/zoomist.min.js",
   "style": "dist/zoomist.min.css",
