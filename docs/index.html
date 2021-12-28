@@ -172,6 +172,12 @@ new Zoomist(zoomistElement, {
                 <td class="w-45 thin">Set image is zoomable when mouse wheeling.</td>
               </tr>
               <tr>
+                <td class="w-20 ter-color bold mono">pinchable</td>
+                <td class="w-15 gray-color bold mono">boolean</td>
+                <td class="w-20 ter-color bold mono">true</td>
+                <td class="w-45 thin">Set image is pinchable when pinching. (Only works on mobile device)</td>
+              </tr>
+              <tr>
                 <td class="w-20 ter-color bold mono">bounds</td>
                 <td class="w-15 gray-color bold mono">boolean</td>
                 <td class="w-20 ter-color bold mono">true</td>
@@ -435,6 +441,21 @@ zoomist.on('ready', function() {
                 <td class="w-65 thin">Event will fire when mouse up to the slider.<br>The first argument is the trasform value of the slider.</td>
               </tr>
               <tr>
+                <td class="w-20 f-50 ter-color bold mono">pinchStart</td>
+                <td class="w-15 f-50 gray-color bold mono">(event)</td>
+                <td class="w-65 thin">Event will fire when touch start with two fingers.<br>This event only works on mobile device.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">pinch</td>
+                <td class="w-15 f-50 gray-color bold mono">(event)</td>
+                <td class="w-65 thin">Event will fire when touch move with two fingers.<br>This event only works on mobile device.</td>
+              </tr>
+              <tr>
+                <td class="w-20 f-50 ter-color bold mono">pinchEnd</td>
+                <td class="w-15 f-50 gray-color bold mono">(event)</td>
+                <td class="w-65 thin">Event will fire when touch end with two fingers.<br>This event only works on mobile device.</td>
+              </tr>
+              <tr>
                 <td class="w-20 f-50 ter-color bold mono">resize</td>
                 <td class="w-15 f-50 gray-color bold mono">()</td>
                 <td class="w-65 thin">Event will fire when zoomist is resizing.</td>
@@ -494,6 +515,9 @@ zoomist.on('ready', function() {
                         </li>
                         <li>
                           <label><div class="title">wheelable</div><input id="wheelable" type="checkbox" checked /><div class="checkball"></div></label>
+                        </li>
+                        <li>
+                          <label><div class="title">pinchable</div><input id="pinchable" type="checkbox" checked /><div class="checkball"></div></label>
                         </li>
                         <li>
                           <label><div class="title">bounds</div><input id="bounds" type="checkbox" checked /><div class="checkball"></div></label>

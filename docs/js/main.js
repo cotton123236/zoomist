@@ -43,6 +43,7 @@ const demoHandler = () => {
   const fillInput = $('#fill')
   const draggableInput = $('#draggable')
   const wheelableInput = $('#wheelable')
+  const pinchableInput = $('#pinchable')
   const boundsInput = $('#bounds')
   const zoomRatioInput = $('#zoomRatio')
   const maxRatioInput = $('#maxRatio')
@@ -77,6 +78,11 @@ const demoHandler = () => {
   wheelableInput.on('change', function() {
     const isChecked = this.checked
     demoZoomist.options.wheelable = isChecked
+    demoZoomist.update()
+  })
+  pinchableInput.on('change', function() {
+    const isChecked = this.checked
+    demoZoomist.options.pinchable = isChecked
     demoZoomist.update()
   })
   boundsInput.on('change', function() {

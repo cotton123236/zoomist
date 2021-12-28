@@ -134,7 +134,62 @@ export default (zoomist) => {
     document.removeEventListener(EVENT_TOUCH_END, dragEnd)
   }
 
-  wrapper.addEventListener(EVENT_TOUCH_START, dragStart)
+  // set image pinch event
+  zoomist.pinching = false
+  zoomist.data.pinchData = {
+    dist: 0,
+    startX: 0,
+    startY: 0
+  }
+
+  const pinchStart = (e) => {
+    if (!options.pinchable) return;
+    if (e.touches.length !== 2) return;
+
+    const { pinchData } = zoomist.data
+
+    setObject(pinchData, {
+      dist: Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY),
+      startX: e.touches[0].clientX,
+      startY: e.touches[0].clientY
+    })
+
+    zoomist.pinching = true
+
+    zoomist.emit('pinchStart', e)
+
+    document.addEventListener(EVENT_TOUCH_MOVE, pinchMove)
+    document.addEventListener(EVENT_TOUCH_END, pinchEnd)
+  }
+  const pinchMove = (e) => {
+    if (!zoomist.pinching) return;
+
+    const { pinchData } = zoomist.data
+
+    const pinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY)
+    const zoomRatio = roundToTwo((pinchDist - pinchData.dist) / 100)
+
+    zoomist.zoom(zoomRatio)
+
+    pinchData.dist = pinchDist
+
+    zoomist.emit('pinch', e)
+  }
+  const pinchEnd = (e) => {
+    zoomist.pinching = false
+
+    zoomist.emit('pinchEnd', e)
+
+    document.removeEventListener(EVENT_TOUCH_MOVE, pinchMove)
+    document.removeEventListener(EVENT_TOUCH_END, pinchEnd)
+  }
+
+  const touchStart = (e) => {
+    dragStart(e)
+    pinchStart(e)
+  }
+
+  wrapper.addEventListener(EVENT_TOUCH_START, touchStart)
 
 
   // set zomm on mousewheel event
@@ -162,7 +217,7 @@ export default (zoomist) => {
     zoomist.emit('wheel', e)
   }
 
-  element.addEventListener(EVENT_WHEEL, wheel)
+  wrapper.addEventListener(EVENT_WHEEL, wheel)
 }
 
 

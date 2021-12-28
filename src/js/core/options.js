@@ -13,6 +13,8 @@ export default {
   draggable: true,
   // {Boolean} set is wheelable or not
   wheelable: true,
+  // {Boolean} set is pinchable or not
+  pinchable: true,
   // {Boolean} set image can be drag out of the bounds (it will set to false when fill is contain)
   bounds: true,
   // {Number} the ratio of zoom at one time
@@ -54,6 +56,12 @@ export const EVENTS = {
   drag: null,
   // invoked when mouseup on wrapper
   dragEnd: null,
+  // invoked when mousedown on wrapper
+  pinchStart: null,
+  // invoked when pinching the image
+  pinch: null,
+  // invoked when mouseup on wrapper
+  pinchEnd: null,
   // invoked when mousedown on slider
   slideStart: null,
   // invoked when sliding the slider

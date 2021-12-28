@@ -3,6 +3,7 @@ const zoomist = new Zoomist('[data-zoomist]', {
   // src: image,
   draggable: true,
   wheelable: true,
+  pinchable: true,
   bounds: true,
   zoomRatio: 0.1,
   maxRatio: 3,
@@ -43,6 +44,15 @@ const zoomist = new Zoomist('[data-zoomist]', {
       // console.log(value)
     },
     slideEnd(value, event) {
+      // console.log(value)
+    },
+    pinchStart(event) {
+      // console.log(value)
+    },
+    pinch(event) {
+      // console.log(value)
+    },
+    pinchEnd(event) {
       // console.log(value)
     },
     resize() {

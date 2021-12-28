@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-12-28T06:52:09.672Z
+ * Date: 2021-12-28T09:18:44.439Z
  */
 
 (function (global, factory) {
@@ -44,6 +44,8 @@
     draggable: true,
     // {Boolean} set is wheelable or not
     wheelable: true,
+    // {Boolean} set is pinchable or not
+    pinchable: true,
     // {Boolean} set image can be drag out of the bounds (it will set to false when fill is contain)
     bounds: true,
     // {Number} the ratio of zoom at one time
@@ -568,9 +570,58 @@
       }, e);
       document.removeEventListener(EVENT_TOUCH_MOVE, dragMove);
       document.removeEventListener(EVENT_TOUCH_END, dragEnd);
+    }; // set image pinch event
+
+
+    zoomist.pinching = false;
+    zoomist.data.pinchData = {
+      dist: 0,
+      startX: 0,
+      startY: 0
     };
 
-    wrapper.addEventListener(EVENT_TOUCH_START, dragStart); // set zomm on mousewheel event
+    const pinchStart = e => {
+      if (!options.pinchable) return;
+      if (e.touches.length !== 2) return;
+      const {
+        pinchData
+      } = zoomist.data;
+      setObject(pinchData, {
+        dist: Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY),
+        startX: e.touches[0].clientX,
+        startY: e.touches[0].clientY
+      });
+      zoomist.pinching = true;
+      zoomist.emit('pinchStart', e);
+      document.addEventListener(EVENT_TOUCH_MOVE, pinchMove);
+      document.addEventListener(EVENT_TOUCH_END, pinchEnd);
+    };
+
+    const pinchMove = e => {
+      if (!zoomist.pinching) return;
+      const {
+        pinchData
+      } = zoomist.data;
+      const pinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      const zoomRatio = roundToTwo((pinchDist - pinchData.dist) / 100);
+      zoomist.zoom(zoomRatio);
+      pinchData.dist = pinchDist;
+      zoomist.emit('pinch', e);
+    };
+
+    const pinchEnd = e => {
+      zoomist.pinching = false;
+      zoomist.emit('pinchEnd', e);
+      document.removeEventListener(EVENT_TOUCH_MOVE, pinchMove);
+      document.removeEventListener(EVENT_TOUCH_END, pinchEnd);
+    };
+
+    const touchStart = e => {
+      dragStart(e);
+      pinchStart(e);
+    };
+
+    wrapper.addEventListener(EVENT_TOUCH_START, touchStart); // set zomm on mousewheel event
 
     zoomist.wheeling = false;
 
@@ -592,7 +643,7 @@
       zoomist.emit('wheel', e);
     };
 
-    element.addEventListener(EVENT_WHEEL, wheel);
+    wrapper.addEventListener(EVENT_WHEEL, wheel);
   }); // slider events
 
   const sliderEvents = zoomist => {
