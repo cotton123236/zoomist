@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-12-24T09:07:41.298Z
+ * Date: 2021-12-28T06:52:09.672Z
  */
 
 (function (global, factory) {
@@ -28,10 +28,10 @@
   const CLASS_ZOOMER_OUT = `${NAME}-out-zoomer`;
   const CLASS_ZOOMER_DISABLE = `${NAME}-zoomer-disable`;
   const IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-  const IS_TOUCH = IS_BROWSER && window.document.documentElement ? 'ontouchstart' in window.document.documentElement : false;
+  const IS_TOUCH = IS_BROWSER && 'ontouchstart' in window ? true : false;
   const EVENT_TOUCH_START = IS_TOUCH ? 'touchstart' : 'mousedown';
   const EVENT_TOUCH_MOVE = IS_TOUCH ? 'touchmove' : 'mousemove';
-  const EVENT_TOUCH_END = IS_TOUCH ? 'touchend touchcancel' : 'mouseup';
+  const EVENT_TOUCH_END = IS_TOUCH ? 'touchend' : 'mouseup';
   const EVENT_RESIZE = 'resize';
   const EVENT_WHEEL = 'wheel';
 
@@ -168,11 +168,12 @@
   }; // get mouse pageX and pageY
 
   const getPointer = event => {
+    const isNotTouch = !IS_TOUCH || event.type === 'wheel';
     return {
-      x: !IS_TOUCH ? event.pageX : event.touches[0].pageX,
-      y: !IS_TOUCH ? event.pageY : event.touches[0].pageY,
-      clientX: !IS_TOUCH ? event.clientX : event.touches[0].clientX,
-      clientY: !IS_TOUCH ? event.clientY : event.touches[0].clientY
+      x: isNotTouch ? event.pageX : event.touches[0].pageX,
+      y: isNotTouch ? event.pageY : event.touches[0].pageY,
+      clientX: isNotTouch ? event.clientX : event.touches[0].clientX,
+      clientY: isNotTouch ? event.clientY : event.touches[0].clientY
     };
   }; // get transformX
 
@@ -518,7 +519,7 @@
 
     const dragStart = e => {
       if (!options.draggable) return;
-      if (e.which !== 1) return;
+      if (e.which === 2 || e.which === 3) return;
       setObject(dragData, {
         startX: getPointer(e).x,
         startY: getPointer(e).y,

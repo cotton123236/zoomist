@@ -87,7 +87,7 @@ export default (zoomist) => {
 
   const dragStart = (e) => {
     if (!options.draggable) return;
-    if (e.which !== 1) return;
+    if (e.which === 2 || e.which === 3) return;
     
     setObject(dragData, {
       startX: getPointer(e).x,

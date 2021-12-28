@@ -80,11 +80,12 @@ export const setStyle = (element, obj) => {
 
 // get mouse pageX and pageY
 export const getPointer = (event) => {
+  const isNotTouch = !IS_TOUCH || event.type === 'wheel'
   return {
-    x: !IS_TOUCH ? event.pageX : event.touches[0].pageX,
-    y: !IS_TOUCH ? event.pageY : event.touches[0].pageY,
-    clientX: !IS_TOUCH ? event.clientX : event.touches[0].clientX,
-    clientY: !IS_TOUCH ? event.clientY : event.touches[0].clientY
+    x: isNotTouch ? event.pageX : event.touches[0].pageX,
+    y: isNotTouch ? event.pageY : event.touches[0].pageY,
+    clientX: isNotTouch ? event.clientX : event.touches[0].clientX,
+    clientY: isNotTouch ? event.clientY : event.touches[0].clientY
   }
 }
 
