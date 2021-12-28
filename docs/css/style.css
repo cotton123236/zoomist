@@ -177,7 +177,11 @@ td {
   vertical-align: middle;
 }
 table pre {
+  width: 100%;
   margin: 8px 0;
+}
+table code {
+  width: 100%;
 }
 table .tips {
   margin-top: 12px;
@@ -253,7 +257,7 @@ aside {
   align-items: flex-end;
   width: 240px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
   aside {
     display: none;
   }
@@ -323,7 +327,7 @@ main {
   width: calc(100% - 240px);
   padding-bottom: 80px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
   main {
     width: 100%;
   }
@@ -480,16 +484,28 @@ ul.tabs a.active {
   align-items: flex-start;
   padding: 50px;
 }
+@media screen and (max-width: 900px) {
+  .views > .demo {
+    flex-direction: column;
+    padding: 20px;
+  }
+}
 .demo .demo-inner {
   position: relative;
   width: 70%;
   max-width: 900px;
+}
+@media screen and (max-width: 900px) {
+  .demo .demo-inner {
+    width: 100%;
+  }
 }
 .demo #my-zoomist {
   z-index: 0;
 }
 .demo .zoomist-data {
   position: absolute;
+  z-index: 2;
   top: calc(100% + 20px);
   left: 50%;
   transform: translateX(-50%);
@@ -513,11 +529,36 @@ ul.tabs a.active {
 }
 .demo .demo-tools {
   flex: 1;
-  padding-left: 60px;
+}
+@media screen and (max-width: 900px) {
+  .demo .demo-tools {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .demo .demo-tools {
+    flex-direction: column;
+  }
 }
 .demo ul {
   max-width: 250px;
-  margin: auto;
+  padding-left: 60px;
+  margin: 0 auto;
+}
+@media screen and (max-width: 900px) {
+  .demo ul {
+    width: 50%;
+    max-width: none;
+  }
+}
+@media screen and (max-width: 767px) {
+  .demo ul {
+    width: 100%;
+    padding-left: 0;
+  }
 }
 .demo li {
   display: flex;
@@ -565,6 +606,7 @@ ul.tabs a.active {
   display: block;
 }
 .demo .checkball {
+  flex-shrink: 0;
   position: relative;
   width: 20px;
   height: 20px;
@@ -614,13 +656,6 @@ ul.tabs a.active {
 @media screen and (max-width: 767px) {
   ul.tabs a {
     font-size: 14px;
-  }
-  .views {
-    width: 100%;
-    padding-bottom: 120%;
-  }
-  .views > div {
-    overflow-y: hidden;
   }
   .views code {
     padding: 20px;
