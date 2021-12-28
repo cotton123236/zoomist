@@ -15,6 +15,16 @@ body {
 }
 
 
+/* keyframes */
+@keyframes shine {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 
 /* components */
 /* pill-btn */
@@ -362,11 +372,16 @@ section.intro-block .text-wrap {
   width: 100%;
   max-width: 1200px;
 } 
-section.intro-block p {
+section.intro-block .text-wrap p {
   color: #999;
-  margin: 40px 0;
+  margin: 30px 0;
 }
-section.intro-block .pill-btn {
+section.intro-block .text-wrap > span {
+  display: inline-block;
+  margin-top: 30px;
+  animation: shine 1.2s infinite alternate;
+}
+section.intro-block .text-wrap .pill-btn {
   margin: 0 10px;
 }
 
