@@ -8,6 +8,7 @@ window.onload = () => {
 
   // 
   new Zoomist('#intro-zoomist', {
+    fill: 'contain',
     height: false,
     maxRatio: 2.5,
     slider: true,
