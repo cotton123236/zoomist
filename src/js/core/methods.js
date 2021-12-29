@@ -55,9 +55,10 @@ export default {
    */
   zoom(zoomRatio, pointer) {
     const { image, data, options, ratio } = this
+    const { maxRatio } = options
 
     if (options.bounds && ratio === 1 && zoomRatio < 0) return;
-    if (options.maxRatio && ratio === options.maxRatio && zoomRatio > 0) return;
+    if (maxRatio && ratio === maxRatio && zoomRatio > 0) return;
 
     const { originImageData } = data
     const containerData = this.getContainerData()
@@ -65,7 +66,7 @@ export default {
     const imageRect = image.getBoundingClientRect()
 
     const calcRatio = roundToTwo(ratio * (zoomRatio + 1))
-    const newRatio = options.bounds && calcRatio < 1 ? 1 : options.maxRatio && calcRatio > options.maxRatio ? options.maxRatio : calcRatio
+    const newRatio = options.bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio
     const newZoomRatio = newRatio / ratio - 1
 
     const newWidth = originImageData.width * newRatio
@@ -109,9 +110,9 @@ export default {
     if (options.zoomer) {
       const { zoomer } = this.__modules__
       if (zoomer.disableOnBounds) {
-        const { bounds, maxRatio } = options
+        const { bounds } = options
         const { zoomerInEl, zoomerOutEl } = this.__modules__.zoomer
-  
+
         bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE)
         this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE)
       }

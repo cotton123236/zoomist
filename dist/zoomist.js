@@ -1,11 +1,11 @@
 /*!
- * zoomist.js v1.0.0
+ * zoomist.js v1.0.1
  * https://github.com/cotton123236/zoomist#readme
  *
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-12-28T09:18:44.439Z
+ * Date: 2021-12-29T08:35:57.610Z
  */
 
 (function (global, factory) {
@@ -84,6 +84,12 @@
     drag: null,
     // invoked when mouseup on wrapper
     dragEnd: null,
+    // invoked when mousedown on wrapper
+    pinchStart: null,
+    // invoked when pinching the image
+    pinch: null,
+    // invoked when mouseup on wrapper
+    pinchEnd: null,
     // invoked when mousedown on slider
     slideStart: null,
     // invoked when sliding the slider
@@ -253,8 +259,11 @@
         options,
         ratio
       } = this;
+      const {
+        maxRatio
+      } = options;
       if (options.bounds && ratio === 1 && zoomRatio < 0) return;
-      if (options.maxRatio && ratio === options.maxRatio && zoomRatio > 0) return;
+      if (maxRatio && ratio === maxRatio && zoomRatio > 0) return;
       const {
         originImageData
       } = data;
@@ -262,7 +271,7 @@
       const imageData = this.getImageData();
       const imageRect = image.getBoundingClientRect();
       const calcRatio = roundToTwo(ratio * (zoomRatio + 1));
-      const newRatio = options.bounds && calcRatio < 1 ? 1 : options.maxRatio && calcRatio > options.maxRatio ? options.maxRatio : calcRatio;
+      const newRatio = options.bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio;
       const newZoomRatio = newRatio / ratio - 1;
       const newWidth = originImageData.width * newRatio;
       const newHeight = originImageData.height * newRatio;
@@ -302,8 +311,7 @@
 
         if (zoomer.disableOnBounds) {
           const {
-            bounds,
-            maxRatio
+            bounds
           } = options;
           const {
             zoomerInEl,
@@ -522,9 +530,10 @@
     const dragStart = e => {
       if (!options.draggable) return;
       if (e.which === 2 || e.which === 3) return;
+      const isPinch = e.touches && e.touches.length === 2;
       setObject(dragData, {
-        startX: getPointer(e).x,
-        startY: getPointer(e).y,
+        startX: isPinch ? (e.touches[0].pageX + e.touches[1].pageX) / 2 : getPointer(e).x,
+        startY: isPinch ? (e.touches[0].pageY + e.touches[1].pageY) / 2 : getPointer(e).y,
         transX: getTransformX(image),
         transY: getTransformY(image)
       });
@@ -539,8 +548,9 @@
 
     const dragMove = e => {
       if (!zoomist.dragging) return;
-      const pageX = getPointer(e).x;
-      const pageY = getPointer(e).y;
+      const isPinch = e.touches && e.touches.length === 2;
+      const pageX = isPinch ? (e.touches[0].pageX + e.touches[1].pageX) / 2 : getPointer(e).x;
+      const pageY = isPinch ? (e.touches[0].pageY + e.touches[1].pageY) / 2 : getPointer(e).y;
 
       if (options.bounds) {
         const minPageX = dragData.startX - (dragData.transX - imageData.left);
@@ -582,7 +592,7 @@
 
     const pinchStart = e => {
       if (!options.pinchable) return;
-      if (e.touches.length !== 2) return;
+      if (!e.touches || e.touches.length !== 2) return;
       const {
         pinchData
       } = zoomist.data;
@@ -590,7 +600,8 @@
         dist: Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY),
         startX: e.touches[0].clientX,
         startY: e.touches[0].clientY
-      });
+      }); // zoomist.dragging = false
+
       zoomist.pinching = true;
       zoomist.emit('pinchStart', e);
       document.addEventListener(EVENT_TOUCH_MOVE, pinchMove);
@@ -604,7 +615,11 @@
       } = zoomist.data;
       const pinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
       const zoomRatio = roundToTwo((pinchDist - pinchData.dist) / 100);
-      zoomist.zoom(zoomRatio);
+      const pointer = {
+        clientX: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        clientY: (e.touches[0].clientY + e.touches[1].clientY) / 2
+      };
+      zoomist.zoom(zoomRatio, pointer);
       pinchData.dist = pinchDist;
       zoomist.emit('pinch', e);
     };
@@ -614,7 +629,8 @@
       zoomist.emit('pinchEnd', e);
       document.removeEventListener(EVENT_TOUCH_MOVE, pinchMove);
       document.removeEventListener(EVENT_TOUCH_END, pinchEnd);
-    };
+    }; // touch start handler
+
 
     const touchStart = e => {
       dragStart(e);

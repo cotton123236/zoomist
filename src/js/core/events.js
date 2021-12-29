@@ -88,10 +88,12 @@ export default (zoomist) => {
   const dragStart = (e) => {
     if (!options.draggable) return;
     if (e.which === 2 || e.which === 3) return;
-    
+
+    const isPinch = e.touches && e.touches.length === 2
+
     setObject(dragData, {
-      startX: getPointer(e).x,
-      startY: getPointer(e).y,
+      startX: isPinch ? (e.touches[0].pageX + e.touches[1].pageX) / 2 : getPointer(e).x,
+      startY: isPinch ? (e.touches[0].pageY + e.touches[1].pageY) / 2 : getPointer(e).y,
       transX: getTransformX(image),
       transY: getTransformY(image)
     })
@@ -106,8 +108,10 @@ export default (zoomist) => {
   const dragMove = (e) => {
     if (!zoomist.dragging) return;
 
-    const pageX = getPointer(e).x
-    const pageY = getPointer(e).y
+    const isPinch = e.touches && e.touches.length === 2
+
+    const pageX = isPinch ? (e.touches[0].pageX + e.touches[1].pageX) / 2 : getPointer(e).x
+    const pageY = isPinch ? (e.touches[0].pageY + e.touches[1].pageY) / 2 : getPointer(e).y
     if(options.bounds) {
       const minPageX = dragData.startX - ( dragData.transX - imageData.left )
       const maxPageX = dragData.startX - ( dragData.transX + imageData.left )
@@ -144,7 +148,7 @@ export default (zoomist) => {
 
   const pinchStart = (e) => {
     if (!options.pinchable) return;
-    if (e.touches.length !== 2) return;
+    if (!e.touches || e.touches.length !== 2) return;
 
     const { pinchData } = zoomist.data
 
@@ -154,6 +158,7 @@ export default (zoomist) => {
       startY: e.touches[0].clientY
     })
 
+    // zoomist.dragging = false
     zoomist.pinching = true
 
     zoomist.emit('pinchStart', e)
@@ -168,8 +173,12 @@ export default (zoomist) => {
 
     const pinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY)
     const zoomRatio = roundToTwo((pinchDist - pinchData.dist) / 100)
+    const pointer = {
+      clientX: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+      clientY: (e.touches[0].clientY + e.touches[1].clientY) / 2
+    }
 
-    zoomist.zoom(zoomRatio)
+    zoomist.zoom(zoomRatio, pointer)
 
     pinchData.dist = pinchDist
 
@@ -184,6 +193,7 @@ export default (zoomist) => {
     document.removeEventListener(EVENT_TOUCH_END, pinchEnd)
   }
 
+  // touch start handler
   const touchStart = (e) => {
     dragStart(e)
     pinchStart(e)
