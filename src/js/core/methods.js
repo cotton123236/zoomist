@@ -137,6 +137,12 @@ export default {
     return this
   },
 
+  /**
+   * move - move to a relative position
+   * x - number
+   * y - number
+   * @param {Number}
+   */
   move(x = 0, y = 0) {
     const { image, data, options } = this
     const { imageData, dragData } = data
@@ -158,6 +164,12 @@ export default {
     return this
   },
 
+  /**
+   * moveTo - move to a absolute position
+   * x - number
+   * y - number
+   * @param {Number}
+   */
   moveTo(x, y) {
     const { data, options } = this
     const { imageData, dragData } = data
