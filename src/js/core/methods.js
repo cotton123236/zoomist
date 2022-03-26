@@ -55,9 +55,9 @@ export default {
    */
   zoom(zoomRatio, pointer) {
     const { image, data, options, ratio } = this
-    const { maxRatio } = options
+    const { bounds, maxRatio } = options
 
-    if (options.bounds && ratio === 1 && zoomRatio < 0) return;
+    if (bounds && ratio === 1 && zoomRatio < 0) return;
     if (maxRatio && ratio === maxRatio && zoomRatio > 0) return;
 
     const { originImageData } = data
@@ -66,7 +66,7 @@ export default {
     const imageRect = image.getBoundingClientRect()
 
     const calcRatio = roundToTwo(ratio * (zoomRatio + 1))
-    const newRatio = options.bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio
+    const newRatio = bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio
     const newZoomRatio = newRatio / ratio - 1
 
     const newWidth = originImageData.width * newRatio
@@ -75,8 +75,8 @@ export default {
     const newTop = (containerData.height - newHeight) / 2
     const distanceX = pointer ? ( imageData.width / 2 - pointer.clientX + imageRect.left ) * newZoomRatio + getTransformX(image) : getTransformX(image)
     const distanceY = pointer ? ( imageData.height / 2 - pointer.clientY + imageRect.top ) * newZoomRatio + getTransformY(image) : getTransformY(image)
-    const transformX = options.bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX
-    const transformY = options.bounds ? minmax(distanceY, newTop, -newTop) : distanceY
+    const transformX = bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX
+    const transformY = bounds ? minmax(distanceY, newTop, -newTop) : distanceY
 
     const newData = {
       width: newWidth,
@@ -133,6 +133,44 @@ export default {
       const calcRatio = zoomRatio / ratio - 1
       this.zoom(calcRatio)
     }
+
+    return this
+  },
+
+  move(x = 0, y = 0) {
+    const { image, data, options } = this
+    const { imageData, dragData } = data
+    const { top, left } = imageData
+    const { transX, transY } = dragData
+    const { bounds } = options
+
+    const calcTransX = bounds ? minmax(transX - x, left, -left) : transX - x
+    const calcTransY = bounds ? minmax(transY - y, top, -top) : transY - y
+    const newTransX = roundToTwo(calcTransX)
+    const newTransY = roundToTwo(calcTransY)
+
+    setObject(dragData, {
+      transX: newTransX,
+      transY: newTransY
+    })
+    image.style.transform = `translate(${newTransX}px, ${newTransY}px)`
+
+    return this
+  },
+
+  moveTo(x, y) {
+    const { data, options } = this
+    const { imageData } = data
+    const { top, left } = imageData
+    const { bounds } = options
+
+    x = x ?? Math.abs(left)
+    y = y ?? Math.abs(top)
+
+    const calcTransX = bounds ? minmax(left + x, left, -left) : left + x
+    const calcTransY = bounds ? minmax(top + y, top, -top) : top + y
+
+    this.move(calcTransX, calcTransY)
 
     return this
   },

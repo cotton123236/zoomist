@@ -1,11 +1,11 @@
 /*!
- * zoomist.js v1.0.1
+ * zoomist.js v1.0.2
  * https://github.com/cotton123236/zoomist#readme
  *
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2021-12-29T08:35:57.610Z
+ * Date: 2022-03-26T09:00:00.988Z
  */
 
 (function (global, factory) {
@@ -260,9 +260,10 @@
         ratio
       } = this;
       const {
+        bounds,
         maxRatio
       } = options;
-      if (options.bounds && ratio === 1 && zoomRatio < 0) return;
+      if (bounds && ratio === 1 && zoomRatio < 0) return;
       if (maxRatio && ratio === maxRatio && zoomRatio > 0) return;
       const {
         originImageData
@@ -271,7 +272,7 @@
       const imageData = this.getImageData();
       const imageRect = image.getBoundingClientRect();
       const calcRatio = roundToTwo(ratio * (zoomRatio + 1));
-      const newRatio = options.bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio;
+      const newRatio = bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio;
       const newZoomRatio = newRatio / ratio - 1;
       const newWidth = originImageData.width * newRatio;
       const newHeight = originImageData.height * newRatio;
@@ -279,8 +280,8 @@
       const newTop = (containerData.height - newHeight) / 2;
       const distanceX = pointer ? (imageData.width / 2 - pointer.clientX + imageRect.left) * newZoomRatio + getTransformX(image) : getTransformX(image);
       const distanceY = pointer ? (imageData.height / 2 - pointer.clientY + imageRect.top) * newZoomRatio + getTransformY(image) : getTransformY(image);
-      const transformX = options.bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX;
-      const transformY = options.bounds ? minmax(distanceY, newTop, -newTop) : distanceY;
+      const transformX = bounds ? minmax(distanceX, newLeft, -newLeft) : distanceX;
+      const transformY = bounds ? minmax(distanceY, newTop, -newTop) : distanceY;
       const newData = {
         width: newWidth,
         height: newHeight,
@@ -340,6 +341,62 @@
         this.zoom(calcRatio);
       }
 
+      return this;
+    },
+
+    move(x = 0, y = 0) {
+      const {
+        image,
+        data,
+        options
+      } = this;
+      const {
+        imageData,
+        dragData
+      } = data;
+      const {
+        top,
+        left
+      } = imageData;
+      const {
+        transX,
+        transY
+      } = dragData;
+      const {
+        bounds
+      } = options;
+      const calcTransX = bounds ? minmax(transX - x, left, -left) : transX - x;
+      const calcTransY = bounds ? minmax(transY - y, top, -top) : transY - y;
+      const newTransX = roundToTwo(calcTransX);
+      const newTransY = roundToTwo(calcTransY);
+      setObject(dragData, {
+        transX: newTransX,
+        transY: newTransY
+      });
+      image.style.transform = `translate(${newTransX}px, ${newTransY}px)`;
+      return this;
+    },
+
+    moveTo(x, y) {
+      const {
+        data,
+        options
+      } = this;
+      const {
+        imageData
+      } = data;
+      const {
+        top,
+        left
+      } = imageData;
+      const {
+        bounds
+      } = options;
+      x = x ?? Math.abs(left);
+      y = y ?? Math.abs(top);
+      const calcTransX = bounds ? minmax(left + x, left, -left) : left + x;
+      const calcTransY = bounds ? minmax(top + y, top, -top) : top + y;
+      this.move(calcTransX, calcTransY);
       return this;
     },
 
@@ -574,9 +631,13 @@
 
     const dragEnd = e => {
       zoomist.dragging = false;
+      setObject(dragData, {
+        transX: getTransformX(image),
+        transY: getTransformY(image)
+      });
       zoomist.emit('dragEnd', {
-        x: getTransformX(image),
-        y: getTransformY(image)
+        x: dragData.transX,
+        y: dragData.transY
       }, e);
       document.removeEventListener(EVENT_TOUCH_MOVE, dragMove);
       document.removeEventListener(EVENT_TOUCH_END, dragEnd);

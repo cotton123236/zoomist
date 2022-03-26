@@ -132,7 +132,12 @@ export default (zoomist) => {
   const dragEnd = (e) => {
     zoomist.dragging = false
 
-    zoomist.emit('dragEnd', {x: getTransformX(image), y: getTransformY(image)}, e)
+    setObject(dragData, {
+      transX: getTransformX(image),
+      transY: getTransformY(image)
+    })
+
+    zoomist.emit('dragEnd', {x: dragData.transX, y: dragData.transY}, e)
 
     document.removeEventListener(EVENT_TOUCH_MOVE, dragMove)
     document.removeEventListener(EVENT_TOUCH_END, dragEnd)

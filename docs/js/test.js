@@ -21,6 +21,8 @@ const zoomist = new Zoomist('[data-zoomist]', {
   on: {
     ready() {
       // console.log('ready')
+      this.zoomTo(1.8)
+      this.moveTo(0, 0)
     },
     zoom(ratio) {
       // console.log(this.getZoomRatio(), ratio)
