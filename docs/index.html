@@ -321,11 +321,33 @@ myZoomist.zoom(0.5)</code></pre>
 zoomist.zoom(0.1)
 zoomist.zoom(-0.1)
 </code></pre>
+                </td>
+              </tr>
               <tr>
                 <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">zoomTo</span>(ratio)</td>
                 <td class="w-65 thin">Zoom the image with a absolute ratio.<br><p class="tips">Requires a positive number. (ratio > 0)</p>
                   <pre><code>// ex: 
 zoomist.zoomTo(2)
+</code></pre>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">move</span>(x, y)</td>
+                <td class="w-65 thin">Move the image with a relative position.<br><p class="tips">x or y should be a number.</p>
+                  <pre><code>// ex: 
+zoomist.move(100, 100)
+zoomist.move(100) // move only x position
+zoomist.move(null, 100) // move only y position
+</code></pre>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-35 gray-color bold mono">zoomist.<span class="ter-color">moveTo</span>(x, y)</td>
+                <td class="w-65 thin">Move the image with a absolute position.<br><p class="tips">x or y should be a number.</p>
+                  <pre><code>// ex: 
+zoomist.moveTo(0, 0) // move image to top-left position
+zoomist.moveTo(100) // move x to 100px, y stay the same
+zoomist.moveTo(null, 100) // move y to 100px, x stay the same
 </code></pre>
                 </td>
               </tr>
@@ -546,6 +568,12 @@ zoomist.on('ready', function() {
                         </li>
                         <li>
                           <button id="zoomTo">zoomTo(<span class="val ter-color">2</span>)</button><input id="zoomToValue" type="text" value="2" />
+                        </li>
+                        <li>
+                          <button id="move">move(<span class="val x ter-color">50</span>, <span class="val y ter-color">50</span>)</button><input id="moveValueX" style="width: 30px;" type="text" value="50" /><input id="moveValueY" style="width: 30px;" type="text" value="50" />
+                        </li>
+                        <li>
+                          <button id="moveTo">moveTo(<span class="val x ter-color">0</span>, <span class="val y ter-color">0</span>)</button><input id="moveToValueX" style="width: 30px;" type="text" value="0" /><input id="moveToValueY" style="width: 30px;" type="text" value="0" />
                         </li>
                         <li>
                           <button id="slideTo">slideTo(<span class="val ter-color">50</span>)</button><input id="slideToValue" type="text" value="50" />

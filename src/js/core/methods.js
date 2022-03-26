@@ -160,15 +160,16 @@ export default {
 
   moveTo(x, y) {
     const { data, options } = this
-    const { imageData } = data
+    const { imageData, dragData } = data
     const { top, left } = imageData
+    const { transX, transY } = dragData
     const { bounds } = options
 
     x = x ?? Math.abs(left)
     y = y ?? Math.abs(top)
 
-    const calcTransX = bounds ? minmax(left + x, left, -left) : left + x
-    const calcTransY = bounds ? minmax(top + y, top, -top) : top + y
+    const calcTransX = bounds ? minmax(left + x + transX, left, -left) : left + x + transX
+    const calcTransY = bounds ? minmax(top + y + transY, top, -top) : top + y + transY
 
     this.move(calcTransX, calcTransY)
 

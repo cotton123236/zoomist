@@ -61,6 +61,12 @@ const demoHandler = () => {
   const zoomValueInput = $('#zoomValue')
   const zoomToBtn = $('#zoomTo')
   const zoomToValueInput = $('#zoomToValue')
+  const moveBtn = $('#move')
+  const moveValueXInput = $('#moveValueX')
+  const moveValueYInput = $('#moveValueY')
+  const moveToBtn = $('#moveTo')
+  const moveToValueXInput = $('#moveToValueX')
+  const moveToValueYInput = $('#moveToValueY')
   const slideToBtn = $('#slideTo')
   const slideToValueInput = $('#slideToValue')
   fillInput.on('change', function() {
@@ -160,6 +166,32 @@ const demoHandler = () => {
   zoomToValueInput.on('change', function() {
     const val = $(this).val()
     zoomToBtn.find('span').text(val)
+  })
+  moveBtn.on('click', function() {
+    const x = Number(moveValueXInput.val())
+    const y = Number(moveValueYInput.val())
+    demoZoomist.move(x, y)
+  })
+  moveValueXInput.on('change', function() {
+    const val = $(this).val()
+    moveBtn.find('span.x').text(val)
+  })
+  moveValueYInput.on('change', function() {
+    const val = $(this).val()
+    moveBtn.find('span.y').text(val)
+  })
+  moveToBtn.on('click', function() {
+    const x = Number(moveToValueXInput.val())
+    const y = Number(moveToValueYInput.val())
+    demoZoomist.moveTo(x, y)
+  })
+  moveToValueXInput.on('change', function() {
+    const val = $(this).val()
+    moveToBtn.find('span.x').text(val)
+  })
+  moveToValueYInput.on('change', function() {
+    const val = $(this).val()
+    moveToBtn.find('span.y').text(val)
   })
   slideToBtn.on('click', function() {
     const val = Number(slideToValueInput.val())

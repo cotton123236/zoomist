@@ -5,7 +5,7 @@
  * Copyright 2021-present Wilson Wu
  * Released under the MIT license
  *
- * Date: 2022-03-26T09:00:00.988Z
+ * Date: 2022-03-26T09:56:17.746Z
  */
 
 (function (global, factory) {
@@ -383,19 +383,24 @@
         options
       } = this;
       const {
-        imageData
+        imageData,
+        dragData
       } = data;
       const {
         top,
         left
       } = imageData;
       const {
+        transX,
+        transY
+      } = dragData;
+      const {
         bounds
       } = options;
       x = x ?? Math.abs(left);
       y = y ?? Math.abs(top);
-      const calcTransX = bounds ? minmax(left + x, left, -left) : left + x;
-      const calcTransY = bounds ? minmax(top + y, top, -top) : top + y;
+      const calcTransX = bounds ? minmax(left + x + transX, left, -left) : left + x + transX;
+      const calcTransY = bounds ? minmax(top + y + transY, top, -top) : top + y + transY;
       this.move(calcTransX, calcTransY);
       return this;
     },
