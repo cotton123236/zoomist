@@ -38,12 +38,12 @@ import Zoomist from 'zoomist'
 #### Script tag include
 If you include zoomist with tag, you need to add CSS as well.
 ```html
-<link rel="stylesheet" src="zoomist.min.css"/>
+<link rel="stylesheet" href="zoomist.min.css"/>
 <script src="zoomist.min.js"></script>
 ```
 or using CDN :
 ```html
-<link rel="stylesheet" src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.css"/>
 <script src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.js"></script>
 ```
 
