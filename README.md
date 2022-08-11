@@ -3,7 +3,7 @@
   <img src="https://i.imgur.com/VfD4y0r.png" />
 </a>
 </p>
-<p align="center">Cotton.JS is a JavaScript library that allows you to make a mouse interaction animation easily.</p>
+<p align="center">Zoomist is a JavaScript library that allows you to make a mouse interaction animation easily.</p>
 <br>
 <p align="center">
 <a href="https://cotton123236.github.io/zoomist/index.html#demo">
