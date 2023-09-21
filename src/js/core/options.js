@@ -1,4 +1,5 @@
 import {
+  CLASS_ROTATOR,
   CLASS_SLIDER,
   CLASS_ZOOMER_IN,
   CLASS_ZOOMER_OUT
@@ -41,6 +42,11 @@ export const DEFAULT_ZOOMER_OPTIONS = {
   outEl: CLASS_ZOOMER_OUT,
   // {Boolean} in zoomer and out zoomer will be disabled when image comes to maximin or minimum
   disableOnBounds: true
+}
+
+export const DEFAULT_ROTATOR_OPTIONS = {
+  // {String / querySelector} the css selector string or a element of the rotator
+  rightEl: CLASS_ROTATOR
 }
 
 export const EVENTS = {

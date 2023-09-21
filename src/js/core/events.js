@@ -39,6 +39,8 @@ export default (zoomist) => {
     const transformX = getTransformX(image) * widthRatio
     const transformY = getTransformY(image) * heightRatio
 
+    const rotation = zoomist.getRotation()
+
     setObject(containerData, {
       width: element.offsetWidth,
       height: element.offsetHeight
@@ -63,7 +65,7 @@ export default (zoomist) => {
       height: imageHeight,
       left: imageLeft,
       top: imageTop,
-      transform: `translate(${transformX}px, ${transformY}px)`
+      transform: `translate(${transformX}px, ${transformY}px) rotate(${rotation}deg)`
     })
 
     zoomist.emit('resize')
@@ -125,7 +127,9 @@ export default (zoomist) => {
     const transformX = roundToTwo(pageX - dragData.startX + dragData.transX)
     const transformY = roundToTwo(pageY - dragData.startY + dragData.transY)
 
-    image.style.transform = `translate(${transformX}px, ${transformY}px)`
+    const rotation = zoomist.getRotation()
+
+    image.style.transform = `translate(${transformX}px, ${transformY}px) rotate(${rotation}deg)`
 
     zoomist.emit('drag', {x: transformX, y: transformY}, e)
   }
@@ -301,4 +305,14 @@ export const zoomerEvents = (zoomist) => {
   zoomer.zoomerOutEl.addEventListener('click', zoomOutHandler)
   zoomer.zoomerInEl.event = zoomInHandler
   zoomer.zoomerOutEl.event = zoomOutHandler
+}
+
+// rotator events
+export const rotatorEvents = (zoomist) => {
+  const { rotator } = zoomist.__modules__
+
+  const rotateRightHandler = () => zoomist.rotate()
+
+  rotator.rotatorRightEl.addEventListener('click', rotateRightHandler);
+  rotator.rotatorRightEl.event = rotateRightHandler
 }
