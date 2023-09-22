@@ -32,6 +32,14 @@ export default {
   },
 
   /**
+   * get now rotation
+   * @returns {Number}
+   */
+  getRotation() {
+    return this.rotation || 0
+  },
+
+  /**
    * get slider value
    * @returns {Number}
    */
@@ -65,6 +73,8 @@ export default {
     const imageData = this.getImageData()
     const imageRect = image.getBoundingClientRect()
 
+    const rotation = this.getRotation()
+
     const calcRatio = roundToTwo(ratio * (zoomRatio + 1))
     const newRatio = bounds && calcRatio < 1 ? 1 : maxRatio && calcRatio > maxRatio ? maxRatio : calcRatio
     const newZoomRatio = newRatio / ratio - 1
@@ -89,7 +99,7 @@ export default {
 
     setStyle(image, {
       ...newData,
-      transform: `translate(${transformX}px, ${transformY}px)`
+      transform: `translate(${transformX}px, ${transformY}px) rotate(${rotation}deg)`
     })
 
     this.ratio = newRatio
@@ -116,6 +126,11 @@ export default {
         bounds && this.ratio === 1 ? zoomerOutEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerOutEl.classList.remove(CLASS_ZOOMER_DISABLE)
         this.ratio === maxRatio ? zoomerInEl.classList.add(CLASS_ZOOMER_DISABLE) : zoomerInEl.classList.remove(CLASS_ZOOMER_DISABLE)
       }
+    }
+
+    // if has rotator
+    if (options.rotator) {
+      const { rotator } = this.__modules__
     }
 
     return this
@@ -155,11 +170,13 @@ export default {
     const newTransX = roundToTwo(calcTransX)
     const newTransY = roundToTwo(calcTransY)
 
+    const rotation = this.getRotation()
+
     setObject(dragData, {
       transX: newTransX,
       transY: newTransY
     })
-    image.style.transform = `translate(${newTransX}px, ${newTransY}px)`
+    image.style.transform = `translate(${newTransX}px, ${newTransY}px) rotate(${rotation}deg)`
 
     return this
   },
@@ -218,16 +235,37 @@ export default {
     return this
   },
 
+   /**
+   * rotate (rotate 90 degrees clockwise)
+   * @param {Number} 
+   */
+   rotate() {
+    const { image, data } = this
+    const { dragData } = data
+    const { transX, transY } = dragData
+
+    let rotation = this.getRotation()
+
+    rotation += 90
+    if (rotation >= 360) rotation = 0
+
+    this.rotation = rotation
+
+    image.style.transform = `translate(${transX}px, ${transY}px) rotate(${rotation}deg)`
+  },
+
   /**
    * reset image to initial status
    */
   reset() {
     const { image } = this
 
+    this.rotation = 0
+
     this.zoomTo(1)
 
     setStyle(image, {
-      transform: 'translate(0, 0)'
+      transform: 'translate(0, 0) rotate(0)'
     })
 
     this.emit('reset')
@@ -240,13 +278,14 @@ export default {
    */
   destroy() {
     const { element, wrapper } = this
-    const { slider, zoomer } = this.__modules__
+    const { rotator, slider, zoomer } = this.__modules__
 
     element[NAME] = undefined
     this.mounted = false
     
     if (slider) this.destroySlider()
     if (zoomer) this.destroyZoomer()
+    if (rotator) this.destroyRotator();
     
     wrapper.remove()
     element.style.removeProperty('width')

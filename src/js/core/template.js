@@ -22,3 +22,9 @@ export const outZoomerIcon = `
   <rect y="5.5" width="12" height="1"/>
 </svg>
 `
+
+export const rightRotatorIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 12 12">
+  <text y="12">↻</text>
+</svg>
+`

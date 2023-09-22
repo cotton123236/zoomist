@@ -18,6 +18,9 @@ const zoomist = new Zoomist('[data-zoomist]', {
     // outEl: '.custom-out-zoomer',
     // disableOnBounds: true
   },
+  rotator: {
+    // rightEl: '.custom-right-rotator',
+  },
   on: {
     ready() {
       // console.log('ready')

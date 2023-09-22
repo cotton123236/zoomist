@@ -1,4 +1,5 @@
 import {
+  DEFAULT_ROTATOR_OPTIONS,
   DEFAULT_SLIDER_OPTIONS,
   DEFAULT_ZOOMER_OPTIONS
 } from './options'
@@ -11,7 +12,9 @@ import {
   CLASS_ZOOMER,
   CLASS_ZOOMER_IN,
   CLASS_ZOOMER_OUT,
-  CLASS_ZOOMER_DISABLE
+  CLASS_ZOOMER_DISABLE,
+  CLASS_ROTATOR,
+  CLASS_ROTATOR_RIGHT
 } from './../shared/constants'
 import {
   isElementExist,
@@ -19,13 +22,15 @@ import {
   upperFirstLetter
 } from './../shared/utils'
 import {
+  rotatorEvents,
   sliderEvents,
   zoomerEvents
 } from './events'
 import {
   sliderTemp,
   inZoomerIcon,
-  outZoomerIcon
+  outZoomerIcon,
+  rightRotatorIcon
 } from './template'
 
 export default {
@@ -166,5 +171,59 @@ export default {
     if (zoomer.zoomerEl) zoomer.zoomerEl.remove()
 
     zoomer.mounted = false
-  }
+  },
+
+  /**
+   * create rotator module
+   */
+  createRotator() {
+    const { element, options, __modules__ } = this
+    __modules__.rotator = Object.assign({}, DEFAULT_ROTATOR_OPTIONS, options.rotator)
+
+    const { rotator } = __modules__
+
+    // mount
+    if (rotator.mounted) rotator.sliderMain.remove()
+
+    const isCustomRightEl = rotator.isCustomRightEl = rotator.rightEl && isElementExist(rotator.rightEl)
+    const rotatorRightEl = isCustomRightEl ? getElement(rotator.rightEl) : document.createElement('div')
+
+    if (!isCustomRightEl) {
+      rotatorRightEl.classList.add(CLASS_ROTATOR_RIGHT)
+      rotatorRightEl.innerHTML = rightRotatorIcon
+    }
+
+    rotator.rotatorRightEl = rotatorRightEl;
+
+    // events
+    rotatorEvents(this)
+
+    rotator.mounted = true
+
+    // render
+    if (!isCustomRightEl) {
+      const rotatorEl = document.createElement('div')
+      rotatorEl.classList.add(CLASS_ROTATOR)
+
+      rotatorEl.append(rotatorRightEl)
+
+      rotator.rotatorEl = rotatorEl
+
+      element.append(rotatorEl)
+    }
+  },
+
+  /**
+   * destroy rotator module
+   */
+  destroyRotator() {
+    const { rotator } = this.__modules__
+
+    if (!rotator || !rotator.mounted) return;
+
+    if (rotator.isCustomEl) rotator.rotatorMain.remove()
+    else rotator.rotatorEl.remove()
+
+    rotator.mounted = false
+  },
 }
