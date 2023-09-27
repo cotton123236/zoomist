@@ -1,0 +1,206 @@
+$NAME: zoomist;
+
+:root {
+  --zoomist-wrapper-bg-color: #efefef;
+
+  --zoomist-slider-bg-color: rgba(255, 255, 255, .8);
+  --zoomist-slider-border-radius: 0 0 4px 0;
+  --zoomist-slider-padding-x: 20px;
+  --zoomist-slider-padding-y: 20px;
+  --zoomist-slider-track-color: #ddd;
+  --zoomist-slider-track-color-hover: #ccc;
+  --zoomist-slider-bar-size: 120px;
+  --zoomist-slider-bar-side: 2px;
+  --zoomist-slider-bar-border-radius: 2px;
+  --zoomist-slider-bar-color: #666;
+  --zoomist-slider-bar-color-hover: #444;
+  --zoomist-slider-button-size: 12px;
+  --zoomist-slider-button-color: #fff;
+
+  --zoomist-zoomer-button-size: 48px;
+  --zoomist-zoomer-button-color: rgba(255, 255, 255, .8);
+  --zoomist-zoomer-button-color-hover: rgba(255, 255, 255, .9);
+  --zoomist-zoomer-button-color-disabled: rgba(255, 255, 255, .8);
+  --zoomist-zoomer-button-opacity-disabled: 0.7;
+  --zoomist-zoomer-icon-size: 14px;
+  --zoomist-zoomer-icon-color: #333;
+  --zoomist-zoomer-icon-color-hover: #111;
+  --zoomist-zoomer-icon-color-disabled: #999;
+
+  --zoomist-modules-tranistion-duration: 0.3s;
+}
+
+// core elements
+.#{$NAME}-container {
+  position: relative;
+  touch-action: none;
+  user-select: none;
+}
+
+.#{$NAME}-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--zoomist-wrapper-bg-color);
+}
+
+.#{$NAME}-image {
+  position: relative;
+  max-width: none !important;
+  max-height: none !important;
+  pointer-events: none;
+}
+
+// module elements
+// slider
+.#{$NAME}-slider {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  padding: var(--zoomist-slider-padding-y) var(--zoomist-slider-padding-x);
+  background-color: var(--zoomist-slider-bg-color);
+  border-radius: var(--zoomist-slider-border-radius);
+
+  &:hover {
+    .#{$NAME}-slider-wrapper {
+      background-color: var(--zoomist-slider-track-color-hover);
+    }
+
+    .#{$NAME}-slider-bar {
+      background-color: var(--zoomist-slider-bar-color-hover)
+    }
+
+    .#{$NAME}-slider-button::before {
+      box-shadow: 0 0 8px rgba(0, 0, 0, .6);
+    }
+  }
+}
+
+.#{$NAME}-slider-horizontal {
+  .#{$NAME}-slider-wrapper {
+    align-items: center;
+    justify-content: flex-start;
+    width: var(--zoomist-slider-bar-size);
+    height: var(--zoomist-slider-bar-side);
+  }
+
+  .#{$NAME}-slider-bar {
+    top: 0;
+    width: calc(var(--value) * 1%);
+    height: 100%;
+  }
+
+  .#{$NAME}-slider-button {
+    left: calc(var(--value) * 1%);
+  }
+}
+
+.#{$NAME}-slider-vertical {
+  .#{$NAME}-slider-wrapper {
+    align-items: flex-end;
+    justify-content: center;
+    width: var(--zoomist-slider-bar-side);
+    height: var(--zoomist-slider-bar-size);
+  }
+
+  .#{$NAME}-slider-bar {
+    bottom: 0;
+    width: 100%;
+    height: calc(var(--value) * 1%);
+  }
+
+  .#{$NAME}-slider-button {
+    bottom: calc(var(--value) * 1%);
+  }
+}
+
+.#{$NAME}-slider-wrapper {
+  position: relative;
+  display: flex;
+  background-color: var(--zoomist-slider-track-color);
+  transition: background-color var(--zoomist-modules-tranistion-duration);
+}
+
+.#{$NAME}-slider-bar {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  display: block;
+  border-radius: var(--zoomist-slider-bar-border-radius);
+  background-color: var(--zoomist-slider-bar-color);
+  transition: background-color var(--zoomist-modules-tranistion-duration);
+}
+
+.#{$NAME}-slider-button {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 0 !important;
+  height: 0 !important;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--zoomist-slider-button-size) * -0.5);
+    top: calc(var(--zoomist-slider-button-size) * -0.5);
+    width: var(--zoomist-slider-button-size);
+    height: var(--zoomist-slider-button-size);
+    display: block;
+    background-color: var(--zoomist-slider-button-color, #fff);
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .4);
+    transition: box-shadow var(--zoomist-modules-tranistion-duration);
+  }
+}
+
+// zoomer
+.#{$NAME}-zoomer {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  border-radius: 0 0 0 4px;
+  overflow: hidden;
+}
+
+.#{$NAME}-zoomer-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--zoomist-zoomer-button-size);
+  height: var(--zoomist-zoomer-button-size);
+  background: none;
+  background-color: var(--zoomist-zoomer-button-color);
+  border: 0;
+  transition: background-color var(--zoomist-modules-tranistion-duration);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--zoomist-zoomer-button-color-hover);
+
+    .#{$NAME}-zoomer-icon {
+      fill: var(--zoomist-zoomer-icon-color-hover);
+    }
+  }
+
+  &.#{$NAME}-zoomer-disabled {
+    pointer-events: none;
+    background-color: var(--zoomist-zoomer-button-color-disabled);
+    opacity: var(--zoomist-zoomer-button-opacity-disabled);
+
+    .#{$NAME}-zoomer-icon {
+      fill: var(--zoomist-zoomer-icon-color-disabled);
+    }
+  }
+}
+
+.#{$NAME}-zoomer-icon {
+  width: var(--zoomist-zoomer-icon-size);
+  height: var(--zoomist-zoomer-icon-size);
+  fill: var(--zoomist-zoomer-icon-color);
+  transition: fill var(--zoomist-modules-tranistion-duration);
+}

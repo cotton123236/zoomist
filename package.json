@@ -1,19 +1,34 @@
 {
   "name": "zoomist",
-  "version": "1.1.0",
-  "description": "A JavaScript library for zooming image.",
-  "main": "dist/zoomist.min.js",
-  "style": "dist/zoomist.min.css",
-  "module": "src/index.js",
-  "directories": {
-    "docs": "docs"
-  },
-  "scripts": {
-    "build": "rollup -c"
+  "version": "2.0.0",
+  "description": "A TypeScript library for zooming any element. Also supports mobile devices.",
+  "type": "module",
+  "main": "./dist/zoomist.umd.cjs",
+  "module": "./dist/zoomist.js",
+  "style": "./dist/zoomist.css",
+  "types": "./dist/zoomist.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/zoomist.js",
+      "require": "./dist/zoomist.umd.cjs",
+      "types": "./dist/zoomist.d.ts"
+    },
+    "./css": {
+      "import": "./dist/zoomist.css",
+      "require": "./dist/zoomist.css"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cotton123236/zoomist.git"
+    "url": "https://github.com/cotton123236/zoomist-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cotton123236/zoomist-ts/issues"
   },
   "keywords": [
     "image",
@@ -24,29 +39,27 @@
     "zoomist",
     "zoomer",
     "zooming",
+    "pinch",
+    "pinchzoom",
+    "gesture",
+    "touch",
+    "touchzoom",
+    "touchmove",
+    "mobile",
     "javascript",
     "front-end"
   ],
   "author": "Wilson Wu",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cotton123236/zoomist/issues"
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "homepage": "https://github.com/cotton123236/zoomist#readme",
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/preset-env": "^7.14.0",
-    "autoprefixer": "^10.4.0",
-    "change-case": "^4.1.2",
-    "create-banner": "^2.0.0",
-    "node-sass": "^7.0.0",
-    "postcss": "^8.3.11",
-    "rollup": "^2.47.0",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-sass": "^1.2.9",
-    "rollup-plugin-scss": "^3.0.0",
-    "rollup-plugin-terser": "^7.0.2"
-  },
-  "dependencies": {}
+    "sass": "^1.64.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.0",
+    "vite-plugin-dts": "^3.5.4"
+  }
 }

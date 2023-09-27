@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zoomist Dev</title>
+
+    <link rel="stylesheet" href="./test/styles/normalize.css">
+    <link rel="stylesheet" href="./dist/zoomist.css">
+    <link rel="stylesheet" href="./test/styles/index.css">
+    <script type="module" src="./test/index.js"></script>
+    <style>
+      body {
+        padding: 20vh 20px;
+      }
+      /* .zoomist-image {
+        aspect-ratio: 1;
+      }
+      .zoomist-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      } */
+      .zoomer-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3rem;
+        height: 3rem;
+        background-color: #efefef;
+      }
+      .zoomer-btn.zoomer-disabled {
+        opacity: 0.2;
+      }
+      .change-image-btn {
+        padding: 0.5rem;
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- ZOOMIST -->
+      <div class="cat-zoomist zoomist-container">
+        <div class="zoomist-wrapper">
+          <div class="zoomist-image">
+            <img src="./test/images/cat.jpg" alt="cat" />
+          </div>
+        </div>
+      </div>
+
+    <!-- <button class="change-image-btn">CHANGE</button> -->
+
+      <!-- <div class="zoomist-custom-zoomer">
+        <button class="in-zoomer zoomer-btn">+</button>
+        <button class="out-zoomer zoomer-btn">-</button>
+        <button class="reset-zoomer zoomer-btn">R</button>
+      </div> -->
+
+      <!-- <div class="zoomist-custom-slider"></div> -->
+    </div>
+
+    <!-- <script>
+      const changeImageBtn = document.querySelector('.change-image-btn')
+
+      changeImageBtn.addEventListener('click', () => {
+        document.querySelector('.zoomist-image').innerHTML = '<img src="./test/images/japan.jpg" alt="japan" />'
+      })
+    </script> -->
+  </body>
+</html>
