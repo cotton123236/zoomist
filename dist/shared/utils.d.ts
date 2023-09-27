@@ -1,6 +1,6 @@
 import { QueryElement, StyleObject, PointerData, BoundingRect } from './../types';
 export declare const isElementExist: (value: QueryElement) => boolean;
-export declare const isPlainObject: (value: object) => boolean;
+export declare const isPlainObject: (value: object | void) => boolean;
 export declare const isFunction: (value: any) => boolean;
 export declare const isNumber: (value: any) => boolean;
 export declare const isNull: (value: any) => boolean;

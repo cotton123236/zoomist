@@ -94,7 +94,7 @@ class Zoomist {
   __modules__!: ZoomistModules;
 
 
-  constructor(element: QueryElement, options: Partial<ZoomistOptions>) {
+  constructor(element: QueryElement, options?: Partial<ZoomistOptions>) {
     if (!element) useError('The first argument is required.')
     if (!isElementExist(element)) useError(`Element ${element} is not exist.`)
 

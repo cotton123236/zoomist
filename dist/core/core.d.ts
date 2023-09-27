@@ -14,7 +14,7 @@ declare class Zoomist {
     controller: AbortController;
     __events__: ZoomistEvents;
     __modules__: ZoomistModules;
-    constructor(element: QueryElement, options: Partial<ZoomistOptions>);
+    constructor(element: QueryElement, options?: Partial<ZoomistOptions>);
     init(): void;
     destroyModules(): void;
     destroySlider(): void;

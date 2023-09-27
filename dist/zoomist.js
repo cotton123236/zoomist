@@ -11,6 +11,8 @@ var E = (n, t, e) => {
 };
 var S = (n, t, e) => (Zt(n, t, "access private method"), e);
 const et = (n) => document.contains(H(n)), bt = (n) => {
+  if (!n)
+    return !1;
   try {
     const { constructor: t } = n, { prototype: e } = t, { hasOwnProperty: s } = Object.prototype;
     return t && e && s.call(e, "isPrototypeOf");

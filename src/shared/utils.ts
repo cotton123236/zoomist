@@ -12,7 +12,8 @@ export const isElementExist = (value: QueryElement): boolean => {
 }
 
 // check value is a plain object
-export const isPlainObject = (value: object): boolean => {
+export const isPlainObject = (value: object | void): boolean => {
+  if (!value) return false
   try {
     const { constructor } = value
     const { prototype } = constructor

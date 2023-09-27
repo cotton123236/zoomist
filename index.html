@@ -5,16 +5,21 @@
     <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zoomist Dev</title>
-
     <link rel="stylesheet" href="./test/styles/normalize.css">
-    <link rel="stylesheet" href="./dist/zoomist.css">
-    <link rel="stylesheet" href="./test/styles/index.css">
-    <script type="module" src="./test/index.js"></script>
     <style>
       body {
-        padding: 20vh 20px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .cat-zoomist {
+        max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
       }
       /* .zoomist-image {
+        width: 400px;
         aspect-ratio: 1;
       }
       .zoomist-image img {
@@ -62,6 +67,7 @@
       <!-- <div class="zoomist-custom-slider"></div> -->
     </div>
 
+    <script type="module" src="./test/main.ts"></script>
     <!-- <script>
       const changeImageBtn = document.querySelector('.change-image-btn')
 
