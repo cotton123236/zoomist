@@ -68,7 +68,7 @@ export type ZoomistEvents = {
 
 export interface ZoomistMethods {
   on: <T extends EventTypes>(event: T, handler: EventOptions[T]) => Zoomist
-  emit: <T extends EventTypes>(event: T, ...args: Parameters<EventOptions [T]>) => Zoomist
+  emit: <T extends EventTypes>(event: T, ...args: Parameters<EventOptions[T]>) => Zoomist
   zoom: (ratio: number, pointer?: { clientX: number, clientY: number } | boolean) => Zoomist
   zoomTo: (ratio: number, pointer?: { clientX: number, clientY: number } | boolean) => Zoomist
   move: (params: { x: number, y: number }) => Zoomist
