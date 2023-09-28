@@ -686,6 +686,5 @@ V = new WeakSet(), wt = function() {
 };
 Object.assign(ue.prototype, de);
 export {
-  ue as Zoomist,
   ue as default
 };

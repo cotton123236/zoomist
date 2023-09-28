@@ -1,7 +1,6 @@
 import './../src/zoomist.scss'
-import './../test/styles/index.css'
 
-import { Zoomist } from '../dist/zoomist.js'
+import Zoomist from './../dist/zoomist.js'
 
 const zoomist = new Zoomist('.cat-zoomist', {
   // initScale: 2.5,
