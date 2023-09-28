@@ -16,12 +16,10 @@
   </a>
 </div>
 
-## 🚀 Get Started
-
-### Installation
+## 🚀 Installation
 There are few ways to import Zoomist into your project:
 
-#### 1. Install from NPM
+### Install from NPM
 You can easily install Zoomist from NPM.
 ```
 npm i zoomist@next
@@ -37,7 +35,7 @@ import Zoomist from 'zoomist'
 const zoomist = new Zoomist(...)
 ```
 
-#### 2. Using CDN
+### Using CDN
 There are two ways to include Zoomist by using CDN.
 
 UMD:
@@ -64,14 +62,14 @@ ES modules in browser:
 </script>
 ```
 
-#### 3. Download assets
+### Download assets
 Or you can use Zoomist locally by [DOWNLOAD](https://github.com/cotton123236/zoomist/archive/refs/heads/next.zip) assets.
 
 
-### Basic usage
+## 📝 Basic usage
 After downloading Zoomist, there are a few steps to create a Zoomist:
 
-#### Add Zoomist HTML layout
+### Add Zoomist HTML layout
 You need to add Zoomist layout in your HTML:
 ```html
 <!-- zoomist-container -->
@@ -86,7 +84,7 @@ You need to add Zoomist layout in your HTML:
   </div>
 </div>
 ```
-#### Custom Zoomist styles
+### Custom Zoomist styles
 You may want to add some custom styles to set Swiper size:
 ```css
 .zoomist-container {
@@ -107,7 +105,7 @@ You may want to add some custom styles to set Swiper size:
 }
 ```
 
-#### Initialize Swiper
+### Initialize Swiper
 Finally, initialize Zoomist in your js file:
 ```js
 const zoomist = new Zoomist('.zoomist-container', {
