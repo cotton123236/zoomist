@@ -1,9 +1,9 @@
 {
   "name": "zoomist",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A TypeScript library for zooming any element. Also supports mobile devices.",
   "type": "module",
-  "main": "./dist/zoomist.umd.cjs",
+  "main": "./dist/zoomist.umd.js",
   "module": "./dist/zoomist.js",
   "style": "./dist/zoomist.css",
   "types": "./dist/zoomist.d.ts",
@@ -15,7 +15,7 @@
   "exports": {
     ".": {
       "import": "./dist/zoomist.js",
-      "require": "./dist/zoomist.umd.cjs",
+      "require": "./dist/zoomist.umd.js",
       "types": "./dist/zoomist.d.ts"
     },
     "./css": {
