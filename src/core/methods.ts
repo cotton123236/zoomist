@@ -1,4 +1,4 @@
-import Zoomist from './core'
+import { Zoomist } from './core'
 import {
   EventTypes,
   MoveToKeywordsX,

@@ -1,12 +1,19 @@
 {
-  "name": "zoomist-src",
+  "name": "zoomist",
   "version": "2.0.7",
   "description": "A TypeScript library for zooming any element. Also supports mobile devices.",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+  "main": "./zoomist.umd.js",
+  "module": "./zoomist.js",
+  "style": "./zoomist.css",
+  "types": "./zoomist.d.ts",
+  "exports": {
+    ".": {
+      "default": "./zoomist.js",
+      "types": "./zoomist.d.ts"
+    },
+    "./css": "./zoomist.css",
+    "./types": "./types.d.ts"
   },
   "repository": {
     "type": "git",
@@ -36,6 +43,11 @@
   ],
   "author": "Wilson Wu",
   "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
   "devDependencies": {
     "sass": "^1.64.1",
     "typescript": "^5.0.2",

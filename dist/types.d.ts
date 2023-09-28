@@ -1,4 +1,4 @@
-import Zoomist from './core/core';
+import { Zoomist } from './core/core';
 export type QueryElement = HTMLElement | string;
 export interface ZoomistHTMLElement extends HTMLElement {
     zoomist: Zoomist | null;

@@ -1,1 +1,1 @@
-export { default } from './core/core';
+export { Zoomist as default } from './core/core';

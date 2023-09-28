@@ -854,4 +854,4 @@ class Zoomist {
 Object.assign(Zoomist.prototype, ZOOMIST_METHODS)
 
 
-export default Zoomist
+export { Zoomist }

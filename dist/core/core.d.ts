@@ -20,4 +20,4 @@ declare class Zoomist {
     destroySlider(): void;
     destroyZoomer(): void;
 }
-export default Zoomist;
+export { Zoomist };

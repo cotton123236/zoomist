@@ -10,8 +10,9 @@ export default defineConfig({
     host: '0.0.0.0'
   },
   build: {
+    emptyOutDir: false,
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(__dirname, 'src/zoomist.ts'),
       name,
       fileName: (format) => `${fileName}${format.includes('es') ? '' : `.${format}`}.js`
     },
