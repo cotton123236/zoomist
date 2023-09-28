@@ -1,6 +1,11 @@
 <div align="center">
   <img src="https://i.imgur.com/fHxO8Fl.png" width="100px" height="100px" alt="logo" />
-  <h1><img src="https://i.imgur.com/QEk2wic.png" width="160px" alt="Zoomist title" /></h1>
+  <h1>
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/jRsv3If.png"/>
+      <img src="https://i.imgur.com/QEk2wic.png" width="160"/>
+    </picture>
+  </h1>
   <p>Zoomist is TypeScript library for zooming any element. Also supports mobile devices.</p>
 </div>
 <!-- 
@@ -41,10 +46,10 @@ There are two ways to include Zoomist by using CDN.
 UMD:
 ```html
 <!-- styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@next/dist/zoomist.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.css" />
 
 <!-- scripts -->
-<script src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@next/dist/zoomist.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.umd.js"></script>
 <script>
   const zoomist = new Zoomist(...)
 </script>
@@ -52,11 +57,11 @@ UMD:
 ES modules in browser:
 ```html
 <!-- styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@next/dist/zoomist.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.css" />
 
 <!-- scripts -->
 <script type="module">
-  import Zoomist from 'https://cdn.jsdelivr.net/gh/cotton123236/zoomist@next/dist/zoomist.js'
+  import Zoomist from 'https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.js'
 
   const zoomist = new Zoomist(...)
 </script>
