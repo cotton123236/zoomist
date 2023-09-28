@@ -24,13 +24,13 @@ export const DEFAULT_OPTIONS: ZoomistOptions = {
   pinchable: true,
   // set image stuck on bounds
   bounds: false,
-  // the ratio of zoom at one time
+  // the ratio of zooming at one time
   zoomRatio: 0.1,
-  // the max ratio of the image, compare to the initial image status (must be number larger then 1)
+  // the max scale of zoomist-image (must be number larger then initScale)
   maxScale: 10,
-  // the max ratio of the image, compare to the initial image status (must be number smaller then 1 and bigger then 0)
+  // the min scale of zoomist-image (must be number smaller then initScale)
   minScale: 1,
-  // set initial ratio of zoomist-image
+  // set initial scale of zoomist-image
   initScale: null
 }
 
@@ -68,6 +68,18 @@ export const ZOOMER_AUTO_GENERATED: Partial<ZoomerOptions> = {
 export const ZOOMIST_EVENTS: ZoomistEvents = {
   // invoked when zoomist instance ready
   ready: null,
+  // invoked when reset methods be used
+  reset: null,
+  // invoked when image changes it's size
+  resize: null,
+  // invoked before destroy methods be used
+  beforeDestroy: null,
+  // invoked after destroy methods be used
+  destroy: null,
+  // invoked before update methods be used
+  beforeUpdate: null,
+  // invoked when update methods be used
+  update: null,
   // invoked when image is zooming
   zoom: null,
   // invoked when wheeling
@@ -89,19 +101,7 @@ export const ZOOMIST_EVENTS: ZoomistEvents = {
   // invoked when sliding the slider
   slide: null,
   // invoked when mouseup on slider
-  slideEnd: null,
-  // invoked when image changes it's size
-  resize: null,
-  // invoked when reset methods be used
-  reset: null,
-  // invoked before destroy methods be used
-  beforeDestroy: null,
-  // invoked after destroy methods be used
-  destroy: null,
-  // invoked before update methods be used
-  beforeUpdate: null,
-  // invoked when update methods be used
-  update: null
+  slideEnd: null
 }
 
 

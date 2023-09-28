@@ -41,23 +41,23 @@ const zoomist = new Zoomist('.cat-zoomist', {
     // slideEnd(val) {
     //   console.log(val)
     // },
-    // dragStart(e) {
-    //   console.log('dragStart', e)
+    // dragStart(_, transform, e) {
+    //   console.log('dragStart', transform, e)
     // },
-    // drag(e) {
-    //   console.log('drag', e)
+    // drag(_, transform, e) {
+    //   console.log('drag', transform, e)
     // },
-    // dragEnd(e) {
-    //   console.log('dragEnd', e)
+    // dragEnd(_, transform, e) {
+    //   console.log('dragEnd', transform, e)
     // },
-    // pinchStart(e) {
-    //   console.log('pinchStart', e)
+    // pinchStart(_, scale, e) {
+    //   console.log('pinchStart', scale, e)
     // },
-    // pinch(e) {
-    //   console.log('pinch', e)
+    // pinch(_, scale, e) {
+    //   console.log('pinch', scale, e)
     // },
-    // pinchEnd(e) {
-    //   console.log('pinchEnd', e)
+    // pinchEnd(_, scale, e) {
+    //   console.log('pinchEnd', scale, e)
     // },
     // beforeDestroy(zoomist) {
     //   const { mounted } = zoomist

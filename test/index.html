@@ -12,14 +12,16 @@
 <body>
   <div class="zoomist-container">
     <div class="zoomist-wrapper">
-      <div class="zoomist-image">
+      <div class="zoomist-image" style="height: 400px; display: flex; justify-content: center; align-items: center;">
         ZOOMIST
       </div>
     </div>
   </div>
-  <script>
+  <!-- <script src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@next/dist/zoomist.umd.js"></script> -->
+  <script type="module">
+    import Zoomist from 'https://cdn.jsdelivr.net/gh/cotton123236/zoomist@next/dist/zoomist.js'
     // console.log(Zoomist)
-    // new Zoomist('.zoomist-container')
+    new Zoomist('.zoomist-container')
   </script>
 </body>
 </html>

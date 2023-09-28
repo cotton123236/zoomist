@@ -31,6 +31,7 @@ import {
 import {
   NAME,
   IS_TOUCH,
+  CLASS_CONTAINER,
   CLASS_IMAGE,
   CLASS_WRAPPER,
   EVENT_TOUCH_START,
@@ -211,7 +212,7 @@ class Zoomist {
   #mount() {
     if (this.mounted) return;
 
-    const { image, options: { minScale, maxScale, initScale }, __modules__: { slider, zoomer } } = this
+    const { element, image, options: { minScale, maxScale, initScale }, __modules__: { slider, zoomer } } = this
     const zoomist = this
 
     setStyle(image, {
@@ -306,6 +307,8 @@ class Zoomist {
       translateX: 0,
       translateY: 0
     })
+
+    element.classList.add(CLASS_CONTAINER)
 
     this.mounted = true
 
