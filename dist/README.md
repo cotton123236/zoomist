@@ -46,10 +46,10 @@ There are two ways to include Zoomist by using CDN.
 UMD:
 ```html
 <!-- styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
 
 <!-- scripts -->
-<script src="https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.umd.js"></script>
 <script>
   const zoomist = new Zoomist(...)
 </script>
@@ -57,11 +57,11 @@ UMD:
 ES modules in browser:
 ```html
 <!-- styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
 
 <!-- scripts -->
 <script type="module">
-  import Zoomist from 'https://cdn.jsdelivr.net/npm/zoomist@next/zoomist.js'
+  import Zoomist from 'https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.js'
 
   const zoomist = new Zoomist(...)
 </script>
@@ -139,7 +139,7 @@ new Zoomist('.zoomist-container', {
   // set is pinchable or not
   pinchable: true,
   // set image stuck on bounds
-  bounds: false,
+  bounds: true,
   // the ratio of zooming at one time
   zoomRatio: 0.1,
   // the max scale of zoomist-image (must be number larger then initScale)

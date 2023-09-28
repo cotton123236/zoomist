@@ -83,7 +83,7 @@ const et = (n) => document.contains(H(n)), bt = (n) => {
   // set is pinchable or not
   pinchable: !0,
   // set image stuck on bounds
-  bounds: !1,
+  bounds: !0,
   // the ratio of zooming at one time
   zoomRatio: 0.1,
   // the max scale of zoomist-image (must be number larger then initScale)

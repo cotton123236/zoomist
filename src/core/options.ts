@@ -23,7 +23,7 @@ export const DEFAULT_OPTIONS: ZoomistOptions = {
   // set is pinchable or not
   pinchable: true,
   // set image stuck on bounds
-  bounds: false,
+  bounds: true,
   // the ratio of zooming at one time
   zoomRatio: 0.1,
   // the max scale of zoomist-image (must be number larger then initScale)
