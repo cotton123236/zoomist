@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://i.imgur.com/fHxO8Fl.png" width="100px" height="100px" alt="logo" />
-  <h1>Zoomist</h1>
+  <h1><img src="https://i.imgur.com/QEk2wic.png" width="160px" alt="Zoomist title" /></h1>
   <p>Zoomist is TypeScript library for zooming any element. Also supports mobile devices.</p>
 </div>
 <!-- 
