@@ -65,6 +65,7 @@ ES modules in browser:
 ### Download assets
 Or you can use Zoomist locally by [DOWNLOAD](https://github.com/cotton123236/zoomist/archive/refs/heads/next.zip) assets.
 
+---
 
 ## 📝 Basic usage
 After downloading Zoomist, there are a few steps to create a Zoomist:
@@ -118,7 +119,7 @@ const zoomist = new Zoomist('.zoomist-container', {
   zoomer: true
 })
 ```
-
+---
 
 ## 📖 Documentation
 
