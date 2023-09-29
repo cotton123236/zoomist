@@ -5,6 +5,8 @@
 </p>
 <p align="center">Zoomist is a JavaScript library that allows you to make a mouse interaction animation easily.</p>
 <br>
+<p align="center"><strong>❗❗❗ Next version of Zoomist is out! Let's checkout <a href="https://github.com/cotton123236/zoomist/tree/next">zoomist@next</a> ❗❗❗</strong></p>
+<hr/>
 <p align="center">
 <a href="https://cotton123236.github.io/zoomist/index.html#demo">
   <img src="https://i.imgur.com/WkskZIG.png" width="140" />
