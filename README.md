@@ -43,8 +43,8 @@ If you include zoomist with tag, you need to add CSS as well.
 ```
 or using CDN :
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.css"/>
-<script src="https://cdn.jsdelivr.net/gh/cotton123236/zoomist@latest/dist/zoomist.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@1/dist/zoomist.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/zoomist@1/dist/zoomist.min.js"></script>
 ```
 
 <br>
@@ -66,7 +66,7 @@ new Zoomist(element[, options])
 new Zoomist('#my-zoomist')
 
 // advanced usage
-const myZoomist = document.querySelector('#my-zoomist')
+const zoomistElement = document.querySelector('#my-zoomist')
 new Zoomist(zoomistElement, {
   // optional parameters
   maxRatio: 4,
