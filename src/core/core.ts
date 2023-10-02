@@ -1,7 +1,7 @@
 import {
   QueryElement,
   ZoomistOptions,
-  ZoomistOptionsDefault,
+  ZoomistDefaultOptions,
   ZoomistData,
   ZoomistEvents,
   ZoomistMethods,
@@ -84,7 +84,7 @@ interface Zoomist extends ZoomistMethods {}
 // class Zoomist
 class Zoomist {
   element: HTMLElement;
-  options: ZoomistOptionsDefault;
+  options: ZoomistDefaultOptions;
   wrapper!: HTMLElement;
   image!: HTMLElement;
   mounted!: boolean;
