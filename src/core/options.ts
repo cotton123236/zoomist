@@ -1,5 +1,5 @@
 import {
-  ZoomistOptions,
+  ZoomistOptionsDefault,
   SliderOptions,
   ZoomerOptions,
   ZoomistEvents,
@@ -15,7 +15,7 @@ import {
 } from '../shared/constants'
 
 
-export const DEFAULT_OPTIONS: ZoomistOptions = {
+export const DEFAULT_OPTIONS: ZoomistOptionsDefault = {
   // set is draggable or not
   draggable: true,
   // set is wheelable or not

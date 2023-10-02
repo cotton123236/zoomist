@@ -1,8 +1,9 @@
 import './../src/zoomist.scss'
 
 import Zoomist from './../dist/zoomist.js'
+import { ZoomistOptions } from './../dist/types'
 
-const zoomist = new Zoomist('.cat-zoomist', {
+const options: ZoomistOptions = {
   // initScale: 2.5,
   // minScale: 0.5,
   // maxScale: 100,
@@ -68,7 +69,9 @@ const zoomist = new Zoomist('.cat-zoomist', {
     //   console.log(mounted, zoomist)
     // },
   }
-})
+}
+
+const zoomist = new Zoomist('.cat-zoomist', options)
 
 // console.log('%cindex.js line:8 zoomist', 'color: #007acc;', zoomist);
 

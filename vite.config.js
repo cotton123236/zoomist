@@ -18,9 +18,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        assetFileNames: () => {
-          return `${fileName}[extname]`
-        }
+        assetFileNames: () => `${fileName}[extname]`
       }
     }
   },

@@ -1,5 +1,5 @@
-import { ZoomistOptions, SliderOptions, ZoomerOptions, ZoomistEvents, ZoomistModules } from './../types';
-export declare const DEFAULT_OPTIONS: ZoomistOptions;
+import { ZoomistOptionsDefault, SliderOptions, ZoomerOptions, ZoomistEvents, ZoomistModules } from './../types';
+export declare const DEFAULT_OPTIONS: ZoomistOptionsDefault;
 export declare const SLIDER_OPTIONS: SliderOptions;
 export declare const SLIDER_AUTO_GENERATED: Partial<SliderOptions>;
 export declare const ZOOMER_OPTIONS: ZoomerOptions;

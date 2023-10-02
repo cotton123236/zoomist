@@ -8,12 +8,12 @@
   </h1>
   <p>Zoomist is TypeScript library for zooming any element. Also supports mobile devices.</p>
 </div>
-<!-- 
+
 <p align="center">
-  <a href="">Get Started</a> |
-  <a href="">Documentation</a> |
-  <a href="">Demos</a>
-</p> -->
+  <!-- <a href="">Get Started</a> |
+  <a href="">Documentation</a> | -->
+  <a href="https://codesandbox.io/s/intelligent-zeh-lgtttg?file=/src/index.ts">Demo</a>
+</p>
 
 <div align="center">
   <a aria-label="NPM version" href="https://github.com/cotton123236/zoomist/tree/next">
