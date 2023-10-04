@@ -3,9 +3,9 @@
   <img src="https://i.imgur.com/VfD4y0r.png" />
 </a>
 </p>
-<p align="center">Zoomist is a JavaScript library that allows you to make a mouse interaction animation easily.</p>
+<p align="center">Zoomist is a JavaScript library for zooming image.</p>
 <br>
-<p align="center"><strong>❗❗❗ Next version of Zoomist is out! Let's checkout <a href="https://github.com/cotton123236/zoomist">zoomist@next</a> ❗❗❗</strong></p>
+<p align="center"><strong>❗❗❗ Next version of Zoomist is out! Let's checkout <a href="https://github.com/cotton123236/zoomist">zoomist v2</a> ❗❗❗</strong></p>
 <hr/>
 <p align="center">
 <a href="https://cotton123236.github.io/zoomist/index.html#demo">
@@ -23,10 +23,10 @@
 ### Download
 
 ```
-npm install zoomist
+npm install zoomist@1
 ```
 #### Manual download
-[Download ZIP](https://github.com/cotton123236/zoomist/archive/refs/heads/main.zip)
+[Download ZIP](https://github.com/cotton123236/zoomist/archive/refs/heads/v1.zip)
 
 <br>
 
@@ -197,5 +197,5 @@ myZoomist.on('update', function() {})
 ## Others
 
 * Visit the [website](https://cotton123236.github.io/zoomist/index.html)
-* Released under the [MIT License](https://github.com/cotton123236/CottonJS/blob/main/LICENSE).
+* Released under the [MIT License](https://github.com/cotton123236/zoomist/blob/main/LICENSE).
 * ©2021 [cotton123236](https://github.com/cotton123236)
