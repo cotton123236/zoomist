@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_圖層_1" data-name="圖層 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 120 120">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #040000;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        fill: url(#_未命名漸層_808);
+      }
+
+      .cls-4 {
+        fill: url(#_未命名漸層_837);
+      }
+    </style>
+    <linearGradient id="_未命名漸層_837" data-name="未命名漸層 837" x1="39.27" y1="89.16" x2="100.18" y2="89.16" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#231815"/>
+      <stop offset=".04" stop-color="#2a1f1c"/>
+      <stop offset=".09" stop-color="#3d3331"/>
+      <stop offset=".16" stop-color="#5d5553"/>
+      <stop offset=".24" stop-color="#8a8482"/>
+      <stop offset=".32" stop-color="#c2bfbe"/>
+      <stop offset=".4" stop-color="#fff"/>
+      <stop offset=".68" stop-color="#fff"/>
+      <stop offset=".71" stop-color="#dddbda"/>
+      <stop offset=".77" stop-color="#a5a09f"/>
+      <stop offset=".82" stop-color="#766f6d"/>
+      <stop offset=".88" stop-color="#524947"/>
+      <stop offset=".93" stop-color="#382e2b"/>
+      <stop offset=".97" stop-color="#281d1a"/>
+      <stop offset="1" stop-color="#231815"/>
+    </linearGradient>
+    <linearGradient id="_未命名漸層_808" data-name="未命名漸層 808" x1="25.58" y1="98.68" x2="52.13" y2="72.13" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#231815"/>
+      <stop offset=".5" stop-color="#abacad"/>
+      <stop offset=".53" stop-color="#c3c4c5"/>
+      <stop offset=".58" stop-color="#d9dada"/>
+      <stop offset=".62" stop-color="#eaeaeb"/>
+      <stop offset=".68" stop-color="#f6f6f6"/>
+      <stop offset=".77" stop-color="#fdfdfd"/>
+      <stop offset="1" stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+  <circle class="cls-1" cx="60" cy="60" r="60"/>
+  <g>
+    <polygon class="cls-4" points="39.27 85.62 100.18 87.2 100.18 91.44 39.27 92.71 39.27 85.62"/>
+    <polygon class="cls-3" points="52.87 72.87 29.44 101.88 25.66 98.76 47.87 69.34 52.87 72.87"/>
+    <polygon class="cls-2" points="47.87 69.34 73.97 34.75 73.97 33.62 38.23 33.62 38.23 26.53 81.82 26.53 81.82 37.02 52.87 72.87 47.87 69.34"/>
+  </g>
+</svg>

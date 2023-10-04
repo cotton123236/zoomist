@@ -1,0 +1,63 @@
+---
+import config from '@config'
+import i18next, { t } from 'i18next'
+import { HeadHrefLangs } from 'astro-i18next/components'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  name,
+  ogImage,
+  themeColor,
+  themeColorDark
+} = config
+
+const {
+  title
+} = Astro.props
+
+const fullTitle = `${title && title + ' | '}${name}`
+const description = Astro.props.description || t('description')
+const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro.site)
+const ogImageURL = new URL(ogImage, Astro.site)
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<link rel="canonical" href={canonicalURL} />
+
+<!-- title -->
+<title>{fullTitle}</title>
+
+<!-- SEO -->
+<!-- General Meta Tags -->
+<meta name="title" content={fullTitle} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content={i18next.language} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+
+<!-- theme -->
+<meta name="theme-color" content={themeColor} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />
+
+<!-- i18n -->
+<HeadHrefLangs />
