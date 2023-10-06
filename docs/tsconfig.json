@@ -9,6 +9,7 @@
       "@config": ["./config.ts"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
+      "@images/*": ["src/images/*"],
       "@content/*": ["src/content/*"],
       "@styles/*": ["src/styles/*"],
       "@stores/*": ["src/stores/*"]

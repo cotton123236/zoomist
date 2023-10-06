@@ -1,11 +1,15 @@
 ---
-import { Icon } from 'astro-icon'
 import { t } from 'i18next'
+import { Icon } from 'astro-icon'
+import { Image } from 'astro:assets'
 // components
 import Link from '@components/utils/Link.astro'
 import SearchBtn from '@components/btns/SearchBtn.astro'
 import LangBtn from '@components/btns/LangBtn.astro'
 import MenuBtn from '@components/btns/MenuBtn.astro'
+// image
+import LogoDark from '@images/z-dark.svg'
+import LogoLight from '@images/z-light.svg'
 
 type NavLinks = Array<{
   name: string
@@ -26,8 +30,8 @@ const navLinks: NavLinks = [
 <header class="header px-lr">
   <nav class="nav">
     <Link class="nav-logo" href="/">
-      <Icon name="z-light" class="dark:hidden" />
-      <Icon name="z-dark" class="hidden dark:block" />
+      <Image src={LogoLight} class="dark:hidden" alt="logo light" />
+      <Image src={LogoDark} class="hidden dark:block" alt="logo dark" />
     </Link>
     <div class="nav-links">
       {
@@ -73,6 +77,7 @@ const navLinks: NavLinks = [
 
   .nav-logo {
     height: 2.25rem;
+    aspect-ratio: 1;
   }
 
   .nav-links {
@@ -87,9 +92,8 @@ const navLinks: NavLinks = [
     @apply ml-auto flex items-center gap-2 lg:gap-4;
   }
 
-  [astro-icon^='z-'] {
-    width: auto;
-    height: 100%;
+  .nav-logo img {
+    @apply h-full w-full object-contain object-center;
   }
 
   [astro-icon^='searcher'] {
