@@ -12,8 +12,8 @@ const config: SiteConfig = {
   site: 'https://zoomist.docs/',
   description: 'A TypeScript library for zooming any element. Also supports mobile devices.',
   ogImage: '/images/logo.svg',
-  themeColor: 'hsl(273, 37%, 93%)',
-  themeColorDark: 'hsl(256, 44%, 15%)'
+  themeColor: '#fff',
+  themeColorDark: '#000'
 }
 
 export { config as default }
