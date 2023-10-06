@@ -1,0 +1,21 @@
+<!-- This is intentionally inlined to avoid FOUC -->
+<script is:inline>
+  const root = document.documentElement
+  const theme = (() => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme')
+    }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark'
+    }
+    return 'light'
+  })()
+
+  console.log(theme)
+  if (theme === 'light') {
+    root.classList.remove('dark')
+  } else {
+    root.classList.add('dark')
+  }
+  root.style.setProperty('color-scheme', theme)
+</script>

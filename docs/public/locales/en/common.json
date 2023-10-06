@@ -1,3 +1,7 @@
 {
-  "description": "A TypeScript library for zooming any element. Also supports mobile devices."
+  "description": "A TypeScript library for zooming any element. Also supports mobile devices.",
+  "navLinks": {
+    "documentation": "Documentation",
+    "demos": "Demos"
+  }
 }

@@ -1,0 +1,21 @@
+---
+import { Icon } from 'astro-icon'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<div class="relative h-5">
+  <button class:list={['lang-btn nav-tool-link', className]} type="button" tabindex="0">
+    <Icon name="lang" class="fill-[currentColor]" />
+  </button>
+</div>
+
+<style>
+  .lang-btn {
+    @apply w-5;
+  }
+</style>

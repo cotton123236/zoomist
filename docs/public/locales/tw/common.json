@@ -1,3 +1,7 @@
 {
-  "description": "是一個讓你可以任意縮放任何元素的庫，使用 TypeScript 編寫，並且支援行動裝置。"
+  "description": "是一個讓你可以任意縮放任何元素的庫，使用 TypeScript 編寫，並且支援行動裝置。",
+  "navLinks": {
+    "documentation": "使用文件",
+    "demos": "示例"
+  }
 }

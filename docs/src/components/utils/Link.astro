@@ -1,0 +1,28 @@
+---
+import { localizePath } from 'astro-i18next'
+import { Icon } from 'astro-icon'
+
+interface Props {
+  href: string
+  class?: string
+  target?: '_self' | '_blank' | '_parent' | '_top' | null
+}
+
+const { href, target, class: className } = Astro.props
+---
+
+<a
+  class:list={[className, { 'group relative': target === '_blank' }]}
+  href={/(http|https)/.test(href) ? href : localizePath(href)}
+  target={target}
+>
+  <slot />
+  {
+    target === '_blank' && (
+      <Icon
+        name="outlink"
+        class="absolute -right-2 top-1 w-[6px] fill-gray-200 duration-200 group-hover:fill-gray-700 dark:group-hover:fill-gray-100"
+      />
+    )
+  }
+</a>

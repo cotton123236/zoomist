@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+/* layer base */
+@layer base {
+  :root {
+    --header-height: 4rem;
+
+    --page-max-width: 90rem;
+  }
+
+  body {
+    @apply bg-white font-base font-light dark:bg-black;
+  }
+
+  code {
+    @apply font-code;
+  }
+}
+
+/* layer utilities */
+@layer utilities {
+  .px-lr {
+    @apply px-4 md:px-6;
+  }
+}
+
+/* layer components */
+@layer components {
+  .text-gradient {
+    --text-gradient-color: linear-gradient(to bottom, #999, #000);
+
+    background: var(--text-gradient-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .split-line {
+    @apply hidden text-gray-100 dark:text-gray-900 md:inline-block;
+  }
+
+  .split-line::before {
+    content: '|';
+  }
+
+  .nav-tool-link {
+    @apply text-gray-600 duration-100 hover:text-gray-950 dark:text-gray-300 hover:dark:text-gray-100;
+  }
+}

@@ -1,5 +1,17 @@
 {
   "files.associations": {
     "*.mdx": "markdown"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "css.validate": false,
+  "editor.inlineSuggest.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.documentSelectors": ["**/*.astro"],
+  "prettier.configPath": ".prettierrc",
+  "eslint.options": {
+    "configFile": ".eslintrc.cjs"
   }
 }

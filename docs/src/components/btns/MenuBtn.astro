@@ -1,0 +1,56 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<button class:list={['menu-btn', className]}>
+  <span class="menu-btn-span top-3"></span>
+  <span class="menu-btn-span bottom-3"></span>
+</button>
+
+<style>
+  .menu-btn {
+    @apply relative h-8 w-8 md:hidden;
+  }
+
+  .menu-btn.is-active .menu-btn-span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
+  .menu-btn.is-active .menu-btn-span:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .menu-btn.is-active .menu-btn-span:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .menu-btn-span {
+    @apply absolute left-1 h-px w-6 bg-gray-950 duration-200 dark:bg-gray-50;
+  }
+</style>
+
+<script>
+  import { $menuState } from '@stores/globals'
+
+  const menuBtn = document.querySelector('.menu-btn')
+  const menuBtnActiveClass: string = 'is-active'
+
+  const useMenuBtn = (): void => {
+    if (!menuBtn) return
+    $menuState.subscribe((val) => {
+      menuBtn.classList[val ? 'add' : 'remove'](menuBtnActiveClass)
+    })
+
+    menuBtn.addEventListener('click', () => {
+      $menuState.set(!$menuState.get())
+    })
+  }
+
+  useMenuBtn()
+</script>

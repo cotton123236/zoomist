@@ -1,0 +1,106 @@
+---
+import { Icon } from 'astro-icon'
+import { t } from 'i18next'
+// components
+import Link from '@components/utils/Link.astro'
+import SearchBtn from '@components/btns/SearchBtn.astro'
+import LangBtn from '@components/btns/LangBtn.astro'
+import MenuBtn from '@components/btns/MenuBtn.astro'
+
+type NavLinks = Array<{
+  name: string
+  href: string
+  target: '_self' | '_blank' | '_parent' | '_top' | null
+}>
+
+const navLinks: NavLinks = [
+  { name: t('navLinks.documentation'), href: '/', target: null },
+  {
+    name: t('navLinks.demos'),
+    href: 'https://codesandbox.io/s/intelligent-zeh-lgtttg?file=/src/index.ts',
+    target: '_blank'
+  }
+]
+---
+
+<header class="header px-lr">
+  <nav class="nav">
+    <Link class="nav-logo" href="/">
+      <Icon name="z-light" class="dark:hidden" />
+      <Icon name="z-dark" class="hidden dark:block" />
+    </Link>
+    <div class="nav-links">
+      {
+        navLinks.map((item) => (
+          <Link href={item.href} target={item.target}>
+            {item.name}
+          </Link>
+        ))
+      }
+    </div>
+    <div class="nav-tools">
+      <SearchBtn />
+      <span class="split-line"></span>
+      <LangBtn />
+      <span class="split-line"></span>
+      <Link href="https://github.com/cotton123236/zoomist" class="nav-tool-link w-6">
+        <Icon name="mdi:github" />
+      </Link>
+      <MenuBtn />
+    </div>
+  </nav>
+</header>
+
+<style>
+  .header {
+    --header-bg-color: 255, 255, 255;
+    --header-border-color: #eee;
+
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    height: var(--header-height);
+    background-color: rgba(var(--header-bg-color), 0.85);
+    box-shadow: inset 0 -1px 0 0 var(--header-border-color);
+    backdrop-filter: saturate(180%) blur(5px);
+  }
+
+  .nav {
+    @apply mx-auto flex h-full w-full items-center gap-10;
+
+    max-width: var(--page-max-width);
+  }
+
+  .nav-logo {
+    height: 2.25rem;
+  }
+
+  .nav-links {
+    @apply hidden md:flex md:items-center md:gap-6;
+  }
+
+  .nav-links a {
+    @apply text-sm leading-8 text-gray-300 duration-200 hover:text-gray-800 dark:hover:text-gray-100;
+  }
+
+  .nav-tools {
+    @apply ml-auto flex items-center gap-2 lg:gap-4;
+  }
+
+  [astro-icon^='z-'] {
+    width: auto;
+    height: 100%;
+  }
+
+  [astro-icon^='searcher'] {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>
+
+<style is:global>
+  .dark .header {
+    --header-bg-color: 0, 0, 0;
+    --header-border-color: #222;
+  }
+</style>

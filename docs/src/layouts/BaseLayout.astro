@@ -1,0 +1,36 @@
+---
+import '@fontsource/inter'
+import '@fontsource/inter/300.css'
+import '@fontsource/inter/700.css'
+import '@fontsource/roboto-mono'
+import '@styles/globals.css'
+import i18next from 'i18next'
+import astroI18nextConfig, { type I18nLocales } from 'astro-i18next.config'
+// components
+import HeadMetas from '@components/HeadMetas.astro'
+import HeadScripts from '@components/HeadScripts.astro'
+import Header from '@components/Header.astro'
+import CommandMenu from '@components/CommandMenu.astro'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title, description } = Astro.props
+---
+
+<!doctype html>
+<html lang={astroI18nextConfig.meta[i18next.language as I18nLocales]?.language}>
+  <head>
+    <HeadMetas title={title} description={description} />
+    <HeadScripts />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <CommandMenu />
+  </body>
+</html>

@@ -2,24 +2,18 @@
 import config from '@config'
 import i18next, { t } from 'i18next'
 import { HeadHrefLangs } from 'astro-i18next/components'
+import astroI18nextConfig, { type I18nLocales } from 'astro-i18next.config'
 
 interface Props {
   title?: string
   description?: string
 }
 
-const {
-  name,
-  ogImage,
-  themeColor,
-  themeColorDark
-} = config
+const { name, ogImage, themeColor, themeColorDark } = config
 
-const {
-  title
-} = Astro.props
+const { title } = Astro.props
 
-const fullTitle = `${title && title + ' | '}${name}`
+const fullTitle = `${title ? title + ' | ' : ''}${name}`
 const description = Astro.props.description || t('description')
 const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro.site)
 const ogImageURL = new URL(ogImage, Astro.site)
@@ -46,7 +40,10 @@ const ogImageURL = new URL(ogImage, Astro.site)
 <meta property="og:title" content={fullTitle} />
 <meta property="og:image" content={ogImageURL} />
 <meta property="og:description" content={description} />
-<meta property="og:locale" content={i18next.language} />
+<meta
+  property="og:locale"
+  content={astroI18nextConfig.meta[i18next.language as I18nLocales]?.language}
+/>
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary" />

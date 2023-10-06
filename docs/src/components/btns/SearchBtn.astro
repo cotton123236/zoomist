@@ -1,0 +1,44 @@
+---
+import { Icon } from 'astro-icon'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<button class:list={['search-btn', className]} type="button" tabindex="0">
+  <Icon name="searcher" class="search-icon fill-[currentColor]" />
+  <span class="search-text md:ml-2">Search</span>
+  <span class="search-text md:ml-auto md:text-gray-700 dark:md:text-gray-300">⌘K</span>
+</button>
+
+<style>
+  .search-btn {
+    @apply flex h-[26px] items-center p-1 duration-200 md:h-8 md:w-36 md:rounded md:bg-gray-50 md:p-2 md:text-gray-200 hover:md:bg-[#eee] dark:md:bg-gray-900 dark:md:text-gray-700 hover:dark:md:bg-gray-800;
+  }
+
+  .search-icon {
+    @apply h-full w-auto;
+  }
+
+  .search-text {
+    @apply hidden md:inline md:text-sm;
+  }
+</style>
+
+<script>
+  const searchBtn = document.querySelector('.search-btn')
+  const ninja = document.querySelector('ninja-keys')
+
+  const useSearchBtn = () => {
+    if (!searchBtn) return
+
+    searchBtn.addEventListener('click', () => {
+      ninja?.open()
+    })
+  }
+
+  useSearchBtn()
+</script>
