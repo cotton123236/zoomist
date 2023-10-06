@@ -1,4 +1,6 @@
 ---
+import astroI18nextConfig, { type I18nLocales } from 'astro-i18next.config'
+import i18next from 'i18next'
 import { Icon } from 'astro-icon'
 
 interface Props {
@@ -6,16 +8,85 @@ interface Props {
 }
 
 const { class: className } = Astro.props
+const { meta, locales, defaultLocale } = astroI18nextConfig
+const { language } = i18next
 ---
 
-<div class="relative h-5">
+<div class="group relative -m-2 h-9 p-2">
   <button class:list={['lang-btn nav-tool-link', className]} type="button" tabindex="0">
     <Icon name="lang" class="fill-[currentColor]" />
   </button>
+  <div class="lang-select">
+    <div
+      class="lang-droplist pointer-events-none -translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
+    >
+      {
+        locales.map((item) => {
+          const newLang = item === defaultLocale ? '' : `/${item}`
+          const [_leadingSlash, _oldLang, ...rest] = Astro.url.pathname.split('/')
+          const slug = rest.join('/')
+          return (
+            <a
+              class:list={['lang-option', { 'is-active': item === language }]}
+              href={`${newLang}/${slug}`}
+            >
+              {meta[item as I18nLocales].name}
+            </a>
+          )
+        })
+      }
+    </div>
+  </div>
 </div>
 
 <style>
   .lang-btn {
     @apply w-5;
   }
+
+  .lang-select {
+    @apply absolute left-1/2 top-full -translate-x-1/2;
+  }
+
+  .lang-droplist {
+    @apply absolute left-1/2 top-full w-32 -translate-x-1/2 rounded bg-white py-2 shadow-gray-200 dark:bg-black dark:shadow-gray-800;
+
+    box-shadow: 0 0 1px 1px #333;
+    transition:
+      opacity 200ms,
+      transform 200ms;
+  }
+
+  .lang-option {
+    @apply relative z-[1] block px-4 py-2 text-sm text-gray-700 duration-200 hover:text-gray-950 dark:text-gray-300 dark:hover:text-gray-50;
+  }
+
+  .lang-option.is-active {
+    @apply pointer-events-none text-black dark:text-white;
+  }
 </style>
+
+<script>
+  import { createPopper } from '@popperjs/core'
+
+  const langBtn: HTMLElement | null = document.querySelector('.lang-btn')
+  const tooltip: HTMLElement | null = document.querySelector('.lang-select')
+
+  const useLangSelect = (): void => {
+    if (!langBtn || !tooltip) return
+
+    createPopper(langBtn, tooltip, {
+      placement: 'bottom',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 8]
+          }
+        }
+      ]
+    })
+  }
+
+  useLangSelect()
+</script>
