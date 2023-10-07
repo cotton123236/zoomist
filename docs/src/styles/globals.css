@@ -8,6 +8,7 @@
     --header-height: 4rem;
 
     --page-max-width: 90rem;
+    --content-max-width: 80rem;
   }
 
   body {
@@ -28,8 +29,20 @@
 
 /* layer components */
 @layer components {
+  [class^='container-'] {
+    @apply mx-auto w-full;
+  }
+
+  .container-page {
+    @apply max-w-[var(--page-max-width)];
+  }
+
+  .container-content {
+    @apply max-w-[var(--content-max-width)];
+  }
+
   .text-gradient {
-    --text-gradient-color: linear-gradient(to bottom, #999, #000);
+    --text-gradient-color: linear-gradient(to bottom, #666, #000);
 
     background: var(--text-gradient-color);
     -webkit-background-clip: text;
@@ -49,6 +62,6 @@
   }
 
   .nav-tool-link {
-    @apply text-gray-700 duration-100 hover:text-black dark:text-gray-200 hover:dark:text-white;
+    @apply text-gray-700 duration-100 hover:text-black dark:text-gray-100 hover:dark:text-white;
   }
 }
