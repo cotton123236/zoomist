@@ -6,5 +6,65 @@ changeLanguage("tw");
 ---
 
 <Layout>
-	
+  <section class="intro px-lr">
+    <div class="intro-container container-page">
+      <div class="container-content text-center">
+        <!-- <h1 class="text-h0 text-gradient font-bold">Zoomist</h1> -->
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .intro {
+    @apply mt-16 md:mt-20;
+  }
+
+  .intro-container {
+    @apply py-8 md:py-12;
+
+    mask-image: radial-gradient(circle at center, #000, #000 70%, transparent 100%);
+    min-height: calc(90vh - var(--header-height) - 5rem);
+    min-height: calc(90dvh - var(--header-height) - 5rem);
+    background-size:
+      var(--intro-dash-stroke) var(--intro-dash-stroke),
+      var(--intro-dash-gap) var(--intro-dash-gap);
+    background-image: linear-gradient(
+        to bottom,
+        transparent var(--intro-dash-space),
+        var(--intro-bg-color) var(--intro-dash-space)
+      ),
+      linear-gradient(
+        to right,
+        var(--intro-dash-color) var(--intro-dash-width),
+        transparent var(--intro-dash-width)
+      ),
+      linear-gradient(
+        to right,
+        transparent var(--intro-dash-space),
+        var(--intro-bg-color) var(--intro-dash-space)
+      ),
+      linear-gradient(
+        to bottom,
+        var(--intro-dash-color) var(--intro-dash-width),
+        transparent var(--intro-dash-width)
+      );
+  }
+</style>
+
+<style is:global>
+  .intro {
+    --intro-dash-space: 0.125rem;
+    --intro-dash-stroke: 0.25rem;
+    --intro-dash-gap: 1.5rem;
+    --intro-dash-width: 1px;
+
+    --intro-bg-color: #fff;
+    --intro-dash-color: #f4f4f4;
+  }
+
+  .dark .intro {
+    --intro-bg-color: #000;
+    --intro-dash-color: #191919;
+  }
+</style>
