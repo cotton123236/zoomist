@@ -17,9 +17,7 @@ const { class: className } = Astro.props
   }
 
   .menu-btn.is-active .menu-btn-span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    @apply top-1/2;
   }
 
   .menu-btn.is-active .menu-btn-span:first-child {
@@ -31,7 +29,7 @@ const { class: className } = Astro.props
   }
 
   .menu-btn-span {
-    @apply absolute left-1 h-px w-6 bg-gray-950 duration-200 dark:bg-gray-50;
+    @apply absolute left-1/2 h-px w-6 -translate-x-1/2 bg-gray-950 duration-200 dark:bg-gray-50;
   }
 </style>
 

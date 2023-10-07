@@ -36,7 +36,7 @@ const navLinks: NavLinks = [
     <div class="nav-links">
       {
         navLinks.map((item) => (
-          <Link href={item.href} target={item.target}>
+          <Link class="nav-link" href={item.href} target={item.target}>
             {item.name}
           </Link>
         ))
@@ -84,12 +84,12 @@ const navLinks: NavLinks = [
     @apply hidden md:flex md:items-center md:gap-6;
   }
 
-  .nav-links a {
-    @apply text-sm leading-8 text-gray-300 duration-200 hover:text-gray-800 dark:hover:text-gray-100;
+  .nav-link {
+    @apply text-sm leading-8;
   }
 
   .nav-tools {
-    @apply ml-auto flex items-center gap-3 lg:gap-4;
+    @apply ml-auto flex items-center gap-4;
   }
 
   .nav-logo img {

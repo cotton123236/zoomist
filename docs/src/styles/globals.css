@@ -44,7 +44,11 @@
     content: '|';
   }
 
+  .nav-link {
+    @apply text-gray-300 duration-200 hover:text-gray-800 dark:hover:text-gray-100;
+  }
+
   .nav-tool-link {
-    @apply text-gray-600 duration-100 hover:text-gray-950 dark:text-gray-200 hover:dark:text-gray-100;
+    @apply text-gray-700 duration-100 hover:text-black dark:text-gray-200 hover:dark:text-white;
   }
 }

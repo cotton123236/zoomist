@@ -12,14 +12,12 @@ const { meta, locales, defaultLocale } = astroI18nextConfig
 const { language } = i18next
 ---
 
-<div class="group relative -m-2 h-9 p-2">
+<div class="lang-select">
   <button class:list={['lang-btn nav-tool-link', className]} type="button" tabindex="0">
     <Icon name="lang" class="fill-[currentColor]" />
   </button>
-  <div class="lang-select">
-    <div
-      class="lang-droplist pointer-events-none -translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
-    >
+  <div class="lang-dropwrap">
+    <div class="lang-droplist">
       {
         locales.map((item) => {
           const newLang = item === defaultLocale ? '' : `/${item}`
@@ -27,7 +25,7 @@ const { language } = i18next
           const slug = rest.join('/')
           return (
             <a
-              class:list={['lang-option', { 'is-active': item === language }]}
+              class:list={['lang-option nav-link', { 'is-active': item === language }]}
               href={`${newLang}/${slug}`}
             >
               {meta[item as I18nLocales].name}
@@ -40,25 +38,32 @@ const { language } = i18next
 </div>
 
 <style>
+  .lang-select {
+    @apply relative -m-2 h-9 p-2;
+  }
+
   .lang-btn {
     @apply w-5;
   }
 
-  .lang-select {
+  .lang-dropwrap {
     @apply absolute left-1/2 top-full -translate-x-1/2;
   }
 
   .lang-droplist {
-    @apply absolute left-1/2 top-full w-32 -translate-x-1/2 rounded bg-white py-2 shadow-gray-200 dark:bg-black dark:shadow-gray-800;
+    @apply pointer-events-none absolute left-1/2 top-full w-32 -translate-x-1/2 -translate-y-2 rounded border border-solid border-[#eee] bg-white py-2 opacity-0 dark:border-gray-800 dark:bg-black;
 
-    box-shadow: 0 0 1px 1px #333;
     transition:
       opacity 200ms,
       transform 200ms;
   }
 
+  .lang-droplist.is-active {
+    @apply pointer-events-auto translate-y-0 opacity-100;
+  }
+
   .lang-option {
-    @apply relative z-[1] block px-4 py-2 text-sm text-gray-700 duration-200 hover:text-gray-950 dark:text-gray-300 dark:hover:text-gray-50;
+    @apply relative z-[1] block px-4 py-2 text-sm;
   }
 
   .lang-option.is-active {
@@ -69,11 +74,19 @@ const { language } = i18next
 <script>
   import { createPopper } from '@popperjs/core'
 
+  const langSelect: HTMLElement | null = document.querySelector('.lang-select')
   const langBtn: HTMLElement | null = document.querySelector('.lang-btn')
-  const tooltip: HTMLElement | null = document.querySelector('.lang-select')
+  const tooltip: HTMLElement | null = document.querySelector('.lang-dropwrap')
+  const droplist: HTMLElement | null = document.querySelector('.lang-droplist')
+
+  const setDroplistShow = (isShow: boolean): void => {
+    droplist!.classList[isShow ? 'add' : 'remove']('is-active')
+  }
 
   const useLangSelect = (): void => {
-    if (!langBtn || !tooltip) return
+    if (!langSelect || !langBtn || !tooltip) return
+
+    const isMobile = typeof window !== 'undefined' && 'ontouchstart' in window
 
     createPopper(langBtn, tooltip, {
       placement: 'bottom',
@@ -86,6 +99,29 @@ const { language } = i18next
         }
       ]
     })
+
+    if (!droplist) return
+
+    if (isMobile) {
+      langBtn.addEventListener('click', () => {
+        setDroplistShow(true)
+      })
+
+      document.addEventListener('click', (e: MouseEvent) => {
+        const { target } = e
+        const isOutside = (target as HTMLElement).contains(langSelect)
+        if (!isOutside) return
+        setDroplistShow(false)
+      })
+    } else {
+      langSelect.addEventListener('mouseenter', () => {
+        setDroplistShow(true)
+      })
+
+      langSelect.addEventListener('mouseleave', () => {
+        setDroplistShow(false)
+      })
+    }
   }
 
   useLangSelect()
