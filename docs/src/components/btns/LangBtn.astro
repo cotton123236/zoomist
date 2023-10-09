@@ -109,8 +109,10 @@ const { language } = i18next
 
       document.addEventListener('click', (e: MouseEvent) => {
         const { target } = e
-        const isOutside = (target as HTMLElement).contains(langSelect)
-        if (!isOutside) return
+        const isInside =
+          (target as HTMLElement).classList.contains('.lang-select') ||
+          (target as HTMLElement).closest('.lang-select')
+        if (isInside) return
         setDroplistShow(false)
       })
     } else {

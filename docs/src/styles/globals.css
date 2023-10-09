@@ -42,8 +42,8 @@
   }
 
   .text-gradient {
-    --text-gradient-color: linear-gradient(to bottom, #000, #999);
-    --text-gradient-color-dark: linear-gradient(to bottom, #fff, #999);
+    --text-gradient-color: linear-gradient(150deg, #000 40%, #999);
+    --text-gradient-color-dark: linear-gradient(150deg, #fff 40%, #999);
 
     background: var(--text-gradient-color);
     -webkit-background-clip: text;
@@ -82,9 +82,9 @@
     --bg-color-dark: #000;
 
     --dash-color: #f4f4f4;
-    --dash-color-drak: #191919;
+    --dash-color-dark: #191919;
 
-    mask-image: radial-gradient(circle at center, #000, #000 70%, transparent 100%);
+    /* mask-image: radial-gradient(circle at center, #000, #000 70%, transparent 100%); */
     background-size:
       var(--dash-stroke) var(--dash-stroke),
       var(--dash-gap) var(--dash-gap);
@@ -96,5 +96,28 @@
       linear-gradient(to right, var(--dash-color) var(--dash-width), transparent var(--dash-width)),
       linear-gradient(to right, transparent var(--dash-space), var(--bg-color) var(--dash-space)),
       linear-gradient(to bottom, var(--dash-color) var(--dash-width), transparent var(--dash-width));
+  }
+
+  .dark .bg-grid {
+    background-image: linear-gradient(
+        to bottom,
+        transparent var(--dash-space),
+        var(--bg-color-dark) var(--dash-space)
+      ),
+      linear-gradient(
+        to right,
+        var(--dash-color-dark) var(--dash-width),
+        transparent var(--dash-width)
+      ),
+      linear-gradient(
+        to right,
+        transparent var(--dash-space),
+        var(--bg-color-dark) var(--dash-space)
+      ),
+      linear-gradient(
+        to bottom,
+        var(--dash-color-dark) var(--dash-width),
+        transparent var(--dash-width)
+      );
   }
 }

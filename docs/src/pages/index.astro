@@ -1,12 +1,10 @@
 ---
-import { changeLanguage } from 'i18next'
-import Layout from '@layouts/BaseLayout.astro'
+import { changeLanguage, t } from "i18next";
+import Layout from "@layouts/BaseLayout.astro";
 
-const zoomistData = await fetch(
-  'https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json'
-).then((res) => res.json())
+changeLanguage("en");
 
-changeLanguage('en')
+const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json").then((res) => res.json());
 ---
 
 <Layout>
@@ -19,9 +17,11 @@ changeLanguage('en')
             <span class="intro-version">v{zoomistData.version}</span>
           </div>
         </div>
-        <h2 class="mt-4 text-gray-300 dark:text-gray-400 md:mt-6 md:text-xl">
-          Zooming anything you want.
-        </h2>
+        <div class="flex justify-center">
+          <h2 class="intro-subtitle text-gradient mt-4 md:mt-6 md:text-lg lg:text-xl">
+            {t('index:intro-subtitle')}
+          </h2>
+        </div>
       </div>
     </div>
   </section>
@@ -45,5 +45,10 @@ changeLanguage('en')
 
   .intro-title {
     @apply text-[clamp(4rem,9.5vw,6.5rem)];
+  }
+
+  .intro-subtitle {
+    --text-gradient-color: linear-gradient(150deg, #999 40%, #ccc);
+    --text-gradient-color-dark: linear-gradient(150deg, #999 40%, #333);
   }
 </style>

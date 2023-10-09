@@ -1,15 +1,27 @@
 ---
-import { changeLanguage } from "i18next";
+import { changeLanguage, t } from "i18next";
 import Layout from "@layouts/BaseLayout.astro";
 
 changeLanguage("tw");
+
+const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json").then((res) => res.json());
 ---
 
 <Layout>
   <section class="intro px-lr">
-    <div class="intro-container container-page">
+    <div class="intro-container container-page bg-grid">
       <div class="container-content text-center">
-        <!-- <h1 class="text-h0 text-gradient font-bold">Zoomist</h1> -->
+        <div class="flex items-end justify-center">
+          <div class="relative">
+            <h1 class="intro-title text-gradient font-bold leading-[1]">Zoomist</h1>
+            <span class="intro-version">v{zoomistData.version}</span>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <h2 class="intro-subtitle text-gradient mt-4 md:mt-6 md:text-lg lg:text-xl">
+            {t('index:intro-subtitle')}
+          </h2>
+        </div>
       </div>
     </div>
   </section>
@@ -23,48 +35,20 @@ changeLanguage("tw");
   .intro-container {
     @apply py-8 md:py-12;
 
-    mask-image: radial-gradient(circle at center, #000, #000 70%, transparent 100%);
     min-height: calc(90vh - var(--header-height) - 5rem);
     min-height: calc(90dvh - var(--header-height) - 5rem);
-    background-size:
-      var(--intro-dash-stroke) var(--intro-dash-stroke),
-      var(--intro-dash-gap) var(--intro-dash-gap);
-    background-image: linear-gradient(
-        to bottom,
-        transparent var(--intro-dash-space),
-        var(--intro-bg-color) var(--intro-dash-space)
-      ),
-      linear-gradient(
-        to right,
-        var(--intro-dash-color) var(--intro-dash-width),
-        transparent var(--intro-dash-width)
-      ),
-      linear-gradient(
-        to right,
-        transparent var(--intro-dash-space),
-        var(--intro-bg-color) var(--intro-dash-space)
-      ),
-      linear-gradient(
-        to bottom,
-        var(--intro-dash-color) var(--intro-dash-width),
-        transparent var(--intro-dash-width)
-      );
-  }
-</style>
-
-<style is:global>
-  .intro {
-    --intro-dash-space: 0.125rem;
-    --intro-dash-stroke: 0.25rem;
-    --intro-dash-gap: 1.5rem;
-    --intro-dash-width: 1px;
-
-    --intro-bg-color: #fff;
-    --intro-dash-color: #f4f4f4;
   }
 
-  .dark .intro {
-    --intro-bg-color: #000;
-    --intro-dash-color: #191919;
+  .intro-version {
+    @apply absolute bottom-0 right-0 mb-1 translate-x-[calc(100%+0.5rem)] text-xs text-gray-100 dark:text-gray-700 md:mb-2 md:translate-x-[calc(100%+1rem)] md:text-sm;
+  }
+
+  .intro-title {
+    @apply text-[clamp(4rem,9.5vw,6.5rem)];
+  }
+
+  .intro-subtitle {
+    --text-gradient-color: linear-gradient(150deg, #999 40%, #ccc);
+    --text-gradient-color-dark: linear-gradient(150deg, #999 40%, #333);
   }
 </style>

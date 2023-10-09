@@ -5,7 +5,7 @@ export type I18nLocales = 'en' | 'tw'
 export default {
   defaultLocale: 'en',
   locales: ['en', 'tw'],
-  namespaces: ['common'],
+  namespaces: ['common', 'index'],
   defaultNamespace: 'common',
   meta: {
     en: {
