@@ -42,9 +42,16 @@
   }
 
   .text-gradient {
-    --text-gradient-color: linear-gradient(to bottom, #666, #000);
+    --text-gradient-color: linear-gradient(to bottom, #000, #999);
+    --text-gradient-color-dark: linear-gradient(to bottom, #fff, #999);
 
     background: var(--text-gradient-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .dark .text-gradient {
+    background: var(--text-gradient-color-dark);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -63,5 +70,31 @@
 
   .nav-tool-link {
     @apply text-gray-700 duration-100 hover:text-black dark:text-gray-100 hover:dark:text-white;
+  }
+
+  .bg-grid {
+    --dash-space: 0.125rem;
+    --dash-stroke: 0.25rem;
+    --dash-gap: 1.5rem;
+    --dash-width: 1px;
+
+    --bg-color: #fff;
+    --bg-color-dark: #000;
+
+    --dash-color: #f4f4f4;
+    --dash-color-drak: #191919;
+
+    mask-image: radial-gradient(circle at center, #000, #000 70%, transparent 100%);
+    background-size:
+      var(--dash-stroke) var(--dash-stroke),
+      var(--dash-gap) var(--dash-gap);
+    background-image: linear-gradient(
+        to bottom,
+        transparent var(--dash-space),
+        var(--bg-color) var(--dash-space)
+      ),
+      linear-gradient(to right, var(--dash-color) var(--dash-width), transparent var(--dash-width)),
+      linear-gradient(to right, transparent var(--dash-space), var(--bg-color) var(--dash-space)),
+      linear-gradient(to bottom, var(--dash-color) var(--dash-width), transparent var(--dash-width));
   }
 }

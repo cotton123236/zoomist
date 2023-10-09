@@ -36,7 +36,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "svgo": "^2.8.0",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "zoomist": "^2.0.10"
   },
   "devDependencies": {
     "prettier": "^3.0.3",
