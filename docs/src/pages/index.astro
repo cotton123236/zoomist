@@ -1,6 +1,9 @@
 ---
 import { changeLanguage, t } from "i18next";
 import Layout from "@layouts/BaseLayout.astro";
+// components
+import { Trans } from "astro-i18next/components";
+import RectBtn from "@components/btns/RectBtn.astro";
 
 changeLanguage("en");
 
@@ -17,10 +20,20 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
             <span class="intro-version">v{zoomistData.version}</span>
           </div>
         </div>
-        <div class="flex justify-center">
-          <h2 class="intro-subtitle text-gradient mt-4 md:mt-6 md:text-lg lg:text-xl">
+        <div class="mt-2 flex justify-center md:mt-4">
+          <h2 class="intro-subtitle text-gradient md:text-lg lg:text-xl">
             {t('index:intro-subtitle')}
           </h2>
+        </div>
+        <p class="mx-auto mt-20 max-w-md text-sm text-gray-600 dark:text-gray-400 md:text-base">
+          <Trans i18nKey="index:intro-brief">
+            <span class="font-medium">Zoomist</span> is a library built with <span
+              class="font-medium">TypeScript</span
+            > that allows you to <br />create zoom elements on website quickly and easily.
+          </Trans>
+        </p>
+        <div class="mt-6 flex justify-center md:mt-8">
+          <RectBtn>Documentation</RectBtn>
         </div>
       </div>
     </div>
@@ -47,8 +60,8 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
     @apply text-[clamp(4rem,9.5vw,6.5rem)];
   }
 
-  .intro-subtitle {
-    --text-gradient-color: linear-gradient(150deg, #999 40%, #ccc);
-    --text-gradient-color-dark: linear-gradient(150deg, #999 40%, #333);
+  .intro-subtitle.text-gradient {
+    --text-gradient-color: linear-gradient(150deg, #999 30%, #ccc);
+    --text-gradient-color-dark: linear-gradient(150deg, #999 30%, #333);
   }
 </style>

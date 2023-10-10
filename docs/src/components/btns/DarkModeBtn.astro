@@ -1,0 +1,43 @@
+---
+import { Icon } from 'astro-icon'
+---
+
+<label
+  class="dark-mode-btn border-gray-300 bg-gray-300 hover:border-gray-400 dark:border-gray-500 dark:bg-gray-700 dark:hover:border-gray-400"
+>
+  <input type="checkbox" class="btn-input" />
+  <span class="btn-check bg-white dark:bg-gray-900">
+    <Icon class="btn-icon" name="sun" />
+    <Icon class="btn-icon opacity-0" name="moon" />
+  </span>
+</label>
+
+<style>
+  .dark-mode-btn {
+    @apply relative block h-6 w-10 rounded-xl border-[1px] border-solid duration-200;
+  }
+
+  .btn-input {
+    @apply hidden;
+  }
+
+  .btn-input:checked + .btn-check {
+    @apply translate-x-4;
+  }
+
+  .btn-input:checked + .btn-check [astro-icon='moon'] {
+    @apply opacity-100;
+  }
+
+  .btn-input:checked + .btn-check [astro-icon='sun'] {
+    @apply opacity-0;
+  }
+
+  .btn-check {
+    @apply absolute left-px top-px h-5 w-5 rounded-xl transition-transform duration-200;
+  }
+
+  .btn-icon {
+    @apply absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 text-sm leading-[1] transition-opacity duration-200;
+  }
+</style>

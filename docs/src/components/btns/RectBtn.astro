@@ -1,0 +1,45 @@
+---
+import Link from '@components/utils/Link.astro'
+
+interface Props {
+  class?: string
+  href?: string
+  type?: string
+}
+
+const { class: className, href, type = 'solid' } = Astro.props
+
+const classList = ['rect-btn', type, className]
+---
+
+{
+  href ? (
+    <Link href={href} class:list={classList} role="link" tabindex="0">
+      <slot />
+    </Link>
+  ) : (
+    <button type="button" role="button" class:list={classList}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .rect-btn {
+    @apply h-10 whitespace-nowrap rounded border border-solid border-[var(--btn-border-color)] bg-[var(--btn-bg-color)] px-4 text-[var(--btn-text-color)];
+  }
+
+  .dark .rect-btn {
+    @apply border-[var(--btn-border-color-dark)] bg-[var(--btn-bg-color-dark)] text-[var(--btn-text-color-dark)];
+  }
+
+  .solid {
+    --btn-border-color: #000;
+    --btn-text-color: #fff;
+    --btn-bg-color: #000;
+
+    --btn-border-color-dark: #fff;
+    --btn-text-color-dark: #000;
+    --btn-bg-color-dark: #fff;
+  }
+</style>

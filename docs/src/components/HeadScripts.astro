@@ -1,7 +1,8 @@
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline>
   const root = document.documentElement
-  const theme = (() => {
+
+  const getTheme = () => {
     if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
       return localStorage.getItem('theme')
     }
@@ -9,12 +10,16 @@
       return 'dark'
     }
     return 'light'
-  })()
-
-  if (theme === 'light') {
-    root.classList.remove('dark')
-  } else {
-    root.classList.add('dark')
   }
-  root.style.setProperty('color-scheme', theme)
+
+  const setTheme = () => {
+    if (getTheme() === 'light') {
+      root.classList.remove('dark')
+    } else {
+      root.classList.add('dark')
+    }
+  }
+
+  setTheme()
+  typeof window !== 'undefined' && window.addEventListener('focus', setTheme)
 </script>
