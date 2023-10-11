@@ -65,7 +65,7 @@
 
   .text-gradient {
     --text-gradient-color: linear-gradient(150deg, #000 30%, #999);
-    --text-gradient-color-dark: linear-gradient(150deg, #fff 30%, #999);
+    --text-gradient-color-dark: linear-gradient(150deg, #fff 30%, #777);
 
     background: var(--text-gradient-color);
     -webkit-background-clip: text;
