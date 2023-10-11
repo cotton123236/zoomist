@@ -7,7 +7,6 @@ import Link from '@components/utils/Link.astro'
 import SearchBtn from '@components/btns/SearchBtn.astro'
 import LangBtn from '@components/btns/LangBtn.astro'
 import MenuBtn from '@components/btns/MenuBtn.astro'
-import DarkModeBtn from '@components/btns/DarkModeBtn.astro'
 // image
 import LogoDark from '@images/z-dark.svg'
 import LogoLight from '@images/z-light.svg'
@@ -28,7 +27,7 @@ const navLinks: NavLinks = [
 ]
 ---
 
-<header class="header px-lr">
+<header class="header px-lr" transition:persist>
   <nav class="nav">
     <Link class="nav-logo" href="/">
       <Image src={LogoLight} class="dark:hidden" alt="logo light" />

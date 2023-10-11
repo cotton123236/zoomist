@@ -8,6 +8,7 @@ import '@styles/globals.css'
 import i18next from 'i18next'
 import astroI18nextConfig, { type I18nLocales } from 'astro-i18next.config'
 // components
+import { ViewTransitions } from 'astro:transitions'
 import HeadMetas from '@components/HeadMetas.astro'
 import HeadScripts from '@components/HeadScripts.astro'
 import Header from '@components/Header.astro'
@@ -26,6 +27,7 @@ const { title, description } = Astro.props
   <head>
     <HeadMetas title={title} description={description} />
     <HeadScripts />
+    <ViewTransitions />
   </head>
   <body>
     <Header />

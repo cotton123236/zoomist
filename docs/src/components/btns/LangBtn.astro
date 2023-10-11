@@ -78,6 +78,7 @@ const { language } = i18next
   const langBtn: HTMLElement | null = document.querySelector('.lang-btn')
   const tooltip: HTMLElement | null = document.querySelector('.lang-dropwrap')
   const droplist: HTMLElement | null = document.querySelector('.lang-droplist')
+  const langOptions = [...document.querySelectorAll('.lang-option')]
 
   const setDroplistShow = (isShow: boolean): void => {
     droplist!.classList[isShow ? 'add' : 'remove']('is-active')
@@ -124,7 +125,17 @@ const { language } = i18next
         setDroplistShow(false)
       })
     }
+
+    langOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        option.classList.add('is-active')
+        langOptions.forEach((el) => {
+          if (el === option) return
+          el.classList.remove('is-active')
+        })
+      })
+    })
   }
 
-  useLangSelect()
+  document.addEventListener('astro:page-load', useLangSelect)
 </script>
