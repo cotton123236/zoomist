@@ -7,9 +7,10 @@ interface Props extends HTMLAttributes<'a'> {
   href: string
   class?: string
   target?: '_self' | '_blank' | '_parent' | '_top' | null
+  outlink?: boolean
 }
 
-const { href, target, class: className, ...attrs } = Astro.props
+const { href, target, class: className, outlink, ...attrs } = Astro.props
 ---
 
 <a
@@ -20,7 +21,7 @@ const { href, target, class: className, ...attrs } = Astro.props
 >
   <slot />
   {
-    target === '_blank' && (
+    outlink && (
       <Icon
         name="outlink"
         class="absolute -right-2 top-1 w-[6px] fill-gray-200 duration-200 group-hover:fill-gray-700 dark:group-hover:fill-gray-100"

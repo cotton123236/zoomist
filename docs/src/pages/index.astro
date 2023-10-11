@@ -1,18 +1,22 @@
 ---
-import { changeLanguage, t } from "i18next";
-import Layout from "@layouts/BaseLayout.astro";
+import { changeLanguage, t } from 'i18next'
+import Layout from '@layouts/BaseLayout.astro'
 // components
-import { Trans } from "astro-i18next/components";
-import RectBtn from "@components/btns/RectBtn.astro";
+import { Trans } from 'astro-i18next/components'
+import RectBtn from '@components/btns/RectBtn.astro'
+import CopyBtn from '@components/btns/CopyBtn'
 
-changeLanguage("en");
+changeLanguage('en')
 
-const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json").then((res) => res.json());
+const zoomistData = await fetch(
+  'https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json'
+).then((res) => res.json())
 ---
 
 <Layout>
   <section class="intro px-lr">
-    <div class="intro-container container-page bg-grid">
+    <div class="intro-container container-page">
+      <div class="absolute-fill bg-grid -z-[1]"></div>
       <div class="container-content text-center">
         <div class="flex items-end justify-center">
           <div class="relative">
@@ -25,15 +29,27 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
             {t('index:intro-subtitle')}
           </h2>
         </div>
-        <p class="mx-auto mt-20 max-w-md text-sm text-gray-600 dark:text-gray-400 md:text-base">
+        <p
+          class="mx-auto mt-16 max-w-md text-sm text-gray-700 dark:text-gray-200 md:mt-20 md:text-base"
+        >
           <Trans i18nKey="index:intro-brief">
             <span class="font-medium">Zoomist</span> is a library built with <span
               class="font-medium">TypeScript</span
-            > that allows you to <br />create zoom elements on website quickly and easily.
+            > that allows you to create zoom elements on website quickly and easily.
           </Trans>
         </p>
-        <div class="mt-6 flex justify-center md:mt-8">
+        <div class="mt-10 flex justify-center space-x-4 md:mt-16">
           <RectBtn>Documentation</RectBtn>
+          <RectBtn
+            type="stroke"
+            target="_blank"
+            href="https://codesandbox.io/s/intelligent-zeh-lgtttg?file=/src/index.ts"
+          >
+            CodeSandbox
+          </RectBtn>
+        </div>
+        <div class="mt-4 flex justify-center md:mt-6">
+          <CopyBtn client:only="react" copy="npm install zoomist">npm install zoomist</CopyBtn>
         </div>
       </div>
     </div>
@@ -46,7 +62,7 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
   }
 
   .intro-container {
-    @apply py-8 md:py-12;
+    @apply relative py-8 md:py-12;
 
     min-height: calc(90vh - var(--header-height) - 5rem);
     min-height: calc(90dvh - var(--header-height) - 5rem);
@@ -62,6 +78,6 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
 
   .intro-subtitle.text-gradient {
     --text-gradient-color: linear-gradient(150deg, #999 30%, #ccc);
-    --text-gradient-color-dark: linear-gradient(150deg, #999 30%, #333);
+    --text-gradient-color-dark: linear-gradient(150deg, #777 30%, #333);
   }
 </style>

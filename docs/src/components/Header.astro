@@ -37,7 +37,12 @@ const navLinks: NavLinks = [
     <div class="nav-links">
       {
         navLinks.map((item) => (
-          <Link class="nav-link" href={item.href} target={item.target}>
+          <Link
+            class="nav-link"
+            href={item.href}
+            target={item.target}
+            outlink={item.target !== null}
+          >
             {item.name}
           </Link>
         ))

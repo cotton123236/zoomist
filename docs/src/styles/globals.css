@@ -5,6 +5,9 @@
 /* layer base */
 @layer base {
   :root {
+    --body-bg-color: #fff;
+    --body-bg-color-dark: #000;
+
     --header-height: 4rem;
 
     --page-max-width: 90rem;
@@ -27,7 +30,7 @@
   }
 
   body {
-    @apply bg-white font-base font-light dark:bg-black;
+    @apply bg-[var(--body-bg-color)] font-base font-light dark:bg-[var(--body-bg-color-dark)] dark:text-white;
   }
 
   code {
@@ -39,6 +42,10 @@
 @layer utilities {
   .px-lr {
     @apply px-4 md:px-6;
+  }
+
+  .absolute-fill {
+    @apply absolute left-0 top-0 h-full w-full;
   }
 }
 
