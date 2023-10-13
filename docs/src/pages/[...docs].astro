@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import astroI18nextConfig from 'astro-i18next.config'
+import { changeLanguage } from 'i18next'
+import { getCollection } from 'astro:content'
+import ContentLayout from '@layouts/ContentLayout.astro'
+
+changeLanguage('en')
+
+// getStaticPaths
+export const getStaticPaths = async () => {
+  const { defaultLocale } = astroI18nextConfig
+  const pages = await getCollection('docs', ({ data }: CollectionEntry<'docs'>) => !data.draft)
+  return pages.map((page) => {
+    const [lang, ...slug] = page.slug.split('/')
+    return {
+      params: { docs: lang === defaultLocale ? slug.join('/') : page.slug },
+      props: { data: page, defaultLocale }
+    }
+  })
+}
+
+export type Props = CollectionEntry<'docs'>
+const { data } = Astro.props
+const { Content, headings } = await data.render()
+---
+
+<ContentLayout {...{ data, headings }}><Content /></ContentLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import SidebarLeft from '@components/SidebarLeft.astro'
+import SidebarRight from '@components/SidebarRight.astro'
+---
+
+<BaseLayout>
+  <div class="px-lr">
+    <div class="container-content flex">
+      <SidebarLeft class="sidebar-left" />
+      <article class="main-content">
+        <slot />
+      </article>
+      <SidebarRight class="sidebar-right" />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  :root {
+    --sidebar-left-width: 100%;
+
+    @media screen and (min-width: 48rem) {
+      --sidebar-left-width: 17.5rem;
+      --sidebar-right-width: 14rem;
+    }
+  }
+
+  .sidebar-left {
+    @apply fixed left-0 top-[var(--header-height)] shrink-0 md:sticky;
+  }
+
+  .sidebar-right {
+    @apply left-0 top-[var(--header-height)] hidden shrink-0 md:sticky md:block;
+  }
+
+  .main-content {
+    @apply w-full;
+  }
+</style>

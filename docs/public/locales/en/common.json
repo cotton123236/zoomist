@@ -3,5 +3,9 @@
   "navLinks": {
     "documentation": "Documentation",
     "demos": "Demos"
+  },
+  "sidebar": {
+    "getting-started": "Getting Started",
+    "installation": "Installation"
   }
 }

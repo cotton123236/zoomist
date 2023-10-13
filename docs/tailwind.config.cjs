@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
 
 const rem = (pixel) => {
   return (pixel / 16).toString() + 'rem'
@@ -65,5 +66,10 @@ module.exports = {
       }
     }
   },
-  plugins: ['prettier-plugin-tailwindcss']
+  plugins: [
+    'prettier-plugin-tailwindcss',
+    plugin(({ addVariant }) => {
+      addVariant('hover-only', '@media (hover: hover)')
+    })
+  ]
 }

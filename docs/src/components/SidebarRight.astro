@@ -1,0 +1,17 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<aside class:list={['sidebar', className]}>LEFT SIDEBAR</aside>
+
+<style>
+  .sidebar {
+    width: var(--sidebar-right-width);
+    height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
+  }
+</style>

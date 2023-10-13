@@ -9,7 +9,7 @@ interface SiteConfig {
 
 const config: SiteConfig = {
   name: 'Zoomist',
-  site: 'https://zoomist.docs/',
+  site: 'https://zoomist.vercel.app/',
   description: 'A TypeScript library for zooming any element. Also supports mobile devices.',
   ogImage: '/images/logo.svg',
   themeColor: '#fff',

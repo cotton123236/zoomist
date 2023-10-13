@@ -91,7 +91,7 @@ You need to add Zoomist layout in your HTML:
 </div>
 ```
 ### Custom Zoomist styles
-You may want to add some custom styles to set Swiper size:
+You may want to add some custom styles:
 ```css
 .zoomist-container {
   width: 100%;
@@ -111,7 +111,7 @@ You may want to add some custom styles to set Swiper size:
 }
 ```
 
-### Initialize Swiper
+### Initialize Zoomist
 Finally, initialize Zoomist in your js file:
 ```js
 const zoomist = new Zoomist('.zoomist-container', {
