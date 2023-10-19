@@ -1,5 +1,6 @@
 ---
 import { changeLanguage, t } from "i18next";
+import { docsRoutes } from "@routes";
 import Layout from "@layouts/BaseLayout.astro";
 // components
 import { Trans } from "astro-i18next/components";
@@ -36,7 +37,9 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
         </Trans>
       </p>
       <div class="mt-10 flex justify-center space-x-4 md:mt-16">
-        <RectBtn>{t('index:intro-btns.documentation')}</RectBtn>
+        <RectBtn href={`${docsRoutes[0].path}${docsRoutes[0].children?.[0].path}`}>
+          {t('index:intro-btns.documentation')}
+        </RectBtn>
         <RectBtn
           type="stroke"
           target="_blank"

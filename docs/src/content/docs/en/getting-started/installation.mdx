@@ -1,7 +1,43 @@
 ---
 title: Installation
 description: Learn how to use Astro's built-in TypeScript support.
-i18nReady: true
 ---
 
-TEST
+# Installation
+
+There are few ways to import Zoomist into your project:
+
+## Install from NPM
+
+You can easily install Zoomist from NPM.
+
+```bash title="Terminal"
+npm i zoomist
+```
+
+```html title="index.astro"
+<!-- zoomist-container -->
+<div class="zoomist-container">
+  <!-- zoomist-wrapper is required -->
+  <div class="zoomist-wrapper">
+    <!-- zoomist-image is required -->
+    <div class="zoomist-image">
+      <!-- you can add anything you want to zoom here. -->
+      <img src="..." />
+    </div>
+  </div>
+</div>
+```
+
+```css title="main.css"
+.zoomist { display: block; }
+```
+```js title="main.js"
+// import Zoomist styles
+import 'zoomist/css'
+// import Zoomist
+import Zoomist from 'zoomist'
+
+// initialize
+const zoomist = new Zoomist(...)
+```

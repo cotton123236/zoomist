@@ -1,17 +1,81 @@
 ---
+import { docsRoutes, useRouteTrans } from '@routes'
+// components
+import Link from '@components/utils/Link.astro'
+
 interface Props {
   class?: string
 }
 
 const { class: className } = Astro.props
+const { pathname } = Astro.url
+const currentPage = pathname.split('/').at(-1)
 ---
 
-<aside class:list={['sidebar', className]}>LEFT SIDEBAR</aside>
+<aside class:list={['sidebar', className]}>
+  <nav class="sidebar-nav">
+    <div class="sidebar-active-marker"></div>
+    {
+      docsRoutes.map((group) => (
+        <>
+          <div class="py-3 font-medium">{useRouteTrans(group)}</div>
+          {group.children && group.children.length && (
+            <ul>
+              {group.children.map((route) => (
+                <li class:list={['sidebar-item', { 'is-active': route.name === currentPage }]}>
+                  <Link href={`${group.path}${route.path}`} class="sidebar-link">
+                    {useRouteTrans(route)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      ))
+    }
+  </nav>
+</aside>
 
 <style>
   .sidebar {
+    @apply px-4 md:px-0;
+
     width: var(--sidebar-left-width);
     height: calc(100vh - var(--header-height));
     height: calc(100dvh - var(--header-height));
   }
+
+  .sidebar-nav {
+    @apply relative max-h-[clac(100%-var(--content-padding-top))] pt-[--nav-padding-top] text-sm;
+  }
+
+  .sidebar-link {
+    @apply block px-4 py-2 text-gray-600 dark:text-gray-500;
+  }
+
+  .is-active .sidebar-link {
+    @apply text-black dark:text-white;
+  }
+
+  .sidebar-active-marker {
+    @apply absolute left-0 top-0 z-[-1] h-9 w-full rounded bg-[#f9f9f9] duration-200 dark:bg-gray-900;
+  }
 </style>
+
+<script>
+  const setActiveMarker = (): void => {
+    const activeMarker: HTMLElement | null = document.querySelector('.sidebar-active-marker')
+    const sidebarNav: HTMLElement | null = document.querySelector('.sidebar-nav')
+    const activeLink: HTMLElement | null = document.querySelector('.sidebar-item.is-active')
+
+    console.log(activeMarker, activeLink, sidebarNav)
+    if (!activeMarker || !activeLink || !sidebarNav) return
+    const { y: activeY, height } = activeLink.getBoundingClientRect()
+    const { y: navTop } = sidebarNav.getBoundingClientRect()
+
+    activeMarker.style.setProperty('top', `${activeY - navTop}px`)
+    activeMarker.style.setProperty('height', `${height}px`)
+  }
+
+  document.addEventListener('astro:page-load', setActiveMarker)
+</script>

@@ -3,5 +3,9 @@
   "navLinks": {
     "documentation": "使用文件",
     "demos": "示例"
+  },
+  "sidebar": {
+    "getting-started": "入門",
+    "installation": "安裝"
   }
 }

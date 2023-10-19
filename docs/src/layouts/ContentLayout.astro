@@ -1,12 +1,22 @@
 ---
+import type { MarkdownHeading } from 'astro'
+import type { CollectionEntry } from 'astro:content'
 import BaseLayout from './BaseLayout.astro'
 import SidebarLeft from '@components/SidebarLeft.astro'
 import SidebarRight from '@components/SidebarRight.astro'
+
+export interface Props {
+  data: CollectionEntry<'docs'>['data']
+  headings: MarkdownHeading[]
+}
+
+const { data, headings } = Astro.props
+const { title, description } = data
 ---
 
-<BaseLayout>
+<BaseLayout {...{ title, description }}>
   <div class="px-lr">
-    <div class="container-content flex">
+    <div class="container-content flex pt-10 md:pt-12">
       <SidebarLeft class="sidebar-left" />
       <article class="main-content">
         <slot />
@@ -21,7 +31,7 @@ import SidebarRight from '@components/SidebarRight.astro'
     --sidebar-left-width: 100%;
 
     @media screen and (min-width: 48rem) {
-      --sidebar-left-width: 17.5rem;
+      --sidebar-left-width: 16rem;
       --sidebar-right-width: 14rem;
     }
   }
@@ -35,6 +45,155 @@ import SidebarRight from '@components/SidebarRight.astro'
   }
 
   .main-content {
-    @apply w-full;
+    @apply w-full px-4 pt-3 md:px-8;
+  }
+</style>
+
+<style is:global>
+  :root {
+    --heading-border-color: #f4f4f4;
+    --heading-border-color-dark: #222;
+  }
+
+  p {
+    @apply mt-4 leading-7 text-gray-600 dark:text-gray-300 md:mt-5;
+  }
+
+  .level-h1 {
+    @apply mb-6 text-3xl font-medium md:mb-8 md:text-4xl;
+  }
+
+  .level-h2 {
+    @apply mb-4 mt-8 pt-6 text-xl font-medium md:mb-6 md:mt-10 md:pt-8 md:text-2xl;
+
+    border-top: 1px solid var(--heading-border-color);
+  }
+
+  .dark .level-h2 {
+    border-top: 1px solid var(--heading-border-color-dark);
+  }
+
+  .heading-wrapper {
+    @apply flex items-center;
+  }
+
+  .anchor-icon {
+    @apply ml-2 block h-4 w-4 md:h-5 md:w-5;
+  }
+
+  .anchor-icon svg {
+    @apply h-full w-full;
+  }
+
+  .expressive-code {
+    /* --code-bg-color: #fbfbfb; */
+    --code-font-size: 0.8125rem;
+    --code-font-family: 'Roboto Mono', 'monospace';
+    --code-ui-font-size: 0.875rem;
+
+    --code-border-color: #f4f4f4;
+    --code-shadow-color: #fbfbfb;
+    --code-tab-bar-color: #fafafa;
+    --code-tab-title-color: #777;
+
+    @apply my-4;
+  }
+
+  .dark .expressive-code {
+    --code-border-color: #191919;
+    --code-shadow-color: #111;
+    --code-tab-bar-color: #121212;
+    --code-tab-title-color: #999;
+    /* --code-tab-bg-color: #191919; */
+  }
+
+  .expressive-code .has-title .header {
+    /* border-bottom: 1px solid var(--code-border-color); */
+  }
+
+  .custom-code-block {
+    --acb-border-radius: 0.375rem;
+    --acb-padding-inline: 1.25rem;
+
+    --acb-code-title-color: #999;
+    --acb-border-color: #f4f4f4;
+    --acb-shadow-color: #fbfbfb;
+    --acb-title-bg-color: 255, 255, 255;
+    --acb-title-bg-opacity: 0.4;
+    --sl-color-gray-3: #999;
+    --sl-color-green: #999;
+
+    --acd-code-keyword: #f472b6;
+    --acd-code-unimportant: #666;
+
+    --astro-code-token-comment: #bbb;
+
+    @apply my-4 overflow-hidden rounded-[var(--acb-border-radius)];
+
+    background-image: linear-gradient(150deg, #fafafa 60%, #eee);
+  }
+
+  .dark .custom-code-block {
+    --acb-code-title-color: #999;
+    --acb-border-color: #2e2e2e;
+    --acb-shadow-color: #111;
+    --acb-title-bg-color: 0, 0, 0;
+    --acb-title-bg-opacity: 0.15;
+    --sl-color-gray-3: #666;
+    --sl-color-green: #666;
+
+    --acd-code-keyword: #dd5ea0;
+    --acd-code-unimportant: #999;
+
+    --astro-code-token-comment: #444;
+
+    background-image: linear-gradient(150deg, #141414 60%, #242424);
+  }
+
+  .lang-html {
+    --astro-code-token-string-expression: var(--acd-code-keyword);
+    --astro-code-token-function: var(--acd-code-unimportant);
+    --astro-code-token-keyword: var(--acd-code-unimportant);
+    --astro-code-color-text: var(--acd-code-unimportant);
+  }
+
+  .lang-js,
+  .lang-ts {
+    --astro-code-color-text: var(--acd-code-keyword);
+    --astro-code-token-function: var(--acd-code-keyword);
+    --astro-code-token-string-expression: var(--acd-code-keyword);
+    --astro-code-token-constant: var(--acd-code-keyword);
+    /* --astro-code-token-keyword: var(--acd-code-unimportant); */
+  }
+
+  figure.custom-code-block.has-title {
+    --code-header-height: 2.75rem;
+  }
+
+  .custom-code-block.has-title .header,
+  .custom-code-block.has-title pre {
+    @apply border-[0];
+  }
+
+  .custom-code-block.has-title figcaption.header {
+    @apply block px-[var(--acb-padding-inline)] py-3 text-[13px];
+
+    background-color: rgba(var(--acb-title-bg-color), var(--acb-title-bg-opacity));
+  }
+
+  .custom-code-block.is-terminal.has-title .header::before {
+    @apply hidden;
+  }
+
+  .custom-code-block pre {
+    @apply py-5 font-code text-[13px];
+  }
+
+  .custom-code-block.has-title pre {
+    @apply rounded-tr-none;
+  }
+
+  .custom-code-block .line {
+    @apply leading-5;
   }
 </style>

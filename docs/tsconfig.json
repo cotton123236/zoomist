@@ -7,6 +7,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@config": ["./config.ts"],
+      "@routes": ["./routes.ts"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
       "@images/*": ["src/images/*"],
