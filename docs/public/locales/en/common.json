@@ -4,8 +4,9 @@
     "documentation": "Documentation",
     "demos": "Demos"
   },
-  "sidebar": {
+  "docNav": {
     "getting-started": "Getting Started",
     "installation": "Installation"
-  }
+  },
+  "onThisPage": "On this page"
 }

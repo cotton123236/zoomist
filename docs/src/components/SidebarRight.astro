@@ -1,17 +1,110 @@
 ---
+import type { MarkdownHeading } from 'astro'
+import { t } from 'i18next'
+
 interface Props {
+  headings: MarkdownHeading[]
   class?: string
 }
 
-const { class: className } = Astro.props
+const { headings, class: className } = Astro.props
+
+const sidebarList = headings.filter((item) => item.depth === 2)
 ---
 
-<aside class:list={['sidebar', className]}>LEFT SIDEBAR</aside>
+<aside class:list={['sidebar', className]}>
+  <div class="sidebar-nav relative">
+    <div class="py-3 font-medium">{t('onThisPage')}</div>
+    <div class="sidebar-active-marker"></div>
+    {
+      sidebarList.map((item) => (
+        <a class="sidebar-link" href={`#${item.slug}`}>
+          {item.text}
+        </a>
+      ))
+    }
+  </div>
+</aside>
 
 <style>
   .sidebar {
+    @apply text-sm;
+
     width: var(--sidebar-right-width);
     height: calc(100vh - var(--header-height));
     height: calc(100dvh - var(--header-height));
   }
+
+  .sidebar-link.is-active {
+    @apply text-black dark:text-white;
+  }
 </style>
+
+<script>
+  import { atom } from 'nanostores'
+
+  const useActiveMarker = () => {
+    const activeMarker: HTMLElement | null = document.querySelector(
+      '.sidebar-right .sidebar-active-marker'
+    )
+    const sidebarNav: HTMLElement | null = document.querySelector('.sidebar-right .sidebar-nav')
+    const links: HTMLElement[] = [
+      ...document.querySelectorAll<HTMLElement>('.sidebar-right .sidebar-link')
+    ]
+    if (!activeMarker || !sidebarNav || !links.length) return
+
+    const headings: HTMLElement[] = [...document.querySelectorAll<HTMLElement>('.level-h2 h2')]
+    const $headingActiveIndex = atom<number | null>(null)
+
+    // get .sidebar-link active index
+    const getActiveHeadingIndex = (entry: IntersectionObserverEntry): number | null => {
+      const { target, isIntersecting } = entry
+      const targetIndex = headings.findIndex((el) => el === target)
+      // console.log(entry)
+      return isIntersecting ? targetIndex : null
+    }
+
+    // check current active heading
+    const observeActiveHeading: IntersectionObserverCallback = (entries, owner) => {
+      entries.forEach((entry) => {
+        const activeHeadingIndex = getActiveHeadingIndex(entry)
+        if (activeHeadingIndex === null) return
+        const activeIndex = activeHeadingIndex - (owner.rootMargin === activeRootMargin ? 0 : 1)
+        $headingActiveIndex.set(activeIndex)
+      })
+    }
+
+    // observer
+    const activeRootMargin = '0px 0px -80% 0px'
+    const inactiveRootMargin = '-50% 0px 0px 0px'
+
+    const activeObserver = new IntersectionObserver(observeActiveHeading, {
+      rootMargin: activeRootMargin
+    })
+    const inactiveObserver = new IntersectionObserver(observeActiveHeading, {
+      rootMargin: inactiveRootMargin
+    })
+
+    // if active index change
+    $headingActiveIndex.subscribe((val) => {
+      if (val === null) return
+      const activeLink = links[val]
+      const { y: activeY, height } = activeLink.getBoundingClientRect()
+      const { y: navTop } = sidebarNav.getBoundingClientRect()
+      links.forEach((link) => {
+        link.classList[link === activeLink ? 'add' : 'remove']('is-active')
+      })
+
+      activeMarker.style.setProperty('top', `${activeY - navTop}px`)
+      activeMarker.style.setProperty('height', `${height}px`)
+    })
+
+    // observe headings
+    headings.forEach((heading) => {
+      activeObserver.observe(heading)
+      inactiveObserver.observe(heading)
+    })
+  }
+
+  document.addEventListener('astro:page-load', useActiveMarker)
+</script>

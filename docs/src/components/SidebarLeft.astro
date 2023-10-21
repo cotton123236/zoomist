@@ -49,26 +49,18 @@ const currentPage = pathname.split('/').at(-1)
     @apply relative max-h-[clac(100%-var(--content-padding-top))] pt-[--nav-padding-top] text-sm;
   }
 
-  .sidebar-link {
-    @apply block px-4 py-2 text-gray-600 dark:text-gray-500;
-  }
-
   .is-active .sidebar-link {
     @apply text-black dark:text-white;
-  }
-
-  .sidebar-active-marker {
-    @apply absolute left-0 top-0 z-[-1] h-9 w-full rounded bg-[#f9f9f9] duration-200 dark:bg-gray-900;
   }
 </style>
 
 <script>
   const setActiveMarker = (): void => {
-    const activeMarker: HTMLElement | null = document.querySelector('.sidebar-active-marker')
-    const sidebarNav: HTMLElement | null = document.querySelector('.sidebar-nav')
-    const activeLink: HTMLElement | null = document.querySelector('.sidebar-item.is-active')
+    const sidebar: HTMLElement = document.querySelector('.sidebar-left')!
+    const activeMarker: HTMLElement | null = sidebar.querySelector('.sidebar-active-marker')
+    const sidebarNav: HTMLElement | null = sidebar.querySelector('.sidebar-nav')
+    const activeLink: HTMLElement | null = sidebar.querySelector('.sidebar-item.is-active')
 
-    console.log(activeMarker, activeLink, sidebarNav)
     if (!activeMarker || !activeLink || !sidebarNav) return
     const { y: activeY, height } = activeLink.getBoundingClientRect()
     const { y: navTop } = sidebarNav.getBoundingClientRect()

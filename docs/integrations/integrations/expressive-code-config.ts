@@ -7,43 +7,44 @@ type IShikiTheme = ExcludeStringAndUndefined<ShikiConfig['theme']>
 export const astroExpressiveCode = () =>
   expressiveCode({
     theme: 'vitesse-dark', // min-dark, rose-pine-dawn, vitesse-dark, material-theme-lighter
-    // customizeTheme(theme) {
-    //   console.log(theme)
-    //   const customizeTheme: Partial<IShikiTheme> = {
-    //     ...theme,
-    //     settings: [
-    //       // ...theme.settings,
-    //       {
-    //         name: 'Comment',
-    //         scope: 'comment',
-    //         settings: {
-    //           foreground: '#999'
-    //         }
-    //       },
-    //       {
-    //         name: 'String',
-    //         scope: 'string',
-    //         settings: {
-    //           foreground: '#62c073'
-    //         }
-    //       },
-    //       {
-    //         name: 'Entity Name Function',
-    //         scope: 'entity.name.function',
-    //         settings: {
-    //           foreground: '#999'
-    //         }
-    //       }
-    //     ]
-    //   }
-    //   return new ExpressiveCodeTheme(customizeTheme)
-    // },
+    customizeTheme(theme) {
+      const customizeTheme: Partial<IShikiTheme> = {
+        ...theme,
+        settings: [
+          ...theme.settings
+          // {
+          //   name: 'Comment',
+          //   scope: 'comment',
+          //   settings: {
+          //     foreground: '#999'
+          //   }
+          // },
+          // {
+          //   name: 'String',
+          //   scope: 'string',
+          //   settings: {
+          //     foreground: '#62c073'
+          //   }
+          // },
+          // {
+          //   name: 'Entity Name Function',
+          //   scope: 'entity.name.function',
+          //   settings: {
+          //     foreground: '#999'
+          //   }
+          // }
+        ]
+      }
+      return new ExpressiveCodeTheme(customizeTheme)
+    },
     styleOverrides: {
       uiFontSize: 'var(--code-ui-font-size)',
       codeFontSize: 'var(--code-font-size)',
       codeFontFamily: 'var(--code-font-family)',
       codeBackground: 'var(--code-bg-color)',
-      borderColor: 'var(--code-border-color)'
+      borderColor: 'var(--code-border-color)',
+      uiPaddingBlock: 'var(--code-tab-bar-padding)',
+      borderRadius: 'var(--code-border-radius)'
     },
     frames: {
       styleOverrides: {

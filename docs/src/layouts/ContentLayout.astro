@@ -16,12 +16,12 @@ const { title, description } = data
 
 <BaseLayout {...{ title, description }}>
   <div class="px-lr">
-    <div class="container-content flex pt-10 md:pt-12">
+    <div class="container-content flex">
       <SidebarLeft class="sidebar-left" />
       <article class="main-content">
         <slot />
       </article>
-      <SidebarRight class="sidebar-right" />
+      <SidebarRight headings={headings} class="sidebar-right" />
     </div>
   </div>
 </BaseLayout>
@@ -29,23 +29,26 @@ const { title, description } = data
 <style>
   :root {
     --sidebar-left-width: 100%;
+    --sidebar-right-width: 100%;
+    --content-padding-top: 1.5rem;
 
     @media screen and (min-width: 48rem) {
       --sidebar-left-width: 16rem;
       --sidebar-right-width: 14rem;
+      --content-padding-top: 2rem;
     }
   }
 
   .sidebar-left {
-    @apply fixed left-0 top-[var(--header-height)] shrink-0 md:sticky;
+    @apply fixed left-0 top-[var(--header-height)] shrink-0 pt-[var(--content-padding-top)] md:sticky;
   }
 
   .sidebar-right {
-    @apply left-0 top-[var(--header-height)] hidden shrink-0 md:sticky md:block;
+    @apply left-0 top-[var(--header-height)] hidden shrink-0 pt-[var(--content-padding-top)] md:sticky md:block;
   }
 
   .main-content {
-    @apply w-full px-4 pt-3 md:px-8;
+    @apply box-border w-full pt-[calc(var(--content-padding-top)+0.75rem)] md:w-[calc(100%-var(--sidebar-left-width)-var(--sidebar-right-width))] md:px-4 lg:px-8;
   }
 </style>
 
@@ -53,10 +56,23 @@ const { title, description } = data
   :root {
     --heading-border-color: #f4f4f4;
     --heading-border-color-dark: #222;
+
+    --link-color: #1985ff;
+    --link-color-hover: #68b5fb;
   }
 
   p {
-    @apply mt-4 leading-7 text-gray-600 dark:text-gray-300 md:mt-5;
+    @apply mt-4 text-sm leading-[1.75] text-gray-600 dark:text-gray-300 md:mt-5 md:text-base;
+  }
+
+  p a {
+    @apply text-[var(--link-color)] duration-200 hover:text-[var(--link-color-hover)];
+  }
+
+  hr {
+    @apply my-8 border-[var(--heading-border-color)] dark:border-[var(--heading-border-color-dark)] md:my-12;
+
+    border-top-width: 1px;
   }
 
   .level-h1 {
@@ -77,8 +93,16 @@ const { title, description } = data
     @apply flex items-center;
   }
 
+  .heading-wrapper:hover .anchor-link {
+    @apply opacity-100;
+  }
+
+  .anchor-link {
+    @apply ml-2 opacity-0 duration-200;
+  }
+
   .anchor-icon {
-    @apply ml-2 block h-4 w-4 md:h-5 md:w-5;
+    @apply block h-4 w-4 md:h-5 md:w-5;
   }
 
   .anchor-icon svg {
@@ -86,73 +110,81 @@ const { title, description } = data
   }
 
   .expressive-code {
-    /* --code-bg-color: #fbfbfb; */
     --code-font-size: 0.8125rem;
     --code-font-family: 'Roboto Mono', 'monospace';
     --code-ui-font-size: 0.875rem;
+    --code-tab-bar-padding: 0.5rem;
+    --code-border-radius: 0.375rem;
 
     --code-border-color: #f4f4f4;
     --code-shadow-color: #fbfbfb;
-    --code-tab-bar-color: #fafafa;
+    /* --code-tab-bar-color: #fafafa; */
     --code-tab-title-color: #777;
 
-    @apply my-4;
+    @apply my-4 rounded-[var(--code-border-radius)];
+
+    background-image: linear-gradient(160deg, #fbfbfb 60%, #eee);
   }
 
   .dark .expressive-code {
     --code-border-color: #191919;
     --code-shadow-color: #111;
-    --code-tab-bar-color: #121212;
+    /* --code-tab-bar-color: #121212; */
     --code-tab-title-color: #999;
-    /* --code-tab-bg-color: #191919; */
+
+    background-image: linear-gradient(160deg, #141414 60%, #242424);
   }
 
-  .expressive-code .has-title .header {
-    /* border-bottom: 1px solid var(--code-border-color); */
+  .expressive-code .frame.has-title:not(.is-terminal) .header {
+    border-bottom: 1px solid var(--code-border-color);
   }
 
+  /* astro-code-block */
   .custom-code-block {
     --acb-border-radius: 0.375rem;
     --acb-padding-inline: 1.25rem;
 
+    --acb-title-bg-color: 0, 0, 0;
+    --acb-title-bg-opacity: 0.02;
     --acb-code-title-color: #999;
     --acb-border-color: #f4f4f4;
     --acb-shadow-color: #fbfbfb;
-    --acb-title-bg-color: 255, 255, 255;
-    --acb-title-bg-opacity: 0.4;
     --sl-color-gray-3: #999;
     --sl-color-green: #999;
 
-    --acd-code-keyword: #f472b6;
-    --acd-code-unimportant: #666;
+    --acd-code-keyword: #fa8cc1;
+    --acd-code-unimportant: #888;
 
     --astro-code-token-comment: #bbb;
 
     @apply my-4 overflow-hidden rounded-[var(--acb-border-radius)];
 
-    background-image: linear-gradient(150deg, #fafafa 60%, #eee);
+    background-image: linear-gradient(160deg, #fbfbfb 60%, #eee);
   }
 
   .dark .custom-code-block {
+    --acb-title-bg-opacity: 0.15;
     --acb-code-title-color: #999;
     --acb-border-color: #2e2e2e;
     --acb-shadow-color: #111;
-    --acb-title-bg-color: 0, 0, 0;
-    --acb-title-bg-opacity: 0.15;
     --sl-color-gray-3: #666;
     --sl-color-green: #666;
 
     --acd-code-keyword: #dd5ea0;
-    --acd-code-unimportant: #999;
+    --acd-code-unimportant: #777;
 
     --astro-code-token-comment: #444;
 
-    background-image: linear-gradient(150deg, #141414 60%, #242424);
+    background-image: linear-gradient(160deg, #141414 60%, #242424);
+  }
+
+  .lang-bash {
+    --astro-code-token-string: var(--acd-code-keyword);
   }
 
   .lang-html {
     --astro-code-token-string-expression: var(--acd-code-keyword);
-    --astro-code-token-function: var(--acd-code-unimportant);
+    /* --astro-code-token-function: var(--acd-code-unimportant); */
     --astro-code-token-keyword: var(--acd-code-unimportant);
     --astro-code-color-text: var(--acd-code-unimportant);
   }
@@ -195,5 +227,9 @@ const { title, description } = data
 
   .custom-code-block .line {
     @apply leading-5;
+  }
+
+  .copy-button svg {
+    @apply h-5 w-5;
   }
 </style>

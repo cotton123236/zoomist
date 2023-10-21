@@ -20,8 +20,8 @@ export default defineConfig({
       applyBaseStyles: false
     }),
     react(),
-    // astroExpressiveCode(),
-    codeblocks(),
+    astroExpressiveCode(),
+    // codeblocks(),
     mdx(),
     astroI18next()
   ],

@@ -4,8 +4,9 @@
     "documentation": "使用文件",
     "demos": "示例"
   },
-  "sidebar": {
+  "docNav": {
     "getting-started": "入門",
     "installation": "安裝"
-  }
+  },
+  "onThisPage": "本頁內容"
 }

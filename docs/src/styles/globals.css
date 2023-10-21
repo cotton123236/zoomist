@@ -29,6 +29,10 @@
     background: var(--selection-bg-color-dark);
   }
 
+  html {
+    @apply scroll-pt-[calc(var(--header-height)+2rem)] scroll-smooth;
+  }
+
   body {
     @apply bg-[var(--body-bg-color)] font-base font-light dark:bg-[var(--body-bg-color-dark)] dark:text-white;
   }
@@ -87,11 +91,19 @@
   }
 
   .nav-link {
-    @apply text-gray-300 duration-200 hover:text-gray-800 dark:hover:text-gray-100;
+    @apply text-gray-300 duration-200 hover:text-black dark:text-gray-500 dark:hover:text-white;
   }
 
   .nav-tool-link {
     @apply text-gray-700 duration-100 hover:text-black dark:text-gray-100 hover:dark:text-white;
+  }
+
+  .sidebar-active-marker {
+    @apply absolute left-0 top-0 z-[-1] h-9 w-full rounded bg-[#f9f9f9] duration-200 dark:bg-gray-900;
+  }
+
+  .sidebar-link {
+    @apply block px-4 py-2 text-gray-300 duration-200 hover:text-black dark:text-gray-500 dark:hover:text-white;
   }
 
   .bg-grid {

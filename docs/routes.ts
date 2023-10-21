@@ -13,12 +13,12 @@ export const docsRoutes: Routes = [
   {
     name: 'getting-started',
     path: '/getting-started',
-    trans: 'sidebar.getting-started',
+    trans: 'docNav.getting-started',
     children: [
       {
         name: 'installation',
         path: '/installation',
-        trans: 'sidebar.installation'
+        trans: 'docNav.installation'
       }
     ]
   }
