@@ -6,7 +6,12 @@
   },
   "docNav": {
     "getting-started": "入門",
-    "installation": "安裝"
+    "installation": "安裝",
+    "basic-usage": "基本用法"
   },
-  "onThisPage": "本頁內容"
+  "onThisPage": "本頁內容",
+  "navigator": {
+    "prev": "上一頁",
+    "next": "下一頁"
+  }
 }

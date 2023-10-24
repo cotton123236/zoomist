@@ -2,12 +2,12 @@
 import type { MarkdownHeading } from 'astro'
 import { t } from 'i18next'
 
-interface Props {
+export interface Props {
   headings: MarkdownHeading[]
   class?: string
 }
 
-const { headings, class: className } = Astro.props
+const { headings, class: className } = Astro.props as Props
 
 const sidebarList = headings.filter((item) => item.depth === 2)
 ---

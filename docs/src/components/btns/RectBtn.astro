@@ -1,14 +1,14 @@
 ---
 import Link from '@components/utils/Link.astro'
 
-interface Props {
+export interface Props {
   class?: string
   href?: string
   type?: string
   target?: '_self' | '_blank' | '_parent' | '_top' | null
 }
 
-const { class: className, href, target, type = 'solid' } = Astro.props
+const { class: className, href, target, type = 'solid' } = Astro.props as Props
 
 const classList = ['rect-btn', type, className]
 ---

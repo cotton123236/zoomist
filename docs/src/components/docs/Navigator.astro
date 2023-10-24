@@ -1,0 +1,60 @@
+---
+import { flatDocsRoutes, useRouteTrans } from '@routes'
+import { t } from 'i18next'
+import Icon from 'astro-icon'
+import Link from '@components/utils/Link.astro'
+
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props as Props
+const { pathname } = Astro.url
+const currentPage = pathname.split('/').at(-1)
+const currentRouteIndex = flatDocsRoutes.findIndex((route) => route.name === currentPage)
+const prevRoute = flatDocsRoutes[currentRouteIndex - 1]
+const nextRoute = flatDocsRoutes[currentRouteIndex + 1]
+---
+
+{
+  (prevRoute || nextRoute) && (
+    <nav class:list={['page-navigator', className]}>
+      {prevRoute && prevRoute.path && (
+        <Link class="nav-link" href={prevRoute.path}>
+          <Icon name="angle-left" class="nav-icon mr-3" style="fill: currentColor;" />
+          <div>
+            <span class="text-sm">{t('navigator.prev')}</span>
+            <div class="nav-title">{useRouteTrans(prevRoute)}</div>
+          </div>
+        </Link>
+      )}
+      {nextRoute && nextRoute.path && (
+        <Link class="nav-link ml-auto flex-row-reverse" href={nextRoute.path}>
+          <Icon name="angle-right" class="nav-icon ml-3" style="fill: currentColor;" />
+          <div>
+            <span class="text-sm">{t('navigator.next')}</span>
+            <div class="nav-title">{useRouteTrans(nextRoute)}</div>
+          </div>
+        </Link>
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .page-navigator {
+    @apply my-8 flex md:my-10;
+  }
+
+  .nav-link {
+    @apply flex items-end;
+  }
+
+  .nav-icon {
+    @apply w-4;
+  }
+
+  .nav-title {
+    @apply mt-2 font-medium leading-[1];
+  }
+</style>

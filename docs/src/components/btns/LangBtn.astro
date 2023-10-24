@@ -3,12 +3,12 @@ import astroI18nextConfig, { type I18nLocales } from 'astro-i18next.config'
 import i18next from 'i18next'
 import { Icon } from 'astro-icon'
 
-interface Props {
+export interface Props {
   class?: string
 }
 
-const { class: className } = Astro.props
-const { meta, locales, defaultLocale } = astroI18nextConfig
+const { class: className } = Astro.props as Props
+const { meta, locales } = astroI18nextConfig
 const { language } = i18next
 ---
 
@@ -20,16 +20,13 @@ const { language } = i18next
     <div class="lang-droplist">
       {
         locales.map((item) => {
-          const newLang = item === defaultLocale ? '' : `/${item}`
-          const [_leadingSlash, _oldLang, ...rest] = Astro.url.pathname.split('/')
-          const slug = rest.join('/')
           return (
-            <a
+            <button
               class:list={['lang-option nav-link', { 'is-active': item === language }]}
-              href={`${newLang}/${slug}`}
+              value={item}
             >
               {meta[item as I18nLocales].name}
-            </a>
+            </button>
           )
         })
       }
@@ -72,20 +69,24 @@ const { language } = i18next
 </style>
 
 <script>
+  import { navigate } from 'astro:transitions/client'
   import { createPopper } from '@popperjs/core'
+  import astroI18nextConfig from 'astro-i18next.config'
 
-  const langSelect: HTMLElement | null = document.querySelector('.lang-select')
-  const langBtn: HTMLElement | null = document.querySelector('.lang-btn')
-  const tooltip: HTMLElement | null = document.querySelector('.lang-dropwrap')
-  const droplist: HTMLElement | null = document.querySelector('.lang-droplist')
-  const langOptions = [...document.querySelectorAll('.lang-option')]
-
-  const setDroplistShow = (isShow: boolean): void => {
-    droplist!.classList[isShow ? 'add' : 'remove']('is-active')
-  }
+  const { defaultLocale, locales } = astroI18nextConfig
 
   const useLangSelect = (): void => {
+    const langSelect: HTMLElement | null = document.querySelector('.lang-select')
+    const langBtn: HTMLElement | null = document.querySelector('.lang-btn')
+    const tooltip: HTMLElement | null = document.querySelector('.lang-dropwrap')
+    const droplist: HTMLElement | null = document.querySelector('.lang-droplist')
+    const langOptions = [...document.querySelectorAll<HTMLButtonElement>('.lang-option')]
+
     if (!langSelect || !langBtn || !tooltip) return
+
+    const setDroplistShow = (isShow: boolean): void => {
+      droplist!.classList[isShow ? 'add' : 'remove']('is-active')
+    }
 
     const isMobile = typeof window !== 'undefined' && 'ontouchstart' in window
 
@@ -128,10 +129,15 @@ const { language } = i18next
 
     langOptions.forEach((option) => {
       option.addEventListener('click', () => {
-        option.classList.add('is-active')
+        const { pathname } = window.location
+        const [_leadingSlash, langOrGroup, ...rest] = pathname.split('/')
+        const { value } = option
+        const newLang = value === defaultLocale ? '' : `/${value}`
+        const slug = (locales.includes(langOrGroup) ? rest : [langOrGroup, ...rest]).join('/')
+        const href = `${newLang}/${slug}`
+        navigate(href)
         langOptions.forEach((el) => {
-          if (el === option) return
-          el.classList.remove('is-active')
+          el.classList[el === option ? 'add' : 'remove']('is-active')
         })
       })
     })

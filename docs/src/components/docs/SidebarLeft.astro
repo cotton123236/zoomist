@@ -3,11 +3,11 @@ import { docsRoutes, useRouteTrans } from '@routes'
 // components
 import Link from '@components/utils/Link.astro'
 
-interface Props {
+export interface Props {
   class?: string
 }
 
-const { class: className } = Astro.props
+const { class: className } = Astro.props as Props
 const { pathname } = Astro.url
 const currentPage = pathname.split('/').at(-1)
 ---
@@ -56,10 +56,13 @@ const currentPage = pathname.split('/').at(-1)
 
 <script>
   const setActiveMarker = (): void => {
-    const sidebar: HTMLElement = document.querySelector('.sidebar-left')!
-    const activeMarker: HTMLElement | null = sidebar.querySelector('.sidebar-active-marker')
-    const sidebarNav: HTMLElement | null = sidebar.querySelector('.sidebar-nav')
-    const activeLink: HTMLElement | null = sidebar.querySelector('.sidebar-item.is-active')
+    const activeMarker: HTMLElement | null = document.querySelector(
+      '.sidebar-left .sidebar-active-marker'
+    )
+    const sidebarNav: HTMLElement | null = document.querySelector('.sidebar-left .sidebar-nav')
+    const activeLink: HTMLElement | null = document.querySelector(
+      '.sidebar-left .sidebar-item.is-active'
+    )
 
     if (!activeMarker || !activeLink || !sidebarNav) return
     const { y: activeY, height } = activeLink.getBoundingClientRect()

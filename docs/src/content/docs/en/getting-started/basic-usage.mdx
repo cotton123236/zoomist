@@ -1,0 +1,70 @@
+---
+title: Basic usage
+description: Basic usage for creating a Zoomist.
+---
+
+# Basic usage
+
+After downloading Zoomist, there are a few steps to create a Zoomist:
+
+## Add Zoomist HTML layout
+
+You need to add Zoomist layout in your HTML:
+
+```html title="index.html"
+<!-- zoomist-container -->
+<div class="zoomist-container">
+  <!-- zoomist-wrapper is required -->
+  <div class="zoomist-wrapper">
+    <!-- zoomist-image is required -->
+    <div class="zoomist-image">
+      <!-- you can add anything you want to zoom here. -->
+      <img src="..." />
+    </div>
+  </div>
+</div>
+```
+
+## Customize Zoomist styles
+
+You may want to add some custom styles:
+
+```css title="customize.css"
+.zoomist-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.zoomist-image {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.zoomist-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+```
+
+## Initialize Zoomist
+
+Finally, initialize Zoomist in your JS file:
+
+```js title="main.js"
+import Zoomist from 'zoomist'
+
+const zoomist = new Zoomist('.zoomist-container', {
+  // Optional parameters
+  maxScale: 4,
+  bounds: true,
+  // if you need slider
+  slider: true,
+  // if you need zoomer
+  zoomer: true
+})
+```
+
+
+---

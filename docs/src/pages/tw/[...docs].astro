@@ -4,11 +4,11 @@ import { changeLanguage } from 'i18next'
 import { getCollection } from 'astro:content'
 import ContentLayout from '@layouts/ContentLayout.astro'
 
-changeLanguage('en')
+changeLanguage('tw')
 
 // getStaticPaths
 export const getStaticPaths = async () => {
-  const lang = 'en'
+  const lang = 'tw'
   const pages = await getCollection('docs', ({ id }: CollectionEntry<'docs'>) =>
     id.startsWith(lang)
   )

@@ -1,6 +1,64 @@
 ---
-title: Installation
-description: Learn how to use Astro's built-in TypeScript support.
+title: 安裝
+description: 在專案中使用 Zoomist 的幾種方式。
 ---
 
-測試
+# 安裝
+
+以下幾種方式能快速地在你的專案上安裝 Zoomist :
+
+## 從 NPM 安裝
+
+你可以很簡單地從 NPM 安裝 Zoomist.
+
+```bash title="Terminal" frame="code"
+npm i zoomist
+```
+
+```js title="main.js"
+// import Zoomist styles
+import 'zoomist/css'
+// import Zoomist
+import Zoomist from 'zoomist'
+
+// initialize
+const zoomist = new Zoomist(...)
+```
+
+## 使用 CDN
+
+有兩中方式能讓你透過 CDN 使用 Zoomist。
+
+UMD:
+
+```html title="index.html"
+<!-- styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
+
+<!-- scripts -->
+<script src="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.umd.js"></script>
+<script>
+  const zoomist = new Zoomist(...)
+</script>
+```
+
+瀏覽器的 ES modules:
+
+```html title="index.html"
+<!-- styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
+
+<!-- scripts -->
+<script type="module">
+  import Zoomist from 'https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.js'
+
+  const zoomist = new Zoomist(...)
+</script>
+```
+
+## 下載檔案
+
+或是你可以 [下載](https://github.com/cotton123236/zoomist/archive/refs/heads/main.zip) 檔案，並在本地端使用。
+
+
+---

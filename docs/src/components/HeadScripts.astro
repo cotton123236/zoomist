@@ -22,5 +22,6 @@
 
   setTheme()
   document.addEventListener('astro:after-swap', setTheme)
-  typeof window !== 'undefined' && window.addEventListener('focus', setTheme)
+  document.addEventListener('visibilitychange', setTheme)
+  window.addEventListener('focus', setTheme)
 </script>

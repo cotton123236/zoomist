@@ -2,15 +2,16 @@
 import type { MarkdownHeading } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import BaseLayout from './BaseLayout.astro'
-import SidebarLeft from '@components/SidebarLeft.astro'
-import SidebarRight from '@components/SidebarRight.astro'
+import SidebarLeft from '@components/docs/SidebarLeft.astro'
+import SidebarRight from '@components/docs/SidebarRight.astro'
+import Navigator from '@components/docs/Navigator.astro'
 
 export interface Props {
   data: CollectionEntry<'docs'>['data']
   headings: MarkdownHeading[]
 }
 
-const { data, headings } = Astro.props
+const { data, headings } = Astro.props as Props
 const { title, description } = data
 ---
 
@@ -20,6 +21,7 @@ const { title, description } = data
       <SidebarLeft class="sidebar-left" />
       <article class="main-content">
         <slot />
+        <Navigator />
       </article>
       <SidebarRight headings={headings} class="sidebar-right" />
     </div>
@@ -40,15 +42,15 @@ const { title, description } = data
   }
 
   .sidebar-left {
-    @apply fixed left-0 top-[var(--header-height)] shrink-0 pt-[var(--content-padding-top)] md:sticky;
+    @apply fixed left-0 top-[var(--header-height)] z-10 shrink-0 bg-[rgba(255,255,255,0.4)] pt-[var(--content-padding-top)] backdrop-blur-2xl dark:bg-[rgba(0,0,0,0.4)] md:sticky md:bg-none md:backdrop-blur-0;
   }
 
   .sidebar-right {
-    @apply left-0 top-[var(--header-height)] hidden shrink-0 pt-[var(--content-padding-top)] md:sticky md:block;
+    @apply left-0 top-[var(--header-height)] hidden shrink-0 pt-[var(--content-padding-top)] lg:sticky lg:block;
   }
 
   .main-content {
-    @apply box-border w-full pt-[calc(var(--content-padding-top)+0.75rem)] md:w-[calc(100%-var(--sidebar-left-width)-var(--sidebar-right-width))] md:px-4 lg:px-8;
+    @apply box-border w-full pb-8 pt-[calc(var(--content-padding-top)+0.75rem)] md:w-[calc(100%-var(--sidebar-left-width))] md:px-4 md:pb-10 lg:w-[calc(100%-var(--sidebar-left-width)-var(--sidebar-right-width))] lg:px-8;
   }
 </style>
 

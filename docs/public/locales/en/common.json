@@ -6,7 +6,12 @@
   },
   "docNav": {
     "getting-started": "Getting Started",
-    "installation": "Installation"
+    "installation": "Installation",
+    "basic-usage": "Basic usage"
   },
-  "onThisPage": "On this page"
+  "onThisPage": "On this page",
+  "navigator": {
+    "prev": "Previous",
+    "next": "Next"
+  }
 }

@@ -16,10 +16,10 @@ export default {
       language: 'zh-TW',
       name: '繁體中文'
     }
-  },
-  routes: {
-    tw: {
-      '[...docs]': 'index'
-    }
   }
+  // routes: {
+  //   tw: {
+  //     '[...docs]': 'index'
+  //   }
+  // }
 }
