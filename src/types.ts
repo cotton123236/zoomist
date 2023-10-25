@@ -204,3 +204,5 @@ export interface MoveToParams {
   x?: number | MoveToKeywordsX
   y?: number | MoveToKeywordsY
 }
+
+export type AppTouchEvent = TouchEvent;

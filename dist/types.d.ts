@@ -3,22 +3,22 @@ export type QueryElement = HTMLElement | string;
 export interface ZoomistHTMLElement extends HTMLElement {
     zoomist: Zoomist | null;
 }
-export interface ZoomistOptions {
-    draggable?: boolean;
-    wheelable?: boolean;
-    pinchable?: boolean;
-    bounds?: boolean;
-    zoomRatio?: number;
-    minScale?: number;
-    maxScale?: number;
-    initScale?: number | null;
+export interface ZoomistDefaultOptions {
+    draggable: boolean;
+    wheelable: boolean;
+    pinchable: boolean;
+    bounds: boolean;
+    zoomRatio: number;
+    minScale: number;
+    maxScale: number;
+    initScale: number | null;
     slider?: boolean | SliderOptions;
     zoomer?: boolean | ZoomerOptions;
     on?: {
         [event in EventTypes]?: EventOptions[event];
     };
 }
-export type ZoomistOptionsDefault = Pick<ZoomistOptions, 'slider' | 'zoomer' | 'on'> & Required<Omit<ZoomistOptions, 'slider' | 'zoomer' | 'on'>>;
+export type ZoomistOptions = Partial<ZoomistDefaultOptions>;
 export interface SliderOptions {
     el: string | HTMLElement | null;
     direction: 'horizontal' | 'vertical';
@@ -189,3 +189,4 @@ export interface MoveToParams {
     x?: number | MoveToKeywordsX;
     y?: number | MoveToKeywordsY;
 }
+export type AppTouchEvent = TouchEvent;

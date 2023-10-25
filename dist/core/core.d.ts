@@ -1,10 +1,10 @@
-import { QueryElement, ZoomistOptions, ZoomistOptionsDefault, ZoomistData, ZoomistEvents, ZoomistMethods, ZoomistStates, ZoomistModules, ZoomistTransfrom } from '../types';
+import { QueryElement, ZoomistOptions, ZoomistDefaultOptions, ZoomistData, ZoomistEvents, ZoomistMethods, ZoomistStates, ZoomistModules, ZoomistTransfrom } from '../types';
 interface Zoomist extends ZoomistMethods {
 }
 declare class Zoomist {
     #private;
     element: HTMLElement;
-    options: ZoomistOptionsDefault;
+    options: ZoomistDefaultOptions;
     wrapper: HTMLElement;
     image: HTMLElement;
     mounted: boolean;
