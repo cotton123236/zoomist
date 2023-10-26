@@ -26,6 +26,33 @@ export const docsRoutes: Routes = [
         trans: 'docNav.basic-usage'
       }
     ]
+  },
+  {
+    name: 'guides',
+    path: '/guides',
+    trans: 'docNav.guides',
+    children: [
+      {
+        name: 'parameters-options',
+        path: '/parameters-options',
+        trans: 'docNav.parameters-options'
+      },
+      {
+        name: 'methods-properties',
+        path: '/methods-properties',
+        trans: 'docNav.methods-properties'
+      },
+      {
+        name: 'events',
+        path: '/events',
+        trans: 'docNav.events'
+      },
+      {
+        name: 'styles',
+        path: '/styles',
+        trans: 'docNav.styles'
+      }
+    ]
   }
 ]
 

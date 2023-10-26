@@ -7,7 +7,12 @@
   "docNav": {
     "getting-started": "入門",
     "installation": "安裝",
-    "basic-usage": "基本用法"
+    "basic-usage": "基本用法",
+    "guides": "使用指南",
+    "parameters-options": "參數與選項",
+    "methods-properties": "方法與屬性",
+    "events": "事件",
+    "styles": "樣式"
   },
   "onThisPage": "本頁內容",
   "navigator": {

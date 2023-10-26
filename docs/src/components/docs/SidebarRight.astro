@@ -15,7 +15,7 @@ const sidebarList = headings.filter((item) => item.depth === 2)
 <aside class:list={['sidebar', className]}>
   <div class="sidebar-nav relative">
     <div class="py-3 font-medium">{t('onThisPage')}</div>
-    <div class="sidebar-active-marker"></div>
+    <div class="sidebar-active-marker" transition:persist></div>
     {
       sidebarList.map((item) => (
         <a class="sidebar-link" href={`#${item.slug}`}>
@@ -54,13 +54,12 @@ const sidebarList = headings.filter((item) => item.depth === 2)
     if (!activeMarker || !sidebarNav || !links.length) return
 
     const headings: HTMLElement[] = [...document.querySelectorAll<HTMLElement>('.level-h2 h2')]
-    const $headingActiveIndex = atom<number | null>(null)
+    const $headingActiveIndex = atom<number | null>(0)
 
     // get .sidebar-link active index
     const getActiveHeadingIndex = (entry: IntersectionObserverEntry): number | null => {
       const { target, isIntersecting } = entry
       const targetIndex = headings.findIndex((el) => el === target)
-      // console.log(entry)
       return isIntersecting ? targetIndex : null
     }
 
@@ -69,7 +68,10 @@ const sidebarList = headings.filter((item) => item.depth === 2)
       entries.forEach((entry) => {
         const activeHeadingIndex = getActiveHeadingIndex(entry)
         if (activeHeadingIndex === null) return
-        const activeIndex = activeHeadingIndex - (owner.rootMargin === activeRootMargin ? 0 : 1)
+        const activeIndex = Math.min(
+          Math.max(activeHeadingIndex - (owner.rootMargin === activeRootMargin ? 0 : 1), 0),
+          links.length
+        )
         $headingActiveIndex.set(activeIndex)
       })
     }

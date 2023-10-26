@@ -1,0 +1,343 @@
+---
+title: Parameters & Options
+description: All available parameters and initial value of Zoomist.
+---
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
+
+# Parameters & Options
+
+After you import Zoomist into your project, you can initialize it by using Zoomist function.
+
+## Zoomist instance
+
+Zoomist can receive two parameters (<span class="hilight">zoomistElement</span> & <span class="hilight">zoomistOptions</span>), and <span class="hilight">returns initialized Zoomist instance</span>.
+
+For example: 
+
+```js
+const zoomist = new Zoomist('.zoomist-container', {
+  maxScale: 4
+})
+```
+
+After you initialize Zoomist, you can access Zoomist [methods]() and [properties]() from the instance. And you can also get the instance from your <span class="hilight">zoomistElement's zoomist property</span>:
+
+For example: 
+
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+zoomist.zoom(0.1)
+document.querySelector('.zoomist-container').zoomist.zoom(0.1)
+```
+
+## Parameters
+
+There are two parameters for class <span class="hilight">Zoomist</span>:
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-tl-[6px] rounded-tr-[6px]">
+      <TableHead className="w-[8.5rem]">Parameter</TableHead>
+      <TableHead className="w-[8.5rem]">Type</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`zoomistElement`</TableCell>
+      <TableCell>`HTMLElement | string`</TableCell>
+      <TableCell><span class="hilight">First parameter, Required.</span> HTMLElement or string (CSS Selector) of zoomist container HTML element.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomistOptions`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell><span class="hilight">Second parameter, Optional.</span> A `Object` with Zoomist options.</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+The second parameter <span class="hilight">`zoomistOptions`</span> is optional, so you can initialize Zoomist simply like:
+
+```js
+new Zoomist('.zoomist-container')
+// or
+const zoomistElement = document.querySelector('.zoomist-container')
+new Zoomist(zoomistElement)
+```
+
+And Zoomist will set the [options](#options) to default.
+
+## Options
+
+All available options and initial value:
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-">
+      <TableHead className="w-[7rem]">Name</TableHead>
+      <TableHead className="w-[8rem]">Type</TableHead>
+      <TableHead className="w-[6rem]">Default</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`bounds`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        Set `.zoomist-image` can be scaled or dragged out of bounds.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`draggable`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        Set `.zoomist-image` is draggable.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`wheelable`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        Set `.zoomist-image` can be scaled when mouse wheeling.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinchable`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        Set `.zoomist-image` is pinchable when pinching. (Only works on mobile device)
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`minScale`</TableCell>
+      <TableCell>`number`</TableCell>
+      <TableCell>`1`</TableCell>
+      <TableCell>
+        Set minimum scale size. Should be smaller than `initScale`.
+        > if `bounds` set to `true` and `minScale < 1`, `minScale` will be set to 1 automatically.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`maxScale`</TableCell>
+      <TableCell>`number`</TableCell>
+      <TableCell>`10`</TableCell>
+      <TableCell>
+        Set maximum scale size. Should be bigger than `minScale`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`initScale`</TableCell>
+      <TableCell>`number | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        Set initial scale size. Should be bigger than `minScale` and smaller than `maxScale`.<br/>
+        If set to `null`, it will take `minScale` as `initScale`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomRatio`</TableCell>
+      <TableCell>`number`</TableCell>
+      <TableCell>`0.1`</TableCell>
+      <TableCell>
+        Set the zoom ratio.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slider`</TableCell>
+      <TableCell>`boolean | SliderOptions`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        The slider tool of Zoomist.<br/>
+        Set to `true` to enable slider quickly. (See more [slider options](#slider))
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomer`</TableCell>
+      <TableCell>`boolean | ZoomerOptions`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        The zoom tools of Zoomist.<br/>
+        Set to `true` to enable zoomer quickly. (See more [zoomer options](#zoomer))
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+For example:
+
+```js
+new Zoomist('.zoomist-container', {
+  maxScale: 4,
+  initScale: 2,
+  slider: true
+})
+```
+
+## Slider
+
+Zoomist provide a simple slider tool for you. You can set option <span class="hilight">`slider`</span> to <span class="hilight">`true`</span> and Zoomist will create a horizontal slider in your <span class="hilight">`zoomistElement`</span>. Or you can use these following options and to customize slider.
+
+All available slider options:
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-">
+      <TableHead className="w-[6rem]">Name</TableHead>
+      <TableHead className="w-[9rem]">Type</TableHead>
+      <TableHead className="w-[6rem]">Default</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`el`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        Receives a `HTMLElement` or a `string (CSS Selector)` and use it as the container of the slider.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`direction`</TableCell>
+      <TableCell>`'horizontal' | 'vertical'`</TableCell>
+      <TableCell>`'horizontal'`</TableCell>
+      <TableCell>
+        Set your slider horizontal or vertical.
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+For example:
+
+```html title="index.html"
+<!-- custom slider -->
+<div class="custom-zoomist-slider"></div>
+<!-- zoomist -->
+<div class="zoomist-container">
+  <div class="zoomist-wrapper">
+    <div class="zoomist-image">
+      <!-- your content -->
+    </div>
+  </div>
+</div>
+```
+
+```js title="main.js"
+new Zoomist('.zoomist-container', {
+  slider: {
+    el: '.custom-zoomist-slider',
+    direction: 'vertical'
+  }
+})
+```
+
+To customize slider's styles, checkout these [CSS variables]().
+
+## Zoomer
+
+Zoomist also provide some zoom tools for you, like: <span class="hilight">zoom-in button, zoom-out button, reset button</span>. You can set option <span class="hilight">`zoomer`</span> to <span class="hilight">`true`</span> and Zoomist will create those buttons in your <span class="hilight">`zoomistElement`</span>. Or you can use these following options and to customize zoomer.
+
+All available zoomer options:
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-">
+      <TableHead className="w-[5rem]">Name</TableHead>
+      <TableHead className="w-[9rem]">Type</TableHead>
+      <TableHead className="w-[6rem]">Default</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`el`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        Define the container of all zoomer buttons.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`inEl`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        Define the zoom-in button.<br/>
+        If you set it to keyword `.zoomist-zoomer-in`, Zoomist will generate a zoom-in button for you.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`outEl`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        Define the zoom-out button.<br/>
+        If you set it to keyword `.zoomist-zoomer-out`, Zoomist will generate a zoom-out button for you.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`resetEl`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        Define the reset button.<br/>
+        If you set it to keyword `.zoomist-zoomer-reset`, Zoomist will generate a reset button for you.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`disabledClass`</TableCell>
+      <TableCell>`string | false | null`</TableCell>
+      <TableCell>`'zoomist-zoomer-disabled'`</TableCell>
+      <TableCell>
+        Set the disable class.<br/>
+        It will be added on `inEl` when scale reaches the `maxScale`, be added on `outEl` when scale reaches the `minScale`, and be added on `resetEl` when scale reaches the `initScale`.
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+For example:
+
+```html title="index.html"
+<!-- custom zoomer -->
+<div class="custom-zoomist-zoomer">
+  <button class="custom-zoomer-in">+</button>
+  <button class="custom-zoomer-out">-</button>
+</div>
+<!-- zoomist -->
+<div class="zoomist-container">
+  <div class="zoomist-wrapper">
+    <div class="zoomist-image">
+      <!-- your content -->
+    </div>
+  </div>
+</div>
+```
+
+```js title="main.js"
+new Zoomist('.zoomist-container', {
+  zoomer: {
+    inEl: '.custom-zoomer-in',
+    outEl: '.custom-zoomer-out'
+  }
+})
+```
+
+To customize zoomer's styles, checkout these [CSS variables]().
+
+---

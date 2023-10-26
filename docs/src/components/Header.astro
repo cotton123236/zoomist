@@ -29,7 +29,7 @@ const navLinks: NavLinks = [
 
 <header class="header px-lr">
   <nav class="nav">
-    <Link class="nav-logo" href="/">
+    <Link class="nav-logo" href="/" transition:persist>
       <Image src={LogoLight} class="dark:hidden" alt="logo light" />
       <Image src={LogoDark} class="hidden dark:block" alt="logo dark" />
     </Link>
@@ -47,7 +47,7 @@ const navLinks: NavLinks = [
         ))
       }
     </div>
-    <div class="nav-tools">
+    <div class="nav-tools" transition:persist>
       <SearchBtn />
       <span class="split-line"></span>
       <LangBtn />

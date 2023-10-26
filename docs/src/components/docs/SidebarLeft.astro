@@ -14,7 +14,7 @@ const currentPage = pathname.split('/').at(-1)
 
 <aside class:list={['sidebar', className]}>
   <nav class="sidebar-nav">
-    <div class="sidebar-active-marker"></div>
+    <div class="sidebar-active-marker" transition:persist></div>
     {
       docsRoutes.map((group) => (
         <>

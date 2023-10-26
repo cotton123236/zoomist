@@ -7,7 +7,12 @@
   "docNav": {
     "getting-started": "Getting Started",
     "installation": "Installation",
-    "basic-usage": "Basic usage"
+    "basic-usage": "Basic usage",
+    "guides": "Guides",
+    "parameters-options": "Parameters & Options",
+    "methods-properties": "Methods & Properties",
+    "events": "Events",
+    "styles": "Styles"
   },
   "onThisPage": "On this page",
   "navigator": {

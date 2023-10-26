@@ -1,0 +1,343 @@
+---
+title: 參數與選項
+description: 所有 Zoomist 的參數與初始設定。
+---
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
+
+# 參數與選項
+
+在你將 Zoomist 引入你的專案之後，就能透過 Zoomist 函式（類別）將其實例化.
+
+## 實例
+
+Zoomist 函式（類別）可傳入兩個參數，分別為 <span class="hilight">zoomistElement</span> 和 <span class="hilight">zoomistOptions</span>，並且將<span class="hilight">回傳 Zoomist 實例</span>。
+
+範例：
+
+```js
+const zoomist = new Zoomist('.zoomist-container', {
+  maxScale: 4
+})
+```
+
+在將 Zoomist 實例化之後, 你就能從 Zoomist 實例上使用與存取其[方法]()和[屬性]()。而且你也能在 <span class="hilight">zoomistElement 的 zoomist 屬性</span> 找到此實例並運用它:
+
+範例：
+
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+zoomist.zoom(0.1)
+document.querySelector('.zoomist-container').zoomist.zoom(0.1)
+```
+
+## 參數
+
+<span class="hilight">Zoomist</span> 函式（類別）能傳入兩個參數：
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-tl-[6px] rounded-tr-[6px]">
+      <TableHead className="w-[8.5rem]">Parameter</TableHead>
+      <TableHead className="w-[8.5rem]">型別</TableHead>
+      <TableHead>描述</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`zoomistElement`</TableCell>
+      <TableCell>`HTMLElement | string`</TableCell>
+      <TableCell><span class="hilight">第一個參數，必要。</span> Zoomist 容器元素對應的 `HTMLElement` 或 `string (CSS Selector)`。</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomistOptions`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell><span class="hilight">第二個參數，選填。</span> 一個 Zoomist 選項的 `object`。</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+第二個參數 <span class="hilight">`zoomistOptions`</span> 為選填，所以你能簡單地初始化 Zoomist 像是：
+
+```js
+new Zoomist('.zoomist-container')
+// 或
+const zoomistElement = document.querySelector('.zoomist-container')
+new Zoomist(zoomistElement)
+```
+
+而 Zoomist 將會把這些[選項](#選項)設為預設值。
+
+## 選項
+
+所有可用選項及其預設值：
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-">
+      <TableHead className="w-[7rem]">名稱</TableHead>
+      <TableHead className="w-[8rem]">型別</TableHead>
+      <TableHead className="w-[6rem]">預設</TableHead>
+      <TableHead>描述</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`bounds`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        設定 `.zoomist-image` 是否能被縮放或拖曳出邊界。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`draggable`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        設定 `.zoomist-image` 是否能被拖曳。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`wheelable`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        設定當使用滑鼠滾輪時 `.zoomist-image`，是否能被縮放。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinchable`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`true`</TableCell>
+      <TableCell>
+        設定 `.zoomist-image` 是否能使用手勢縮放。（僅適用於行動裝置）
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`minScale`</TableCell>
+      <TableCell>`number`</TableCell>
+      <TableCell>`1`</TableCell>
+      <TableCell>
+        設定縮放的最小值，必須小於 `initScale`。
+        > 若設定 `bounds` 為 `true` 而且 `minScale < 1`, `minScale` 將會自動地被設定為 1。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`maxScale`</TableCell>
+      <TableCell>`number`</TableCell>
+      <TableCell>`10`</TableCell>
+      <TableCell>
+        設定縮放的最大值，必須大於 `minScale`。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`initScale`</TableCell>
+      <TableCell>`number | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        設定縮放的初始值。必須大於 `minScale` 且小於 `maxScale`。<br/>
+        若將其設為 `null`，則會以 `minScale` 作為 `initScale`的值。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomRatio`</TableCell>
+      <TableCell>`number`</TableCell>
+      <TableCell>`0.1`</TableCell>
+      <TableCell>
+        設定縮放時的比率。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slider`</TableCell>
+      <TableCell>`boolean | SliderOptions`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Zoomist 內建的滑桿工具。<br/>
+        設定成 `true` 可以快速的啟用它。（查看更多 [slider 選項](#滑桿工具)）
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomer`</TableCell>
+      <TableCell>`boolean | ZoomerOptions`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Zoomist 內建的縮放按鈕工具。<br/>
+        設定成 `true` 可以快速的啟用它。（查看更多 [zoomer 選項](#縮放按鈕)）
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+範例：
+
+```js
+new Zoomist('.zoomist-container', {
+  maxScale: 4,
+  initScale: 2,
+  slider: true
+})
+```
+
+## 滑桿工具
+
+Zoomist 內建一個簡單的滑桿工具供你使用。你可以將選項 <span class="hilight">`slider`</span> 設定成 <span class="hilight">`true`</span>， Zoomist 將會在 <span class="hilight">`zoomistElement`</span> 中生成一個水平的滑桿工具。或是你能透過以下的 `slider` 選項客製化你的滑桿工具。
+
+所有的滑桿工具選項：
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-">
+      <TableHead className="w-[6rem]">名稱</TableHead>
+      <TableHead className="w-[9rem]">型別</TableHead>
+      <TableHead className="w-[6rem]">預設</TableHead>
+      <TableHead>描述</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`el`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        接收一個 `HTMLElement` 或 `string (CSS Selector)` 並將其作為滑桿工具的容器。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`direction`</TableCell>
+      <TableCell>`'horizontal' | 'vertical'`</TableCell>
+      <TableCell>`'horizontal'`</TableCell>
+      <TableCell>
+        設定滑桿工具的方向為水平或垂直。
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+範例：
+
+```html title="index.html"
+<!-- custom slider -->
+<div class="custom-zoomist-slider"></div>
+<!-- zoomist -->
+<div class="zoomist-container">
+  <div class="zoomist-wrapper">
+    <div class="zoomist-image">
+      <!-- your content -->
+    </div>
+  </div>
+</div>
+```
+
+```js title="main.js"
+new Zoomist('.zoomist-container', {
+  slider: {
+    el: '.custom-zoomist-slider',
+    direction: 'vertical'
+  }
+})
+```
+
+若欲客製化滑桿工具的樣式，查看 [CSS 變數]()。
+
+## 縮放按鈕
+
+Zoomist 也為你提供一些縮放工具，像是 <span class="hilight">放大按鈕、縮小按鈕、重置按鈕</span>。你能將選項 <span class="hilight">`zoomer`</span> 設定成 <span class="hilight">`true`</span>， Zoomist 將會在 <span class="hilight">`zoomistElement`</span> 內生成這些按鈕。或是你能透過以下的 `zoomer` 選項客製化你的縮放按鈕。
+
+所有縮放按鈕的選項：
+
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950 rounded-">
+      <TableHead className="w-[5rem]">名稱</TableHead>
+      <TableHead className="w-[9rem]">型別</TableHead>
+      <TableHead className="w-[6rem]">預設</TableHead>
+      <TableHead>描述</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`el`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        定義縮放按鈕的容器。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`inEl`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        定義你的放大按鈕。<br/>
+        若將其設定為關鍵字 `.zoomist-zoomer-in`, Zoomist 將會自動生產一個按鈕給你。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`outEl`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        定義你的縮小按鈕。<br/>
+        若將其設定為關鍵字 `.zoomist-zoomer-out`, Zoomist 將會自動生產一個按鈕給你。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`resetEl`</TableCell>
+      <TableCell>`HTMLElement | string | null`</TableCell>
+      <TableCell>`null`</TableCell>
+      <TableCell>
+        定義你的重置按鈕。<br/>
+        若將其設定為關鍵字 `.zoomist-zoomer-reset`, Zoomist 將會自動生產一個按鈕給你。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`disabledClass`</TableCell>
+      <TableCell>`string | false | null`</TableCell>
+      <TableCell>`'zoomist-zoomer-disabled'`</TableCell>
+      <TableCell>
+        設定禁用時的 class。<br/>
+        當縮放值到達 `maxScale` 時，`inEl` 會被加上此 class；當縮放值到達 `minScale` 時，`outEl` 會被加上此 class；當縮放值為 `initScale` 時，`resetEl` 會被加上此 class。
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+範例：
+
+```html title="index.html"
+<!-- custom zoomer -->
+<div class="custom-zoomist-zoomer">
+  <button class="custom-zoomer-in">+</button>
+  <button class="custom-zoomer-out">-</button>
+</div>
+<!-- zoomist -->
+<div class="zoomist-container">
+  <div class="zoomist-wrapper">
+    <div class="zoomist-image">
+      <!-- your content -->
+    </div>
+  </div>
+</div>
+```
+
+```js title="main.js"
+new Zoomist('.zoomist-container', {
+  zoomer: {
+    inEl: '.custom-zoomer-in',
+    outEl: '.custom-zoomer-out'
+  }
+})
+```
+
+若欲客製化縮放按鈕的樣式，查看 [CSS 變數]()。
+
+---
