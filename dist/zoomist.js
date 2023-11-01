@@ -269,7 +269,7 @@ const et = (n) => document.contains(H(n)), bt = (n) => {
   },
   getSliderValue() {
     const { __modules__: { slider: n } } = this;
-    return n && n.value ? n.value : null;
+    return n && n.value !== void 0 ? n.value : null;
   },
   // private methods
   getImageDiff() {

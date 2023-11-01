@@ -240,7 +240,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   getSliderValue() {
     const { __modules__: { slider } } = this
 
-    return slider && slider.value ? slider.value : null
+    return slider && slider.value !== undefined ? slider.value : null
   },
 
 

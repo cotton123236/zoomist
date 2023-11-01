@@ -1,11 +1,19 @@
 ---
 title: Methods & Properties
-description: After initialize Zoomist, you can use initialized instance in variable with methods and properties.
+description: After initialize Zoomist, you can access methods and properties in initialized instance.
 ---
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
 
 # Methods & Properties
 
-After initialize Zoomist, you can use initialized instance in variable with methods and properties.
+After initialize Zoomist, you can access methods and properties in initialized instance.
 
 For example: 
 
@@ -20,7 +28,127 @@ console.log(zoomist.transform)
 
 ## Methods
 
+All available methods (take `zoomist` variable in example above):
 
+<Table className="min-w-[40rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
+      <TableHead className="w-[12rem]">Methods</TableHead>
+      <TableHead className="w-[12rem]">Args Type</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`zoomist.zoom(scale)`</TableCell>
+      <TableCell>`scale: number`</TableCell>
+      <TableCell>
+        Zoom `.zoomist-image` with a relative scale.
+        > Use <span class="hilight">positive</span> numbers to <span class="hilight">zoom in</span>, <span class="hilight">negative</span> numbers to <span class="hilight">zoom out</span>.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.zoomTo(scale)`</TableCell>
+      <TableCell>`scale: number`</TableCell>
+      <TableCell>
+        Zoom `.zoomist-image` to a specific number. This number must be between `minScale` and `maxScale`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.move(translate)`</TableCell>
+      <TableCell>`translate: {x: number, y: number}`</TableCell>
+      <TableCell>
+        Translate `.zoomist-image` with relative `x` and `y`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.moveTo(translate)`</TableCell>
+      <TableCell>`translate: {x: number, y: number}`</TableCell>
+      <TableCell>
+        Translate `.zoomist-image` to specific `x` and `y`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.slideTo(value)`</TableCell>
+      <TableCell>`value: number`</TableCell>
+      <TableCell>
+        Set the slider to a specific value between 0 and 100. <br/>
+        And `.zoomist-image` will scale to the corresponding size automatically.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.on(event, handler)`</TableCell>
+      <TableCell>`event: string, handler: function`</TableCell>
+      <TableCell>
+        Add event handler. (Checkout all [events]())
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.reset()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Set `.zoomist-image` to initial state.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroy(cleanStyle)`</TableCell>
+      <TableCell>`cleanStyle: boolean`</TableCell>
+      <TableCell>
+        Destroy Zoomist and remove all event listeners.<br/>
+        If set `cleanStyle` to `true` will remove styles on `.zoomist-image`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroySlider()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Destroy Zoomist slider.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroyZoomer()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Destroy Zoomist zoomer.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroyModules()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Destroy both slider and zoomer.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.update(options)`</TableCell>
+      <TableCell>`options: ZoomistOptions`</TableCell>
+      <TableCell>
+        Update Zoomist. If new options are given, Zoomist will update with new options.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.getContainerData()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Get `.zoomist-container` data.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.getImageData()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Get `.zoomist-image` data.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.getSliderValue()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Get slider current value.
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
 
 ## Properties
 
