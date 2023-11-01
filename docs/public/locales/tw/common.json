@@ -12,7 +12,8 @@
     "parameters-options": "參數與選項",
     "methods-properties": "方法與屬性",
     "events": "事件",
-    "styles": "樣式"
+    "styles": "樣式",
+    "using-typescript": "使用 Typescript"
   },
   "onThisPage": "本頁內容",
   "navigator": {

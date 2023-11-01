@@ -38,6 +38,14 @@ const sidebarList = headings.filter((item) => item.depth === 2)
   .sidebar-link.is-active {
     @apply text-black dark:text-white;
   }
+
+  .sidebar-active-marker {
+    opacity: 0;
+  }
+
+  .sidebar-active-marker.is-active {
+    opacity: 1;
+  }
 </style>
 
 <script>
@@ -54,7 +62,7 @@ const sidebarList = headings.filter((item) => item.depth === 2)
     if (!activeMarker || !sidebarNav || !links.length) return
 
     const headings: HTMLElement[] = [...document.querySelectorAll<HTMLElement>('.level-h2 h2')]
-    const $headingActiveIndex = atom<number | null>(0)
+    const $headingActiveIndex = atom<number | null>(null)
 
     // get .sidebar-link active index
     const getActiveHeadingIndex = (entry: IntersectionObserverEntry): number | null => {
@@ -99,6 +107,7 @@ const sidebarList = headings.filter((item) => item.depth === 2)
 
       activeMarker.style.setProperty('top', `${activeY - navTop}px`)
       activeMarker.style.setProperty('height', `${height}px`)
+      activeMarker.classList.add('is-active')
     })
 
     // observe headings

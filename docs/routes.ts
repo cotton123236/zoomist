@@ -51,6 +51,11 @@ export const docsRoutes: Routes = [
         name: 'styles',
         path: '/styles',
         trans: 'docNav.styles'
+      },
+      {
+        name: 'using-typescript',
+        path: '/using-typescript',
+        trans: 'docNav.using-typescript'
       }
     ]
   }

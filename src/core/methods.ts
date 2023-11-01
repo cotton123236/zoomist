@@ -69,9 +69,11 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
 
     this.transform.scale = ratio
 
-    this.emit('zoom', this, this.transform.scale)
+    if (!pointer) {
+      this.emit('zoom', this, this.transform.scale)
 
-    if (!pointer) return this
+      return this
+    }
 
     pointer = typeof pointer === 'boolean' ? this.getContainerCenterClient() : pointer
 
@@ -88,6 +90,8 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
       translateX,
       translateY
     })
+
+    this.emit('zoom', this, this.transform.scale)
 
     return this
   },

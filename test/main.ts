@@ -73,7 +73,7 @@ const options: ZoomistOptions = {
 
 const zoomist = new Zoomist('.cat-zoomist', options)
 
-// console.log('%cindex.js line:8 zoomist', 'color: #007acc;', zoomist);
+console.log('%cindex.js line:8 zoomist', 'color: #007acc;', zoomist);
 
 // zoomist.on('resize', (zoomist) => {
 //   console.log(zoomist)

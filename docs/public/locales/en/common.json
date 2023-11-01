@@ -12,7 +12,8 @@
     "parameters-options": "Parameters & Options",
     "methods-properties": "Methods & Properties",
     "events": "Events",
-    "styles": "Styles"
+    "styles": "Styles",
+    "using-typescript": "Using Typescript"
   },
   "onThisPage": "On this page",
   "navigator": {
