@@ -3,6 +3,7 @@ import {
   StyleObject,
   PointerData,
   BoundingRect,
+  AppTouchEvent,
 } from './../types'
 
 
@@ -46,8 +47,8 @@ export const getElement = (value: QueryElement): HTMLElement => {
 }
 
 // get mouse clientX, clientY
-export const getPointer = (e: MouseEvent | TouchEvent): PointerData => {
-  const event = e instanceof TouchEvent ? e.touches[0] : e
+export const getPointer = (e: MouseEvent | AppTouchEvent): PointerData => {
+  const event = 'touches' in e ? e.touches[0] : e
   return {
     clientX: event.clientX,
     clientY: event.clientY
@@ -75,7 +76,7 @@ export const getBoundingRect = (target: HTMLElement): BoundingRect => {
 }
 
 // get two fingers center
-export const getPinchHypot = (touches: TouchEvent['touches']): number => {
+export const getPinchHypot = (touches: AppTouchEvent['touches']): number => {
   return touches.length >= 2 ? Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY) : 0
 }
 

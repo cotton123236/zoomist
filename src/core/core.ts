@@ -9,7 +9,8 @@ import {
   EventTypes,
   ZoomistModules,
   ZoomistHTMLElement,
-  ZoomistTransfrom
+  ZoomistTransfrom,
+  AppTouchEvent
 } from '../types'
 import {
   isElementExist,
@@ -337,7 +338,7 @@ class Zoomist {
       draggable && (this.states.dragging = false)
       pinchable && (this.states.pinching = false)
 
-      const useTouch = (e: TouchEvent) => this.#useTouch(e)
+      const useTouch = (e: AppTouchEvent) => this.#useTouch(e)
 
       wrapper.addEventListener('touchstart', useTouch, { signal })
     }
@@ -400,8 +401,8 @@ class Zoomist {
     }
 
     // dragMove
-    const dragMove = (e: MouseEvent | TouchEvent) => {
-      if ((e as TouchEvent).touches) return;
+    const dragMove = (e: MouseEvent | AppTouchEvent) => {
+      if ((e as AppTouchEvent).touches) return;
       if (!this.states.dragging) return;
 
       const clientX = getPointer(e).clientX
@@ -420,8 +421,8 @@ class Zoomist {
     }
 
     // dragEnd
-    const dragEnd = (e: MouseEvent | TouchEvent) => {
-      if ((e as TouchEvent).touches) return;
+    const dragEnd = (e: MouseEvent | AppTouchEvent) => {
+      if ((e as AppTouchEvent).touches) return;
 
       this.states.dragging = false
 
@@ -435,14 +436,14 @@ class Zoomist {
   }
 
   // on touch (pinch and touchmove)
-  #useTouch(e: TouchEvent) {
+  #useTouch(e: AppTouchEvent) {
     const { data, transform, options: { maxScale, minScale, draggable, pinchable } } = this
     const { touchData, imageData } = data
 
     if (!touchData || !imageData) return;
 
     // touchStart
-    const touchStart = (e: TouchEvent) => {
+    const touchStart = (e: AppTouchEvent) => {
       const touches = e.touches
       if (!touches) return;
 
@@ -476,7 +477,7 @@ class Zoomist {
     }
 
     // touchMove
-    const touchMove = (e: TouchEvent) => {
+    const touchMove = (e: AppTouchEvent) => {
       const touches = e.touches
       if (!touches) return;
 
@@ -517,7 +518,7 @@ class Zoomist {
     }
 
     // touchEnd
-    const touchEnd = (e: TouchEvent) => {
+    const touchEnd = (e: AppTouchEvent) => {
       const touches = e.touches
       if (!touches) return;
 
@@ -683,7 +684,7 @@ class Zoomist {
 
     const isVertical = direction === 'vertical'
     
-    const getScale = (e: MouseEvent | TouchEvent): number => {
+    const getScale = (e: MouseEvent | AppTouchEvent): number => {
       const wrapperRect = getBoundingRect(sliderTrack)
       const total = wrapperRect[isVertical ? 'height' : 'width']
       const start = wrapperRect[isVertical ? 'bottom' : 'left']
@@ -696,7 +697,7 @@ class Zoomist {
     }
 
     // slideStart
-    const slideStart = (e: MouseEvent | TouchEvent) => {
+    const slideStart = (e: MouseEvent | AppTouchEvent) => {
       if (e instanceof MouseEvent && e.button !== 0) return;
 
       slider.sliding = true
@@ -711,7 +712,7 @@ class Zoomist {
     }
 
     // slideMove
-    const slideMove = (e: MouseEvent | TouchEvent) => {
+    const slideMove = (e: MouseEvent | AppTouchEvent) => {
       if (!slider.sliding) return;
 
       const scale = getScale(e)
@@ -721,7 +722,7 @@ class Zoomist {
     }
 
     // slideEnd
-    const slideEnd = (e: MouseEvent | TouchEvent) => {
+    const slideEnd = (e: MouseEvent | AppTouchEvent) => {
       this.emit('slideEnd', this, this.getSliderValue()!, e)
 
       slider.sliding = false

@@ -4,7 +4,7 @@ var O = (n, t, e) => (Ht(n, typeof t != "symbol" ? t + "" : t, e), e), Zt = (n, 
   if (!t.has(n))
     throw TypeError("Cannot " + e);
 };
-var p = (n, t, e) => {
+var E = (n, t, e) => {
   if (t.has(n))
     throw TypeError("Cannot add the same private member more than once");
   t instanceof WeakSet ? t.add(n) : t.set(n, e);
@@ -20,7 +20,7 @@ const et = (n) => document.contains(H(n)), bt = (n) => {
     return !1;
   }
 }, gt = (n) => typeof n == "function", $ = (n) => !isNaN(Number(n)), st = (n) => n == null, H = (n) => n instanceof HTMLElement ? n : document.querySelector(n), w = (n) => {
-  const t = n instanceof TouchEvent ? n.touches[0] : n;
+  const t = "touches" in n ? n.touches[0] : n;
   return {
     clientX: t.clientX,
     clientY: t.clientY
@@ -49,12 +49,12 @@ const et = (n) => document.contains(H(n)), bt = (n) => {
 }, X = (n, t, e) => Math.min(Math.max(n, t), e), z = (n) => {
   const t = +(Math.round(+(n + "e+2")) + "e-2");
   return isNaN(t) ? 0 : t;
-}, Et = (n) => {
+}, pt = (n) => {
   throw new Error(n);
 }, nt = (n) => console.warn(n), y = (n = "div", t, e, s) => {
   const i = document.createElement(n);
   return t && i.classList.add(...t.split(" ")), e && A(i, e), s && (i.innerHTML = s), i;
-}, _ = "zoomist", Vt = `${_}-container`, pt = `${_}-wrapper`, it = `${_}-image`, I = `${_}-slider`, Wt = `${_}-slider-wrapper`, Ut = `${_}-slider-bar`, Bt = `${_}-slider-button`, Z = `${_}-zoomer`, kt = `${_}-zoomer-button`, lt = `${_}-zoomer-icon`, ot = `${_}-zoomer-in`, rt = `${_}-zoomer-out`, at = `${_}-zoomer-reset`, jt = `${_}-zoomer-disabled`, Gt = {
+}, _ = "zoomist", Vt = `${_}-container`, Et = `${_}-wrapper`, it = `${_}-image`, I = `${_}-slider`, Wt = `${_}-slider-wrapper`, Ut = `${_}-slider-bar`, Bt = `${_}-slider-button`, Z = `${_}-zoomer`, kt = `${_}-zoomer-button`, lt = `${_}-zoomer-icon`, ot = `${_}-zoomer-in`, rt = `${_}-zoomer-out`, at = `${_}-zoomer-reset`, jt = `${_}-zoomer-disabled`, Gt = {
   tabindex: "0",
   role: "slider",
   "aria-label": "slider for zoomist",
@@ -195,7 +195,7 @@ const et = (n) => document.contains(H(n)), bt = (n) => {
     if (this.transform.scale = n, this.emit("zoom", this, this.transform.scale), !t)
       return this;
     t = typeof t == "boolean" ? this.getContainerCenterClient() : t;
-    const { clientX: l, clientY: o } = t, { top: a, left: d, width: f, height: m } = Y(e), { width: h, height: u } = this.getImageDiff(), g = n / s - 1, E = (f / 2 - l + d) * g + i, T = (m / 2 - o + a) * g + c, b = r ? X(E, h, -h) : E, D = r ? X(T, u, -u) : T;
+    const { clientX: l, clientY: o } = t, { top: a, left: d, width: f, height: m } = Y(e), { width: h, height: u } = this.getImageDiff(), g = n / s - 1, p = (f / 2 - l + d) * g + i, T = (m / 2 - o + a) * g + c, b = r ? X(p, h, -h) : p, D = r ? X(T, u, -u) : T;
     return v(this.transform, {
       translateX: b,
       translateY: D
@@ -302,29 +302,29 @@ var V, wt, W, Yt, U, Xt, B, Rt, k, zt, j, Dt, G, Lt, P, yt, F, At, q, It, K, $t,
 class me {
   constructor(t, e) {
     // create initial data
-    p(this, V);
+    E(this, V);
     // mount elements and bind events
-    p(this, W);
+    E(this, W);
     // resize, drag, pinch, wheel
-    p(this, U);
+    E(this, U);
     // on wheel
-    p(this, B);
+    E(this, B);
     // on drag (mouse)
-    p(this, k);
+    E(this, k);
     // on touch (pinch and touchmove)
-    p(this, j);
+    E(this, j);
     // resize observer on element
-    p(this, G);
+    E(this, G);
     // check modules and create
-    p(this, P);
+    E(this, P);
     // mount slider
-    p(this, F);
+    E(this, F);
     // slider events
-    p(this, q);
+    E(this, q);
     // mount zoomer
-    p(this, K);
+    E(this, K);
     // zoomer event
-    p(this, J);
+    E(this, J);
     O(this, "element");
     O(this, "options");
     O(this, "wrapper");
@@ -336,7 +336,7 @@ class me {
     O(this, "controller");
     O(this, "__events__");
     O(this, "__modules__");
-    t || Et("The first argument is required."), et(t) || Et(`Element ${t} is not exist.`), this.element = H(t), this.options = Object.assign({}, Ot, bt(e) && e), this.init();
+    t || pt("The first argument is required."), et(t) || pt(`Element ${t} is not exist.`), this.element = H(t), this.options = Object.assign({}, Ot, bt(e) && e), this.init();
   }
   // check zoomist-image is exist
   init() {
@@ -344,9 +344,9 @@ class me {
     if (t[_])
       return;
     t[_] = this;
-    const r = t.querySelector(`.${pt}`), l = t.querySelector(`.${it}`);
+    const r = t.querySelector(`.${Et}`), l = t.querySelector(`.${it}`);
     if (!r)
-      return nt(`${_} needs a ".${pt}" element.`);
+      return nt(`${_} needs a ".${Et}" element.`);
     if (!l)
       return nt(`${_} needs a ".${it}" element.`);
     this.options.minScale = e && s < 1 ? 1 : s, this.options.maxScale = Math.max(i, s), this.options.initScale = X(c || s, s, i), this.wrapper = r, this.image = l, S(this, V, wt).call(this);
@@ -534,7 +534,7 @@ V = new WeakSet(), wt = function() {
     const u = h.touches;
     if (!u)
       return;
-    const { top: g, left: E } = Y(this.image), { width: T, height: b } = this.getImageDiff();
+    const { top: g, left: p } = Y(this.image), { width: T, height: b } = this.getImageDiff();
     v(o, {
       hypot: _t(u),
       startX: C(u).clientX,
@@ -542,7 +542,7 @@ V = new WeakSet(), wt = function() {
       prevX: 0,
       prevY: 0,
       imageTop: g,
-      imageLeft: E,
+      imageLeft: p,
       widthDiff: T,
       heightDiff: b
     }), r && (this.states.dragging = !0, this.emit("dragStart", this, { x: s.translateX, y: s.translateY }, h)), l && u.length === 2 && (this.states.pinching = !0, this.emit("pinchStart", this, s.scale, h)), document.addEventListener("touchmove", f), document.addEventListener("touchend", m);
@@ -550,8 +550,8 @@ V = new WeakSet(), wt = function() {
     const u = h.touches;
     if (!u)
       return;
-    const { states: { dragging: g, pinching: E } } = this, { top: T, left: b } = Y(this.image), { width: D, height: ht } = this.getImageDiff(), Q = _t(u), dt = Q ? Q / o.hypot : 1, tt = this.useFixedRatio(dt * s.scale), ut = C(u).clientX + o.prevX, mt = C(u).clientY + o.prevY;
-    if (E && u.length === 2 && this.zoomTo(tt, !1), g) {
+    const { states: { dragging: g, pinching: p } } = this, { top: T, left: b } = Y(this.image), { width: D, height: ht } = this.getImageDiff(), Q = _t(u), dt = Q ? Q / o.hypot : 1, tt = this.useFixedRatio(dt * s.scale), ut = C(u).clientX + o.prevX, mt = C(u).clientY + o.prevY;
+    if (p && u.length === 2 && this.zoomTo(tt, !1), g) {
       const ft = tt !== i && tt !== c && l ? dt : 1, Mt = z(ut - o.imageLeft - (D - o.widthDiff) - (o.startX - o.imageLeft) * ft + s.translateX), xt = z(mt - o.imageTop - (ht - o.heightDiff) - (o.startY - o.imageTop) * ft + s.translateY);
       this.moveTo({ x: Mt, y: xt });
     }
@@ -563,13 +563,13 @@ V = new WeakSet(), wt = function() {
       imageLeft: b,
       widthDiff: D,
       heightDiff: ht
-    }), E && u.length === 2 && this.emit("pinch", this, s.scale, h), g && this.emit("drag", this, { x: s.translateX, y: s.translateY }, h);
+    }), p && u.length === 2 && this.emit("pinch", this, s.scale, h), g && this.emit("drag", this, { x: s.translateX, y: s.translateY }, h);
   }, m = (h) => {
     const u = h.touches;
     if (!u)
       return;
-    const { states: { dragging: g, pinching: E } } = this;
-    if (g && !u.length && (this.states.dragging = !1, this.emit("dragEnd", this, { x: s.translateX, y: s.translateY }, h)), E && u.length < 2 && (this.states.pinching = !1, this.emit("pinchEnd", this, s.scale, h)), g && u.length === 1) {
+    const { states: { dragging: g, pinching: p } } = this;
+    if (g && !u.length && (this.states.dragging = !1, this.emit("dragEnd", this, { x: s.translateX, y: s.translateY }, h)), p && u.length < 2 && (this.states.pinching = !1, this.emit("pinchEnd", this, s.scale, h)), g && u.length === 1) {
       const T = w(h).clientX, b = w(h).clientY;
       v(o, {
         prevX: o.startX - T,
@@ -639,7 +639,7 @@ V = new WeakSet(), wt = function() {
   if (!r || !l)
     return;
   const o = i === "vertical", a = (h) => {
-    const u = Y(l), g = u[o ? "height" : "width"], E = u[o ? "bottom" : "left"], T = w(h)[o ? "clientY" : "clientX"], b = z(X((T - E) * (o ? -1 : 1) / g, 0, 1));
+    const u = Y(l), g = u[o ? "height" : "width"], p = u[o ? "bottom" : "left"], T = w(h)[o ? "clientY" : "clientX"], b = z(X((T - p) * (o ? -1 : 1) / g, 0, 1));
     return (e - t) * b + t;
   }, d = (h) => {
     if (h instanceof MouseEvent && h.button !== 0)
@@ -660,9 +660,9 @@ V = new WeakSet(), wt = function() {
   const { element: t, __modules__: { zoomer: e } } = this;
   if (!e || e.mounted)
     return;
-  const { options: { el: s, inEl: i, outEl: c, resetEl: r } } = e, l = [i, c, r], o = (h, u, g, E, T) => {
+  const { options: { el: s, inEl: i, outEl: c, resetEl: r } } = e, l = [i, c, r], o = (h, u, g, p, T) => {
     const b = h === `.${g}`;
-    return !h || !b && !et(h) ? null : (g = l.includes(h) ? `${g} ${kt}` : g, b ? y(u, g, E, T) : H(h));
+    return !h || !b && !et(h) ? null : (g = l.includes(h) ? `${g} ${kt}` : g, b ? y(u, g, p, T) : H(h));
   }, a = o(s, "div", Z), d = o(i, "button", ot, Pt, ce), f = o(c, "button", rt, Ft, he), m = o(r, "button", at, qt, de);
   v(e, {
     controller: new AbortController(),
