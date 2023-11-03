@@ -8,10 +8,11 @@ export interface Props {
   class?: string
 }
 
-const { class: className } = Astro.props as Props
+const { class: className } = Astro.props
 const { pathname } = Astro.url
-const currentPage = pathname.split('/').at(-1)
-const currentRouteIndex = flatDocsRoutes.findIndex((route) => route.name === currentPage)
+const currentRouteIndex = flatDocsRoutes.findIndex((route) =>
+  route.path ? pathname.includes(route.path) : null
+)
 const prevRoute = flatDocsRoutes[currentRouteIndex - 1]
 const nextRoute = flatDocsRoutes[currentRouteIndex + 1]
 ---
@@ -33,7 +34,7 @@ const nextRoute = flatDocsRoutes[currentRouteIndex + 1]
           <Icon name="angle-right" class="nav-icon ml-3" style="fill: currentColor;" />
           <div class="flex flex-col">
             <span class="ml-auto text-xs md:text-sm">{t('navigator.next')}</span>
-            <div class="nav-title">{useRouteTrans(nextRoute)}</div>
+            <div class="nav-title ml-auto">{useRouteTrans(nextRoute)}</div>
           </div>
         </Link>
       )}

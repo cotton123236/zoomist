@@ -1,4 +1,185 @@
 ---
 title: Events
-description: Zoomist provides a bunch of helpful events you can listen.
+description: Zoomist provides some helpful events you can listen.
+---
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
+
+# Events
+
+Zoomist provides some helpful events you can listen.
+
+You can assign event in two ways.
+
+1 . Assign event with `on` in options:
+
+```js
+new Zoomist('.zoomist-container', {
+  on: {
+    zoom(zoomist, scale) {
+      console.log(zoomist, scale)
+    }
+  }
+})
+```
+
+2 . Assign event with `on` method after initialization:
+
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+zoomist.on('zoom', (zoomist, scale) => {
+  console.log(zoomist, scale)
+})
+```
+
+## Events
+
+All available events:
+
+<Table className="min-w-[42rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
+      <TableHead className="w-[6rem]">Name</TableHead>
+      <TableHead className="w-[12rem]">Args</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`ready`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked right after initialization.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`reset`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked when `reset` method be used.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`resize`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked when `.zoomist-image` is resizing.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`beforeDestroy`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked before Zoomist destroyed.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`destroy`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked on Zoomist destroy.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`beforeUpdate`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked before Zoomist updated.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`update`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        Event will invoked on Zoomist update.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoom`</TableCell>
+      <TableCell>`(zoomist, scale)`</TableCell>
+      <TableCell>
+        Event will invoked when zooming.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`wheel`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        Event will invoked when mouse wheeling. (Only works on desktop.)
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`dragStart`</TableCell>
+      <TableCell>`(zoomist, transform, event)`</TableCell>
+      <TableCell>
+        Event will invoked on drag start.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`drag`</TableCell>
+      <TableCell>`(zoomist, transform, event)`</TableCell>
+      <TableCell>
+        Event will invoked when dragging.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`dragEnd`</TableCell>
+      <TableCell>`(zoomist, transform, event)`</TableCell>
+      <TableCell>
+        Event will invoked on drag end.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinchStart`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        Event will invoked on pinch start. (Only works on mobile.)
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinch`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        Event will invoked when pinching. (Only works on mobile.)
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinchEnd`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        Event will invoked on pinch end. (Only works on mobile.)
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slideStart`</TableCell>
+      <TableCell>`(zoomist, value, event)`</TableCell>
+      <TableCell>
+        Event will invoked on slider slide start.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slide`</TableCell>
+      <TableCell>`(zoomist, value, event)`</TableCell>
+      <TableCell>
+        Event will invoked when slider is sliding.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slideEnd`</TableCell>
+      <TableCell>`(zoomist, value, event)`</TableCell>
+      <TableCell>
+        Event will invoked on slider slide end.
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+
 ---

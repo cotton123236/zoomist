@@ -1,4 +1,185 @@
 ---
-title: Events
-description: Zoomist provides a bunch of helpful events you can listen.
+title: 事件
+description: Zoomist 提供一些有用的事件讓你監聽。
+---
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
+
+# 事件
+
+Zoomist 提供一些有用的事件讓你監聽。
+
+事件能被以兩種方式被註冊。
+
+1 . 在選項中以 `on` 註冊事件：
+
+```js
+new Zoomist('.zoomist-container', {
+  on: {
+    zoom(zoomist, scale) {
+      console.log(zoomist, scale)
+    }
+  }
+})
+```
+
+2 . 在實例化後使用方法 `on` 註冊事件：
+
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+zoomist.on('zoom', (zoomist, scale) => {
+  console.log(zoomist, scale)
+})
+```
+
+## 事件
+
+所有可使用的事件：
+
+<Table className="min-w-[42rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
+      <TableHead className="w-[6rem]">名稱</TableHead>
+      <TableHead className="w-[12rem]">參數</TableHead>
+      <TableHead>描述</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`ready`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在實例化完成後觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`reset`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在使用 `reset` 方法後觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`resize`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在 `.zoomist-image` resize 時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`beforeDestroy`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在 Zoomist 被銷毀之前觸法。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`destroy`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在 Zoomist 被銷毀時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`beforeUpdate`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在 Zoomist 更新之前觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`update`</TableCell>
+      <TableCell>`(zoomist)`</TableCell>
+      <TableCell>
+        事件在 Zoomist 更新時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoom`</TableCell>
+      <TableCell>`(zoomist, scale)`</TableCell>
+      <TableCell>
+        事件在縮放時出發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`wheel`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        事件在滑鼠滾輪滾動時觸發。（僅在桌上型有作用）
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`dragStart`</TableCell>
+      <TableCell>`(zoomist, transform, event)`</TableCell>
+      <TableCell>
+        事件在拖移啟動時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`drag`</TableCell>
+      <TableCell>`(zoomist, transform, event)`</TableCell>
+      <TableCell>
+        事件在拖移時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`dragEnd`</TableCell>
+      <TableCell>`(zoomist, transform, event)`</TableCell>
+      <TableCell>
+        事件在拖移結束時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinchStart`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        事件在使用手勢縮放啟動觸發。（僅在行動裝置有作用）
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinch`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        事件在使用手勢縮放時觸發。（僅在行動裝置有作用）
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`pinchEnd`</TableCell>
+      <TableCell>`(zoomist, scale, event)`</TableCell>
+      <TableCell>
+        事件在使用手勢縮放結束觸發。（僅在行動裝置有作用）
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slideStart`</TableCell>
+      <TableCell>`(zoomist, value, event)`</TableCell>
+      <TableCell>
+        事件在滑桿啟用滑動時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slide`</TableCell>
+      <TableCell>`(zoomist, value, event)`</TableCell>
+      <TableCell>
+        事件在滑桿滑動時觸發。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`slideEnd`</TableCell>
+      <TableCell>`(zoomist, value, event)`</TableCell>
+      <TableCell>
+        事件在滑桿結束滑動時觸發。
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+
 ---

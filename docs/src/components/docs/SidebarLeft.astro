@@ -55,21 +55,29 @@ const currentPage = pathname.split('/').at(-1)
 </style>
 
 <script>
+  import { flatDocsRoutes } from '@routes'
+
   const setActiveMarker = (): void => {
     const activeMarker: HTMLElement | null = document.querySelector(
       '.sidebar-left .sidebar-active-marker'
     )
     const sidebarNav: HTMLElement | null = document.querySelector('.sidebar-left .sidebar-nav')
-    const activeLink: HTMLElement | null = document.querySelector(
-      '.sidebar-left .sidebar-item.is-active'
-    )
+    const sidebarLinks: HTMLElement[] = [
+      ...document.querySelectorAll<HTMLElement>('.sidebar-left .sidebar-item')
+    ]
+    if (!activeMarker || !sidebarNav || !sidebarLinks.length) return
 
-    if (!activeMarker || !activeLink || !sidebarNav) return
+    const { pathname } = window.location
+    const currentRouteIndex = flatDocsRoutes.findIndex((route) =>
+      route.path ? pathname.includes(route.path) : null
+    )
+    const activeLink = sidebarLinks[currentRouteIndex]
     const { y: activeY, height } = activeLink.getBoundingClientRect()
     const { y: navTop } = sidebarNav.getBoundingClientRect()
 
     activeMarker.style.setProperty('top', `${activeY - navTop}px`)
     activeMarker.style.setProperty('height', `${height}px`)
+    activeLink.classList.add('is-active')
   }
 
   document.addEventListener('astro:page-load', setActiveMarker)
