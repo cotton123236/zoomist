@@ -1,0 +1,79 @@
+---
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<button class:list={['sidebar-btn', className]}>
+  <div class="inner">
+    <span class="icon">
+      <span class="icon-span"></span>
+      <span class="icon-span"></span>
+    </span>
+    <span class="ml-3 text-sm">Menu</span>
+  </div>
+</button>
+
+<style>
+  .sidebar-btn {
+    @apply h-[var(--sidebar-btn-height)] py-3;
+
+    background-color: rgba(var(--header-bg-color), 0.85);
+    backdrop-filter: saturate(180%) blur(5px);
+  }
+
+  .sidebar-btn.is-active .icon-span:first-child {
+    @apply -translate-x-[2px];
+  }
+
+  .sidebar-btn.is-active .icon-span:last-child {
+    @apply translate-x-[2px];
+  }
+
+  .inner {
+    @apply flex items-center;
+  }
+
+  .icon {
+    @apply relative block h-2 w-4;
+  }
+
+  .icon-span {
+    @apply absolute left-0 block h-px w-full bg-black duration-100 dark:bg-white;
+  }
+
+  .icon-span:first-child {
+    @apply top-0;
+  }
+
+  .icon-span:last-child {
+    @apply bottom-0;
+  }
+</style>
+
+<style is:global>
+  .dark .sidebar-btn {
+    background-color: rgba(var(--header-bg-color-dark), 0.85);
+  }
+</style>
+
+<script>
+  import { $sidebarState } from '@stores/globals'
+
+  const useSidebarControll = (): void => {
+    const sidebarBtn = document.querySelector('.sidebar-btn')
+    if (!sidebarBtn) return
+
+    sidebarBtn.addEventListener('click', () => {
+      $sidebarState.set(!$sidebarState.get())
+    })
+
+    $sidebarState.subscribe((val) => {
+      sidebarBtn.classList[val ? 'add' : 'remove']('is-active')
+    })
+  }
+
+  document.addEventListener('astro:page-load', useSidebarControll)
+</script>

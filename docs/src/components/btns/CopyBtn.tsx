@@ -24,7 +24,7 @@ export default ({ children, className, copy }: CopyBtnProps) => {
       className={clsx(
         styles['copy-btn'],
         className,
-        'dark:hover-only:hover:bg-gray-900 dark:hover-only:hover:text-gray-300 hover-only:hover:bg-gray-50 hover-only:hover:text-gray-600 text-gray-200 dark:text-gray-600'
+        'text-gray-200 hover-only:hover:bg-gray-50 hover-only:hover:text-gray-600 dark:text-gray-600 dark:hover-only:hover:bg-gray-900 dark:hover-only:hover:text-gray-300'
       )}
       type="button"
       onClick={useCopy}

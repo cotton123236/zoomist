@@ -39,8 +39,13 @@
     /* custom */
     --body-bg-color: #fff;
     --body-bg-color-dark: #000;
+    --header-border-color: #eee;
+    --header-border-color-dark: #222;
+    --header-bg-color: 255, 255, 255;
+    --header-bg-color-dark: 0, 0, 0;
 
     --header-height: 4rem;
+    --sidebar-btn-height: 3rem;
 
     --page-max-width: 90rem;
     --content-max-width: 85rem;

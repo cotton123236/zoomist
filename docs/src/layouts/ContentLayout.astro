@@ -2,6 +2,7 @@
 import type { MarkdownHeading } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import BaseLayout from './BaseLayout.astro'
+import SidebarBtn from '@components/docs/SidebarBtn.astro'
 import SidebarLeft from '@components/docs/SidebarLeft.astro'
 import SidebarRight from '@components/docs/SidebarRight.astro'
 import Navigator from '@components/docs/Navigator.astro'
@@ -16,14 +17,24 @@ const { title, description } = data
 ---
 
 <BaseLayout {...{ title, description }}>
+  <SidebarBtn class="px-lr md:hidden" />
   <div class="px-lr">
-    <div class="container-content flex">
-      <SidebarLeft class="sidebar-left" />
+    <div class="container-content relative flex">
+      <aside class="sidebar-left">
+        <SidebarLeft
+          class="sticky left-0 top-[calc(var(--header-height)+var(--sidebar-btn-height))] md:top-[calc(var(--header-height)+var(--content-padding-top))]"
+        />
+      </aside>
       <article class="main-content">
         <slot />
         <Navigator />
       </article>
-      <SidebarRight headings={headings} class="sidebar-right" />
+      <aside class="sidebar-right">
+        <SidebarRight
+          headings={headings}
+          class="lg:sticky lg:left-0 lg:top-[calc(var(--header-height)+var(--content-padding-top))]"
+        />
+      </aside>
     </div>
   </div>
 </BaseLayout>
@@ -41,12 +52,28 @@ const { title, description } = data
     }
   }
 
+  .sidebar-btn {
+    @apply sticky left-0 top-[var(--header-height)] z-50 w-full border-b border-solid border-[var(--header-border-color)] bg-white dark:border-[var(--header-border-color-dark)] dark:bg-black;
+  }
+
   .sidebar-left {
-    @apply fixed left-0 top-[var(--header-height)] z-10 shrink-0 bg-[rgba(255,255,255,0.4)] pt-[var(--content-padding-top)] backdrop-blur-2xl dark:bg-[rgba(0,0,0,0.4)] md:sticky md:bg-none md:backdrop-blur-0;
+    @apply absolute left-0 top-0 z-10 -mx-4 h-full w-[calc(100%+2rem)] shrink-0 -translate-x-full bg-[rgba(255,255,255,0.8)] opacity-0 backdrop-blur-lg md:relative md:m-0 md:h-auto md:w-[var(--sidebar-left-width)] md:transform-none md:pt-[var(--content-padding-top)] md:opacity-100;
+
+    transition:
+      transform 0.4s,
+      opacity 0.4s;
+
+    @media screen and (min-width: 48rem) {
+      transition: 0s;
+    }
+  }
+
+  .sidebar-left.is-active {
+    @apply translate-x-0 opacity-100;
   }
 
   .sidebar-right {
-    @apply left-0 top-[var(--header-height)] hidden shrink-0 pt-[var(--content-padding-top)] lg:sticky lg:block;
+    @apply left-0 top-[var(--header-height)] hidden shrink-0  pt-[var(--content-padding-top)]  lg:block;
   }
 
   .main-content {
@@ -181,3 +208,18 @@ const { title, description } = data
     border-bottom: 1px solid var(--code-border-color);
   }
 </style>
+
+<script>
+  import { $sidebarState } from '@stores/globals'
+
+  const useSidebarLeftControll = (): void => {
+    const sidebarLeft = document.querySelector('.sidebar-left')
+    if (!sidebarLeft) return
+
+    $sidebarState.subscribe((val) => {
+      sidebarLeft.classList[val ? 'add' : 'remove']('is-active')
+    })
+  }
+
+  document.addEventListener('astro:page-load', useSidebarLeftControll)
+</script>

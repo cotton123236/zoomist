@@ -62,15 +62,12 @@ const navLinks: NavLinks = [
 
 <style>
   .header {
-    --header-bg-color: 255, 255, 255;
-    --header-border-color: #eee;
-
     position: sticky;
     top: 0;
     z-index: 999;
     height: var(--header-height);
-    background-color: rgba(var(--header-bg-color), 0.85);
     box-shadow: inset 0 -1px 0 0 var(--header-border-color);
+    background-color: rgba(var(--header-bg-color), 0.85);
     backdrop-filter: saturate(180%) blur(5px);
   }
 
@@ -109,7 +106,7 @@ const navLinks: NavLinks = [
 
 <style is:global>
   .dark .header {
-    --header-bg-color: 0, 0, 0;
-    --header-border-color: #222;
+    background-color: rgba(var(--header-bg-color-dark), 0.85);
+    box-shadow: inset 0 -1px 0 0 var(--header-border-color-dark);
   }
 </style>

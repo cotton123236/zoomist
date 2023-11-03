@@ -1,12 +1,256 @@
 ---
-title: Methods & Properties
-description: After initialize Zoomist, you can use initialized instance in variable with methods and properties.
+title: 方法與屬性
+description: 在 Zoomist 實例化之後，你便可以在實例中存取其方法與屬性。
 ---
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
 
-# Methods & Properties
+# 方法與屬性
 
-After initialize Zoomist, you can use initialized instance in variable with methods and properties.
+在 Zoomist 實例化之後，你便可以在實例中存取其方法與屬性。
 
+範例：
 
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+// 方法
+zoomist.zoom(0.1)
+// 屬性
+console.log(zoomist.transform)
+```
+
+## 方法
+
+所有可使用的方法（以下以 `zoomist` 變數作為範例）：
+
+<Table className="min-w-[44rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
+      <TableHead className="w-[15rem]">方法</TableHead>
+      <TableHead className="w-[12rem]">參數型別</TableHead>
+      <TableHead>描述</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`zoomist.zoom(scale)`</TableCell>
+      <TableCell>`scale: number`</TableCell>
+      <TableCell>
+        以一個相對的值縮放 `.zoomist-image`。
+        > <span class="hilight">正數</span>用以<span class="hilight">放大</span>, <span class="hilight">負數</span>用以<span class="hilight">縮小</span>。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.zoomTo(scale)`</TableCell>
+      <TableCell>`scale: number`</TableCell>
+      <TableCell>
+        縮放 `.zoomist-image` 至一個絕對的值，這個數值的大小必須介於 `minScale` 和 `maxScale` 之間。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.move(translate)`</TableCell>
+      <TableCell>`translate: {x: number, y: number}`</TableCell>
+      <TableCell>
+        以一個相對的 `x` 及 `y` 移動 `.zoomist-image`。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.moveTo(translate)`</TableCell>
+      <TableCell>`translate: {x: number, y: number}`</TableCell>
+      <TableCell>
+        移動 `.zoomist-image` 至一個絕對的 `x` 及 `y`。
+        > `x` 可被設置為關鍵字 `left`, `right`, `center`。 `y` 可被設置為關鍵字 `top`, `bottom`, `center`。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.slideTo(value)`</TableCell>
+      <TableCell>`value: number`</TableCell>
+      <TableCell>
+        可將滑桿的值設定為一個介於 0 與 100 之間的值。<br/>
+        而 `.zoomist-image` 也會自動地縮放至對應的大小。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.reset()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        將 `.zoomist-image` 恢復為初始狀態。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroy(cleanStyle)`</TableCell>
+      <TableCell>`cleanStyle: boolean`</TableCell>
+      <TableCell>
+        將 Zoomist 銷毀並移除所有事件監聽。<br/>
+        若將參數 `cleanStyle` 設為 `true` 則會移除 `.zoomist-image` 上的所有樣式。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroySlider()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        銷毀滑桿。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroyZoomer()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        銷毀縮放按鈕。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.destroyModules()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        銷毀滑桿及縮放按鈕。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.update(options)`</TableCell>
+      <TableCell>`options: ZoomistOptions`</TableCell>
+      <TableCell>
+        更新 Zoomist。<br/>
+        若傳入新的選項，則將會以新傳入的選項更新 Zoomist。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.getContainerData()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        取得 `.zoomist-container` 資訊。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.getImageData()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        取得 `.zoomist-image` 資訊。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.getSliderValue()`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        取得當前滑桿的值。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.on(event, handler)`</TableCell>
+      <TableCell>`event: string, handler: function`</TableCell>
+      <TableCell>
+        添加事件處理。（查看所有[事件]()）
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+你可以透過這些有用的方法，做出很多額外的功能。
+
+例如，製作一個置中按鈕：
+
+```html title="index.html"
+<!-- centered-button -->
+<button class="centered-button"></button>
+<!-- zoomist -->
+<div class="zoomist-container">
+  <div class="zoomist-wrapper">
+    <div class="zoomist-image">
+      <!-- your content -->
+    </div>
+  </div>
+</div>
+```
+
+```js title="main.js"
+const zoomist = new Zoomist('.zoomist-container')
+
+document.querySelector('.centered-button').addEventListener('click', () => {
+  zoomist.moveTo({ x: 0, y: 0 })
+})
+```
+
+## 屬性
+
+<Table className="min-w-[44rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
+      <TableHead className="w-[15rem]">Porperty</TableHead>
+      <TableHead className="w-[12rem]">Type</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`zoomist.element`</TableCell>
+      <TableCell>`HTMLElement`</TableCell>
+      <TableCell>
+        `.zoomist-container` HTML 元素。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.wrapper`</TableCell>
+      <TableCell>`HTMLElement`</TableCell>
+      <TableCell>
+        `.zoomist-wrapper` HTML 元素。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.image`</TableCell>
+      <TableCell>`HTMLElement`</TableCell>
+      <TableCell>
+        `.zoomist-image` HTML 元素。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.options`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell>
+        當前應用的 `ZoomistOptions`。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.mounted`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>
+        若 Zoomist 初始化完成則為 `true`。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.states`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell>
+        當前 `dragging`, `pinching`, `wheeling` 的狀態。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.transform`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell>
+        當前 `.zoomist-image` 的縮放及位移資訊。
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+你可以從這些屬性中得到一些有用的資訊。
+
+例如，取得當前 Zoomist 的縮放大小：
+
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+document.querySelector('.get-scale-button').addEventListener('click', () => {
+  const { scale } = zoomist.transform
+  console.log(scale)
+})
+```
 
 ---

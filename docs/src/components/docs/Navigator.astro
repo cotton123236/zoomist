@@ -23,7 +23,7 @@ const nextRoute = flatDocsRoutes[currentRouteIndex + 1]
         <Link class="nav-link" href={prevRoute.path}>
           <Icon name="angle-left" class="nav-icon mr-3" style="fill: currentColor;" />
           <div>
-            <span class="text-sm">{t('navigator.prev')}</span>
+            <span class="text-xs md:text-sm">{t('navigator.prev')}</span>
             <div class="nav-title">{useRouteTrans(prevRoute)}</div>
           </div>
         </Link>
@@ -31,8 +31,8 @@ const nextRoute = flatDocsRoutes[currentRouteIndex + 1]
       {nextRoute && nextRoute.path && (
         <Link class="nav-link ml-auto flex-row-reverse" href={nextRoute.path}>
           <Icon name="angle-right" class="nav-icon ml-3" style="fill: currentColor;" />
-          <div>
-            <span class="text-sm">{t('navigator.next')}</span>
+          <div class="flex flex-col">
+            <span class="ml-auto text-xs md:text-sm">{t('navigator.next')}</span>
             <div class="nav-title">{useRouteTrans(nextRoute)}</div>
           </div>
         </Link>
@@ -55,6 +55,6 @@ const nextRoute = flatDocsRoutes[currentRouteIndex + 1]
   }
 
   .nav-title {
-    @apply mt-2 font-medium leading-[1] text-black dark:text-white;
+    @apply mt-2 text-sm font-medium leading-[1] text-black dark:text-white md:text-base md:leading-[1];
   }
 </style>

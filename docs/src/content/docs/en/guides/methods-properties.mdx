@@ -30,10 +30,10 @@ console.log(zoomist.transform)
 
 All available methods (take `zoomist` variable in example above):
 
-<Table className="min-w-[40rem]">
+<Table className="min-w-[44rem]">
   <TableHeader>
     <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
-      <TableHead className="w-[12rem]">Methods</TableHead>
+      <TableHead className="w-[15rem]">Method</TableHead>
       <TableHead className="w-[12rem]">Args Type</TableHead>
       <TableHead>Description</TableHead>
     </TableRow>
@@ -66,6 +66,7 @@ All available methods (take `zoomist` variable in example above):
       <TableCell>`translate: {x: number, y: number}`</TableCell>
       <TableCell>
         Translate `.zoomist-image` to specific `x` and `y`.
+        > You can set `x` to keyword `left`, `right`, `center`. And set `y` to keyword `top`, `bottom`, `center`
       </TableCell>
     </TableRow>
     <TableRow>
@@ -74,13 +75,6 @@ All available methods (take `zoomist` variable in example above):
       <TableCell>
         Set the slider to a specific value between 0 and 100. <br/>
         And `.zoomist-image` will scale to the corresponding size automatically.
-      </TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell>`zoomist.on(event, handler)`</TableCell>
-      <TableCell>`event: string, handler: function`</TableCell>
-      <TableCell>
-        Add event handler. (Checkout all [events]())
       </TableCell>
     </TableRow>
     <TableRow>
@@ -123,7 +117,8 @@ All available methods (take `zoomist` variable in example above):
       <TableCell>`zoomist.update(options)`</TableCell>
       <TableCell>`options: ZoomistOptions`</TableCell>
       <TableCell>
-        Update Zoomist. If new options are given, Zoomist will update with new options.
+        Update Zoomist.<br/>
+        If pass new options, Zoomist will update with new options.
       </TableCell>
     </TableRow>
     <TableRow>
@@ -147,11 +142,115 @@ All available methods (take `zoomist` variable in example above):
         Get slider current value.
       </TableCell>
     </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.on(event, handler)`</TableCell>
+      <TableCell>`event: string, handler: function`</TableCell>
+      <TableCell>
+        Add event handler. (Checkout all [events]())
+      </TableCell>
+    </TableRow>
   </TableBody>
 </Table>
 
+With these useful methods, you can do a lot of extra things.
+
+For example, making a centered-button:
+
+```html title="index.html"
+<!-- centered-button -->
+<button class="centered-button"></button>
+<!-- zoomist -->
+<div class="zoomist-container">
+  <div class="zoomist-wrapper">
+    <div class="zoomist-image">
+      <!-- your content -->
+    </div>
+  </div>
+</div>
+```
+
+```js title="main.js"
+const zoomist = new Zoomist('.zoomist-container')
+
+document.querySelector('.centered-button').addEventListener('click', () => {
+  zoomist.moveTo({ x: 0, y: 0 })
+})
+```
+
 ## Properties
 
+<Table className="min-w-[44rem]">
+  <TableHeader>
+    <TableRow className="font-medium bg-[#f9f9f9] dark:bg-gray-950">
+      <TableHead className="w-[15rem]">Porperty</TableHead>
+      <TableHead className="w-[12rem]">Type</TableHead>
+      <TableHead>Description</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>`zoomist.element`</TableCell>
+      <TableCell>`HTMLElement`</TableCell>
+      <TableCell>
+        `.zoomist-container` HTML element.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.wrapper`</TableCell>
+      <TableCell>`HTMLElement`</TableCell>
+      <TableCell>
+        `.zoomist-wrapper` HTML element.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.image`</TableCell>
+      <TableCell>`HTMLElement`</TableCell>
+      <TableCell>
+        `.zoomist-image` HTML element.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.options`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell>
+        Object with passed `ZoomistOptions`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.mounted`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>
+        `true` if Zoomist initialize completed.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.states`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell>
+        The states of `dragging`, `pinching`, `wheeling`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`zoomist.transform`</TableCell>
+      <TableCell>`object`</TableCell>
+      <TableCell>
+        Transform data of `.zoomist-image`.
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
 
+You can get some useful data from these properties.
+
+For example, getting your current scale:
+
+```js
+const zoomist = new Zoomist('.zoomist-container')
+
+document.querySelector('.get-scale-button').addEventListener('click', () => {
+  const { scale } = zoomist.transform
+  console.log(scale)
+})
+```
 
 ---

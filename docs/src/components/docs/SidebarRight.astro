@@ -12,7 +12,7 @@ const { headings, class: className } = Astro.props as Props
 const sidebarList = headings.filter((item) => item.depth === 2)
 ---
 
-<aside class:list={['sidebar', className]}>
+<div class:list={['sidebar', className]}>
   <div class="sidebar-nav relative">
     <div class="py-3 font-medium">{t('onThisPage')}</div>
     <div class="sidebar-active-marker" transition:persist></div>
@@ -24,7 +24,7 @@ const sidebarList = headings.filter((item) => item.depth === 2)
       ))
     }
   </div>
-</aside>
+</div>
 
 <style>
   .sidebar {
