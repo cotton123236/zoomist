@@ -207,6 +207,24 @@ const { title, description } = data
   .expressive-code .frame.has-title:not(.is-terminal) .header {
     border-bottom: 1px solid var(--code-border-color);
   }
+
+  .expressive-code.ec-theme-vitesse-dark .frame .copy button {
+    width: 1.75rem;
+    height: 1.75rem;
+
+    @media (hover: hover) {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  .expressive-code.ec-theme-vitesse-dark .frame .copy button::before {
+    border: none;
+  }
+
+  .expressive-code.ec-theme-vitesse-dark .frame .copy button::after {
+    margin: 0.375rem;
+  }
 </style>
 
 <script>
