@@ -57,6 +57,7 @@ zoomist.on('zoom', (zoomist, scale) => {
       <TableCell>`(zoomist)`</TableCell>
       <TableCell>
         事件在實例化完成後觸發。
+        > 若你使用 `on` 方法註冊 `ready` 事件則事件並不會觸發，因為此時實例化已完成。
       </TableCell>
     </TableRow>
     <TableRow>

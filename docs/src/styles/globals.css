@@ -74,6 +74,10 @@
     @apply bg-[var(--body-bg-color)] font-base font-light dark:bg-[var(--body-bg-color-dark)] dark:text-white;
   }
 
+  body.is-locked {
+    @apply overflow-hidden;
+  }
+
   code {
     @apply font-code;
   }

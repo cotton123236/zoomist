@@ -218,8 +218,14 @@ const { title, description } = data
 
     $sidebarState.subscribe((val) => {
       sidebarLeft.classList[val ? 'add' : 'remove']('is-active')
+      document.body.classList[val ? 'add' : 'remove']('is-locked')
     })
   }
 
+  const useCloseSidebarLeft = (): void => {
+    $sidebarState.set(false)
+  }
+
   document.addEventListener('astro:page-load', useSidebarLeftControll)
+  document.addEventListener('astro:after-swap', useCloseSidebarLeft)
 </script>
