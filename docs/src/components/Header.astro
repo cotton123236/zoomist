@@ -2,6 +2,7 @@
 import { t } from 'i18next'
 import { Icon } from 'astro-icon'
 import { Image } from 'astro:assets'
+import { flatDocsRoutes } from '@routes'
 // components
 import Link from '@components/utils/Link.astro'
 import SearchBtn from '@components/btns/SearchBtn.astro'
@@ -18,7 +19,7 @@ type NavLinks = Array<{
 }>
 
 const navLinks: NavLinks = [
-  { name: t('navLinks.documentation'), href: '/', target: null },
+  { name: t('navLinks.documentation'), href: flatDocsRoutes[0]?.path!, target: null },
   {
     name: t('navLinks.demos'),
     href: 'https://codesandbox.io/s/intelligent-zeh-lgtttg?file=/src/index.ts',
@@ -27,54 +28,72 @@ const navLinks: NavLinks = [
 ]
 ---
 
-<header class="header px-lr">
-  <nav class="nav">
-    <Link class="nav-logo" href="/" transition:persist>
-      <Image src={LogoLight} class="dark:hidden" alt="logo light" />
-      <Image src={LogoDark} class="hidden dark:block" alt="logo dark" />
-    </Link>
-    <div class="nav-links">
+<header class="header">
+  <nav class="nav px-lr">
+    <div class="nav-wrap">
+      <Link class="nav-logo" href="/" transition:persist>
+        <Image src={LogoLight} class="dark:hidden" alt="logo light" />
+        <Image src={LogoDark} class="hidden dark:block" alt="logo dark" />
+      </Link>
+      <div class="nav-links">
+        {
+          navLinks.map((item) => (
+            <Link
+              class="nav-link"
+              href={item.href}
+              target={item.target}
+              outlink={item.target !== null}
+            >
+              {item.name}
+            </Link>
+          ))
+        }
+      </div>
+      <div class="nav-tools" transition:persist>
+        <SearchBtn />
+        <span class="split-line"></span>
+        <LangBtn />
+        <span class="split-line"></span>
+        <Link
+          href="https://github.com/cotton123236/zoomist"
+          target="_blank"
+          class="nav-tool-link w-6"
+        >
+          <Icon name="mdi:github" />
+        </Link>
+        <MenuBtn />
+      </div>
+    </div>
+  </nav>
+  <!-- menu -->
+  <div class="menu">
+    <ul class="menu-wrap">
       {
         navLinks.map((item) => (
-          <Link
-            class="nav-link"
-            href={item.href}
-            target={item.target}
-            outlink={item.target !== null}
-          >
+          <Link class="nav-link px-lr block py-2" href={item.href} target={item.target}>
             {item.name}
           </Link>
         ))
       }
-    </div>
-    <div class="nav-tools" transition:persist>
-      <SearchBtn />
-      <span class="split-line"></span>
-      <LangBtn />
-      <span class="split-line"></span>
-      <Link href="https://github.com/cotton123236/zoomist" class="nav-tool-link w-6">
-        <Icon name="mdi:github" />
-      </Link>
-      <MenuBtn />
-    </div>
-  </nav>
+    </ul>
+  </div>
 </header>
 
 <style>
   .header {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    height: var(--header-height);
+    @apply sticky top-0 z-[999] h-[var(--header-height)];
+  }
+
+  .nav {
+    @apply relative z-20 h-full w-full;
+
     box-shadow: inset 0 -1px 0 0 var(--header-border-color);
     background-color: rgba(var(--header-bg-color), 0.85);
     backdrop-filter: saturate(180%) blur(5px);
   }
 
-  .nav {
-    @apply mx-auto flex h-full w-full items-center gap-10;
-
-    max-width: var(--page-max-width);
+  .nav-wrap {
+    @apply mx-auto flex h-full w-full max-w-[var(--page-max-width)] items-center gap-10;
   }
 
   .nav-logo {
@@ -102,6 +121,22 @@ const navLinks: NavLinks = [
     width: 1rem;
     height: 1rem;
   }
+
+  .menu {
+    @apply absolute left-0 top-[var(--header-height)] z-10 w-full -translate-y-full opacity-0 duration-500;
+
+    box-shadow: inset 0 -1px 0 0 var(--header-border-color);
+    background-color: rgba(var(--header-bg-color), 0.85);
+    backdrop-filter: blur(5px);
+  }
+
+  .menu.is-active {
+    @apply translate-y-0 opacity-100;
+  }
+
+  .menu-wrap {
+    @apply mx-auto max-w-[var(--page-max-width)] py-4;
+  }
 </style>
 
 <style is:global>
@@ -110,3 +145,28 @@ const navLinks: NavLinks = [
     box-shadow: inset 0 -1px 0 0 var(--header-border-color-dark);
   }
 </style>
+
+<script>
+  import { $menuState } from '@stores/globals'
+
+  const menuActiveClass: string = 'is-active'
+
+  const useMenu = (): void => {
+    const menu = document.querySelector('header .menu')
+    if (!menu) return
+
+    $menuState.subscribe((val) => {
+      menu.classList[val ? 'add' : 'remove'](menuActiveClass)
+    })
+  }
+
+  const useCloseMenu = (): void => {
+    const menu = document.querySelector('header .menu')
+    if (!menu) return
+
+    $menuState.set(false)
+  }
+
+  document.addEventListener('astro:page-load', useMenu)
+  document.addEventListener('astro:after-swap', useCloseMenu)
+</script>

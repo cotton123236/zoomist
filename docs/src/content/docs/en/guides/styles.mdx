@@ -2,3 +2,85 @@
 title: Styles
 description: Customize Zoomist styles and CSS variables.
 ---
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
+
+# Styles
+
+Zoomist provides some CSS variables that you can customize.
+
+For example:
+
+```css
+@media (prefers-color-scheme: dark) {
+  .zoomist-container {
+    --zoomist-wrapper-bg-color: transparent;
+  
+    --zoomist-slider-bg-color: rgba(0, 0, 0, .8);
+    --zoomist-slider-track-color: #444;
+    --zoomist-slider-track-color-hover: #666;
+    --zoomist-slider-bar-color: #222;
+    --zoomist-slider-bar-color-hover: #444;
+    --zoomist-slider-button-color: #000;
+  }
+}
+```
+
+## CSS variables
+
+CSS variables:
+
+```css
+:root {
+  --zoomist-wrapper-bg-color: #efefef;
+  --zoomist-modules-tranistion-duration: 0.3s;
+}
+```
+
+## Slider CSS variables
+
+All slider CSS variables:
+
+```css
+:root {
+  --zoomist-slider-bg-color: rgba(255, 255, 255, .8);
+  --zoomist-slider-border-radius: 0 0 4px 0;
+  --zoomist-slider-padding-x: 20px;
+  --zoomist-slider-padding-y: 20px;
+  --zoomist-slider-track-color: #ddd;
+  --zoomist-slider-track-color-hover: #ccc;
+  --zoomist-slider-bar-size: 120px;
+  --zoomist-slider-bar-side: 2px;
+  --zoomist-slider-bar-border-radius: 2px;
+  --zoomist-slider-bar-color: #666;
+  --zoomist-slider-bar-color-hover: #444;
+  --zoomist-slider-button-size: 12px;
+  --zoomist-slider-button-color: #fff;
+}
+```
+
+## Zoomer CSS variables
+
+All zoomer CSS variables:
+
+```css
+:root {
+  --zoomist-zoomer-button-size: 48px;
+  --zoomist-zoomer-button-color: rgba(255, 255, 255, .8);
+  --zoomist-zoomer-button-color-hover: rgba(255, 255, 255, .9);
+  --zoomist-zoomer-button-color-disabled: rgba(255, 255, 255, .8);
+  --zoomist-zoomer-button-opacity-disabled: 0.7;
+  --zoomist-zoomer-icon-size: 14px;
+  --zoomist-zoomer-icon-color: #333;
+  --zoomist-zoomer-icon-color-hover: #111;
+  --zoomist-zoomer-icon-color-disabled: #999;
+}
+```
+
+---

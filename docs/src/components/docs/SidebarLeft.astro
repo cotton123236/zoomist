@@ -41,8 +41,13 @@ const currentPage = pathname.split('/').at(-1)
     @apply overflow-auto px-4 md:px-0;
 
     width: var(--sidebar-left-width);
-    max-height: calc(100vh - var(--header-height));
-    max-height: calc(100dvh - var(--header-height));
+    max-height: calc(100vh - var(--sidebar-btn-height) - var(--header-height));
+    max-height: calc(100dvh - var(--sidebar-btn-height) - var(--header-height));
+
+    @media screen and (min-width: 48rem;) {
+      max-height: calc(100vh - var(--header-height));
+      max-height: calc(100dvh - var(--header-height));
+    }
   }
 
   .sidebar-nav {

@@ -36,11 +36,12 @@ const { class: className } = Astro.props as Props
 <script>
   import { $menuState } from '@stores/globals'
 
-  const menuBtn = document.querySelector('.menu-btn')
   const menuBtnActiveClass: string = 'is-active'
 
   const useMenuBtn = (): void => {
+    const menuBtn = document.querySelector('.menu-btn')
     if (!menuBtn) return
+
     $menuState.subscribe((val) => {
       menuBtn.classList[val ? 'add' : 'remove'](menuBtnActiveClass)
     })
@@ -50,5 +51,5 @@ const { class: className } = Astro.props as Props
     })
   }
 
-  useMenuBtn()
+  document.addEventListener('astro:page-load', useMenuBtn)
 </script>

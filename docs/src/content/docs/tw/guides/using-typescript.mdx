@@ -1,4 +1,141 @@
 ---
-title: Using TypeScript
-description: Using Zoomist with TypeScript.
+title: 使用 TypeScript
+description: 在 TypeScript 專案中使用 Zoomist。
+---
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/ui/table'
+
+# 使用 TypeScript
+
+因為 Zoomist 使用 TypeScript 編寫，你可以輕鬆地在你的 TypeScript 專案中使用 Zoomist。
+
+例如：
+
+```ts
+import Zoomist from 'zoomist'
+import { ZoomerOptions } from 'zoomist/types'
+
+const options: ZoomistOptions = {
+  slider: true,
+  zoomer: true
+}
+
+const zoomist = new Zoomist('.zoomist-container', options)
+```
+
+## 選項型別
+
+你能透過 `'zoomist/types'` 引入型別。
+
+以下是你可能會需要用到的型別：
+
+### ZoomistOptions
+
+```ts
+interface ZoomistOptions {
+  draggable?: boolean
+  wheelable?: boolean
+  pinchable?: boolean
+  bounds?: boolean
+  zoomRatio?: number
+  minScale?: number
+  maxScale?: number
+  initScale?: number | null
+  slider?: boolean | SliderOptions
+  zoomer?: boolean | ZoomerOptions
+  on?: {
+    [event in EventTypes]?: EventOptions[event]
+  }
+}
+```
+
+### SliderOptions
+
+```ts
+interface SliderOptions {
+  el: HTMLElement | string | null
+  direction: 'horizontal' | 'vertical'
+}
+```
+
+### ZoomerOptions
+
+```ts
+interface ZoomerOptions {
+  el: string | HTMLElement | null
+  inEl: string | HTMLElement | null
+  outEl: string | HTMLElement | null
+  resetEl: string | HTMLElement | null
+  disabledClass: string | false | null
+}
+```
+
+### EventOptions
+
+```ts
+interface EventOptions {
+  drag: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
+  dragStart: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
+  dragEnd: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
+  pinch: (zoomist: Zoomist, scale: number, event: Event) => void
+  pinchStart: (zoomist: Zoomist, scale: number, event: Event) => void
+  pinchEnd: (zoomist: Zoomist, scale: number, event: Event) => void
+  slide: (zoomist: Zoomist, value: number, event: Event) => void
+  slideStart: (zoomist: Zoomist, value: number, event: Event) => void
+  slideEnd: (zoomist: Zoomist, value: number, event: Event) => void
+  wheel: (zoomist: Zoomist, scale: number, event: WheelEvent) => void
+  zoom: (zoomist: Zoomist, scale: number) => void
+  ready: (zoomist: Zoomist) => void
+  reset: (zoomist: Zoomist) => void
+  resize: (zoomist: Zoomist) => void
+  beforeDestroy: (zoomist: Zoomist) => void
+  destroy: (zoomist: Zoomist) => void
+  beforeUpdate: (zoomist: Zoomist) => void
+  update: (zoomist: Zoomist) => void
+}
+```
+
+## 屬性型別
+
+在 Zoomist 實例化之後，你能從實例中取得一些有用的屬性資料。
+
+若你需要使用資料的型別：
+
+### zoomist.transform
+
+```ts
+interface ZoomistTransfrom {
+  scale: number
+  translateX: number
+  translateY: number
+}
+```
+
+### zoomist.states
+
+```ts
+interface ZoomistStates {
+  dragging?: boolean
+  pinching?: boolean
+  wheeling?: boolean
+}
+```
+
+### zoomist.data
+
+```ts
+interface ZoomistData {
+  imageData: ImageData
+  containerData: ContainerData
+  dragData?: DragData
+  touchData?: touchData
+}
+```
+
 ---

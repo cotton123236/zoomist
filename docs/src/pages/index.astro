@@ -1,15 +1,17 @@
 ---
-import { changeLanguage, t } from "i18next";
-import { docsRoutes } from "@routes";
-import Layout from "@layouts/BaseLayout.astro";
+import { changeLanguage, t } from 'i18next'
+import { flatDocsRoutes } from '@routes'
+import Layout from '@layouts/BaseLayout.astro'
 // components
-import { Trans } from "astro-i18next/components";
-import RectBtn from "@components/btns/RectBtn.astro";
-import CopyBtn from "@components/btns/CopyBtn";
+import { Trans } from 'astro-i18next/components'
+import RectBtn from '@components/btns/RectBtn.astro'
+import CopyBtn from '@components/btns/CopyBtn'
 
-changeLanguage("en");
+changeLanguage('en')
 
-const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json").then((res) => res.json());
+const zoomistData = await fetch(
+  'https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json'
+).then((res) => res.json())
 ---
 
 <Layout>
@@ -37,7 +39,7 @@ const zoomistData = await fetch("https://raw.githubusercontent.com/cotton123236/
         </Trans>
       </p>
       <div class="mt-10 flex justify-center space-x-4 md:mt-16">
-        <RectBtn href={`${docsRoutes[0].path}${docsRoutes[0].children?.[0].path}`}>
+        <RectBtn href={`${flatDocsRoutes[0]?.path}`}>
           {t('index:intro-btns.documentation')}
         </RectBtn>
         <RectBtn
