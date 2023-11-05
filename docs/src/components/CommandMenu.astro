@@ -1,24 +1,50 @@
 <ninja-keys></ninja-keys>
 
-<style>
+<style is:global>
   ninja-keys {
     --ninja-z-index: 9999;
     --ninja-width: 90%;
+    --ninja-backdrop-filter: blur(5px);
 
     @media screen and (min-width: 48rem) {
       --ninja-width: 40rem;
     }
+  }
+
+  .dark ninja-keys {
+    --ninja-overflow-background: rgba(0, 0, 0, 0.5);
+    --ninja-text-color: #eee;
+    --ninja-secondary-text-color: #ccc;
+    --ninja-modal-background: #121212;
+    --ninja-secondary-background-color: #333;
+    --ninja-modal-shadow: rgb(66 66 66 / 50%) 0px 16px 70px;
+    --ninja-footer-background: rgba(0, 0, 0, 0.4);
+    --ninja-selected-text-color: #fff;
+    --ninja-selected-background: #222;
   }
 </style>
 
 <script>
   import 'ninja-keys'
 
-  const ninja = document.querySelector('ninja-keys')
-
   const useNinja = () => {
+    const ninja = document.querySelector('ninja-keys')
     if (!ninja) return
+
+    ninja.data = [
+      {
+        id: 'Projects',
+        title: 'Open Projects',
+        hotkey: 'ctrl+N',
+        icon: 'apps',
+        section: 'Projects',
+        handler: () => {
+          // it's auto register above hotkey with this handler
+          alert('Your logic to handle')
+        }
+      }
+    ]
   }
 
-  useNinja()
+  document.addEventListener('astro:page-load', useNinja)
 </script>
