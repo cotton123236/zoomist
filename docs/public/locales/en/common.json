@@ -19,5 +19,6 @@
   "navigator": {
     "prev": "Previous",
     "next": "Next"
-  }
+  },
+  "sidebarBtn": "Menu"
 }
