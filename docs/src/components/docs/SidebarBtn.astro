@@ -69,6 +69,7 @@ const { class: className } = Astro.props as Props
     if (!sidebarBtn) return
 
     sidebarBtn.addEventListener('click', () => {
+      console.log('click')
       $sidebarState.set(!$sidebarState.get())
     })
 

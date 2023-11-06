@@ -1,4 +1,8 @@
-<ninja-keys></ninja-keys>
+---
+import { t } from 'i18next'
+---
+
+<ninja-keys hideBreadcrumbs="true" placeholder={t('searchPlaceholder')}></ninja-keys>
 
 <style is:global>
   ninja-keys {
@@ -26,23 +30,46 @@
 
 <script>
   import 'ninja-keys'
+  import { flatDocsRoutes } from '@routes'
+  import astroI18nextConfig from 'astro-i18next.config'
+  import { navigate } from 'astro:transitions/client'
 
-  const useNinja = () => {
+  const { MODE } = import.meta.env
+  const { defaultLocale, locales } = astroI18nextConfig
+
+  const useNinja = async () => {
     const ninja = document.querySelector('ninja-keys')
     if (!ninja) return
 
+    const { pathname } = window.location
+    const [_leadingSlash, langOrGroup, ...rest] = pathname.split('/')
+    const locale = locales.includes(langOrGroup) ? langOrGroup : defaultLocale
+    const lang = locale === defaultLocale ? '' : `/${locale}`
+    const translationJson =
+      MODE === 'development'
+        ? await import(/* @vite-ignore */ `/public/locales/${locale}/common.json`)
+        : await import(/* @vite-ignore */ `/locales/${locale}/common.json`, {
+            assert: { type: 'json' }
+          })
+
+    const translation = MODE === 'development' ? translationJson : translationJson.default
+    // navigate(translation)
     ninja.data = [
-      {
-        id: 'Projects',
-        title: 'Open Projects',
-        hotkey: 'ctrl+N',
-        icon: 'apps',
-        section: 'Projects',
-        handler: () => {
-          // it's auto register above hotkey with this handler
-          alert('Your logic to handle')
+      ...flatDocsRoutes.map((item) => {
+        const [group, trans] = item.trans?.split('.')!
+        return {
+          id: item.name,
+          title: translation[group][trans],
+          section: item.parent,
+          icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="8" style="margin-right: 8px"><path d="M4.45 15.6a.47.47 0 0 1-.35-.15c-.2-.2-.2-.51 0-.71l6.75-6.75L4.1 1.25c-.2-.2-.2-.51 0-.71s.51-.2.71 0l7.1 7.1c.2.2.2.51 0 .71l-7.1 7.1c-.1.1-.23.15-.35.15Z" /></svg>',
+          keywords: translation.keywords[trans],
+          handler: () => {
+            if (item.path) {
+              navigate(item.path)
+            }
+          }
         }
-      }
+      })
     ]
   }
 

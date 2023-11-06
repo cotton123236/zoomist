@@ -29,16 +29,15 @@ const { class: className } = Astro.props as Props
 </style>
 
 <script>
-  const searchBtn = document.querySelector('.search-btn')
-  const ninja = document.querySelector('ninja-keys')
-
   const useSearchBtn = () => {
-    if (!searchBtn) return
+    const searchBtn = document.querySelector('.search-btn')
+    const ninja = document.querySelector('ninja-keys')
+    if (!searchBtn || !ninja) return
 
     searchBtn.addEventListener('click', () => {
       ninja?.open()
     })
   }
 
-  useSearchBtn()
+  document.addEventListener('astro:page-load', useSearchBtn)
 </script>

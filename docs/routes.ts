@@ -5,11 +5,14 @@ export interface Route {
   path: string | null
   trans?: string
   children?: Route[]
+  keywords?: string
 }
 
-export type Routes = Route[]
+export interface flatRoute extends Route {
+  parent?: string
+}
 
-export const docsRoutes: Routes = [
+export const docsRoutes: Route[] = [
   {
     name: 'getting-started',
     path: '/getting-started',
@@ -18,12 +21,14 @@ export const docsRoutes: Routes = [
       {
         name: 'installation',
         path: '/installation',
-        trans: 'docNav.installation'
+        trans: 'docNav.installation',
+        keywords: 'keywords.installation'
       },
       {
         name: 'basic-usage',
         path: '/basic-usage',
-        trans: 'docNav.basic-usage'
+        trans: 'docNav.basic-usage',
+        keywords: 'keywords.basic-usage'
       }
     ]
   },
@@ -35,38 +40,44 @@ export const docsRoutes: Routes = [
       {
         name: 'parameters-options',
         path: '/parameters-options',
-        trans: 'docNav.parameters-options'
+        trans: 'docNav.parameters-options',
+        keywords: 'keywords.parameters-options'
       },
       {
         name: 'methods-properties',
         path: '/methods-properties',
-        trans: 'docNav.methods-properties'
+        trans: 'docNav.methods-properties',
+        keywords: 'keywords.methods-properties'
       },
       {
         name: 'events',
         path: '/events',
-        trans: 'docNav.events'
+        trans: 'docNav.events',
+        keywords: 'keywords.events'
       },
       {
         name: 'styles',
         path: '/styles',
-        trans: 'docNav.styles'
+        trans: 'docNav.styles',
+        keywords: 'keywords.styles'
       },
       {
         name: 'using-typescript',
         path: '/using-typescript',
-        trans: 'docNav.using-typescript'
+        trans: 'docNav.using-typescript',
+        keywords: 'keywords.using-typescript'
       }
     ]
   }
 ]
 
-export const flatDocsRoutes: Route[] = docsRoutes
+export const flatDocsRoutes: flatRoute[] = docsRoutes
   .map((route) => {
     return route.children && route.children.length
       ? route.children.map((item) => ({
           ...item,
-          path: `${route.path}${item.path}`
+          path: `${route.path}${item.path}`,
+          parent: route.name
         }))
       : { ...route }
   })

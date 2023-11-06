@@ -38,18 +38,28 @@ const { class: className } = Astro.props as Props
 
   const menuBtnActiveClass: string = 'is-active'
 
+  const setMenuState = () => {
+    $menuState.set(!$menuState.get())
+  }
+
   const useMenuBtn = (): void => {
     const menuBtn = document.querySelector('.menu-btn')
     if (!menuBtn) return
 
+    menuBtn.addEventListener('click', setMenuState)
+
     $menuState.subscribe((val) => {
       menuBtn.classList[val ? 'add' : 'remove'](menuBtnActiveClass)
     })
-
-    menuBtn.addEventListener('click', () => {
-      $menuState.set(!$menuState.get())
-    })
   }
 
+  const unmountMenuBtn = (): void => {
+    const menuBtn = document.querySelector('.menu-btn')
+    if (!menuBtn) return
+
+    menuBtn.removeEventListener('click', setMenuState)
+  }
+
+  document.addEventListener('astro:after-swap', unmountMenuBtn)
   document.addEventListener('astro:page-load', useMenuBtn)
 </script>

@@ -4,6 +4,7 @@
     "documentation": "Documentation",
     "demos": "Demos"
   },
+  "searchPlaceholder": "Search Documentation",
   "docNav": {
     "getting-started": "Getting Started",
     "installation": "Installation",
@@ -20,5 +21,14 @@
     "prev": "Previous",
     "next": "Next"
   },
-  "sidebarBtn": "Menu"
+  "sidebarBtn": "Menu",
+  "keywords": {
+    "installation": "npm, cdn, download assets",
+    "basic-usage": "Add Zoomist HTML layout, Customize Zoomist styles, Initialize Zoomist",
+    "parameters-options": "Zoomist instance, zoomistElement, zoomistOptions, bounds, draggable, wheelable, pinchable, minScale, maxScale, initScale, zoomRatio, slider, zoomer, el, direction, inEl, outEl, resetEl, disabledClass",
+    "methods-properties": "zoom, zoomTo, move, moveTo, slideTo, reset, destroy, destroySlider, destroyZoomer, destroyModules, update, getContainerData, getImageData, getSliderValue, on, element, wrapper, image, options, mounted, states, transform, data",
+    "events": "ready, reset, resize, beforeDestroy, destroy, beforeUpdate, update, zoom, wheel, dragStart, drag, dragEnd, pinchStart, pinch, pinchEnd, slideStart, slide, slideEnd",
+    "styles": "css variables, slider, zoomer",
+    "using-typescript": "type, interface"
+  }
 }
