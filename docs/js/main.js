@@ -16,6 +16,22 @@ window.onload = () => {
   })
 
   demoHandler()
+
+  useAlertModal()
+}
+
+
+const useAlertModal = () => {
+  const modal = document.querySelector('.alert-modal')
+  const closeBtn = document.querySelector('.modal .close-btn')
+  const isClicked = window.sessionStorage.getItem('is-clicked')
+  if (!modal || !closeBtn || isClicked) return;
+
+  modal.classList.add('is-active')
+  closeBtn.addEventListener('click', () => {
+    window.sessionStorage.setItem('is-clicked', true)
+    modal.classList.remove('is-active')
+  })
 }
 
 
