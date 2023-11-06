@@ -15,7 +15,7 @@
 </p>
 
 <div align="center">
-  <a aria-label="NPM version" href="https://github.com/cotton123236/zoomist/tree/next">
+  <a aria-label="NPM version" href="https://github.com/cotton123236/zoomist">
     <img alt="NPM version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcotton123236%2Fzoomist%2Fmain%2Fpackage.json&query=%24.version&style=for-the-badge&label=NPM&color=black" />
   </a>
 </div>
