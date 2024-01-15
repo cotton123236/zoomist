@@ -32,6 +32,7 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   minScale: 1,
   // set initial scale of zoomist-image
   initScale: null,
+  // return `false` if mousedown event does not lead to dragging
   dragFilter: (e: MouseEvent) => {
     return e.button === 0
   }
