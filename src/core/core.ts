@@ -380,12 +380,14 @@ class Zoomist {
   #useDrag(e: MouseEvent) {
     const { data, transform } = this
     const { dragData, imageData } = data
+    const { options } = this
+    const { dragFilter } = options
 
     if (!dragData || !imageData) return;
 
     // dragStart
     const dragStart = (e: MouseEvent) => {
-      if (e && e.button !== 0) return;
+      if (dragFilter && !dragFilter(e)) return;
 
       setObject(dragData, {
         startX: getPointer(e).clientX,
