@@ -19,7 +19,8 @@ export interface ZoomistDefaultOptions {
   zoomer?: boolean | ZoomerOptions
   on?: {
     [event in EventTypes]?: EventOptions[event]
-  }
+  },
+  dragFilter?: (e: MouseEvent) => boolean
 }
 
 export type ZoomistOptions = Partial<ZoomistDefaultOptions>
