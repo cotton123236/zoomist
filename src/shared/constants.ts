@@ -41,6 +41,7 @@ export const ATTR_SLIDER_BUTTON: Record<string, string> = {
 const ATTR_ZOOMER_BUTTON = {
   tabindex: '0',
   role: 'button',
+  type: 'button',
   'aria-disabled': 'false'
 }
 export const ATTR_ZOOMER_IN: Record<string, string> = {

@@ -65,6 +65,7 @@ const et = (n) => document.contains(H(n)), bt = (n) => {
 }, ct = {
   tabindex: "0",
   role: "button",
+  type: "button",
   "aria-disabled": "false"
 }, Pt = {
   ...ct,
