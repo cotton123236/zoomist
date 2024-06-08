@@ -15,6 +15,9 @@ export const CLASS_CONTAINER: string = `${NAME}-container`
 export const CLASS_WRAPPER: string = `${NAME}-wrapper`
 export const CLASS_IMAGE: string = `${NAME}-image`
 
+export const CLASS_NOT_DRAGGABLE: string = `${NAME}-not-draggable`
+export const CLASS_NOT_WHEELABLE: string = `${NAME}-not-wheelable`
+
 export const CLASS_SLIDER: string = `${NAME}-slider`
 export const CLASS_SLIDER_TRACK: string = `${NAME}-slider-wrapper`
 export const CLASS_SLIDER_BAR: string = `${NAME}-slider-bar`
@@ -58,7 +61,7 @@ export const ATTR_ZOOMER_RESET: Record<string, string> = {
 }
 
 export const IS_BROWSER: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined'
-export const IS_TOUCH: boolean = IS_BROWSER && 'ontouchstart' in window ? true : false
+export const IS_TOUCH: boolean = IS_BROWSER && 'ontouchstart' in window
 
 export const EVENT_TOUCH_START: ConstEventTouchStart = IS_TOUCH ? 'touchstart' : 'mousedown'
 export const EVENT_TOUCH_MOVE: ConstEventTouchMove = IS_TOUCH ? 'touchmove' : 'mousemove'

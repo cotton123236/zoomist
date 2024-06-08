@@ -6,6 +6,8 @@ import {
   ZoomistModules
 } from './../types'
 import {
+  CLASS_NOT_DRAGGABLE,
+  CLASS_NOT_WHEELABLE,
   CLASS_SLIDER,
   CLASS_ZOOMER,
   CLASS_ZOOMER_IN,
@@ -31,7 +33,11 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   // the min scale of zoomist-image (must be number smaller then initScale)
   minScale: 1,
   // set initial scale of zoomist-image
-  initScale: null
+  initScale: null,
+  // if element has this class won't be dragging
+  notDraggableClass: CLASS_NOT_DRAGGABLE,
+  // if element has this class won't be zoomed by wheel
+  notWheelableClass: CLASS_NOT_WHEELABLE
 }
 
 export const SLIDER_OPTIONS: SliderOptions = {

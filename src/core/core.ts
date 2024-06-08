@@ -16,6 +16,7 @@ import {
   isElementExist,
   isPlainObject,
   getElement,
+  getClosestElement,
   getPointer,
   setObject,
   setStyle,
@@ -28,7 +29,7 @@ import {
   createElement,
   setAttributes,
   isNull,
-  getTouchesCenter
+  getTouchesCenter,
 } from '../shared/utils'
 import {
   NAME,
@@ -359,11 +360,12 @@ class Zoomist {
   // on wheel
   #useWheel(e: WheelEvent) {
     const { options } = this
-    const { zoomRatio } = options
+    const { zoomRatio, notWheelableClass } = options
 
     e.preventDefault()
 
     if (this.states.wheeling) return;
+    if (getClosestElement((e.target as HTMLElement), notWheelableClass)) return;
 
     // prevent wheeling too fast
     this.states.wheeling = true
@@ -378,7 +380,7 @@ class Zoomist {
 
   // on drag (mouse)
   #useDrag(e: MouseEvent) {
-    const { data, transform } = this
+    const { data, transform, options: { notDraggableClass } } = this
     const { dragData, imageData } = data
 
     if (!dragData || !imageData) return;
@@ -386,6 +388,10 @@ class Zoomist {
     // dragStart
     const dragStart = (e: MouseEvent) => {
       if (e && e.button !== 0) return;
+
+      e.preventDefault()
+
+      if (getClosestElement((e.target as HTMLElement), notDraggableClass)) return;
 
       setObject(dragData, {
         startX: getPointer(e).clientX,
@@ -404,6 +410,8 @@ class Zoomist {
     const dragMove = (e: MouseEvent | AppTouchEvent) => {
       if ((e as AppTouchEvent).touches) return;
       if (!this.states.dragging) return;
+
+      e.preventDefault()
 
       const clientX = getPointer(e).clientX
       const clientY = getPointer(e).clientY
@@ -437,7 +445,7 @@ class Zoomist {
 
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
-    const { data, transform, options: { maxScale, minScale, draggable, pinchable } } = this
+    const { data, transform, options: { maxScale, minScale, draggable, pinchable, notDraggableClass } } = this
     const { touchData, imageData } = data
 
     if (!touchData || !imageData) return;
@@ -446,6 +454,8 @@ class Zoomist {
     const touchStart = (e: AppTouchEvent) => {
       const touches = e.touches
       if (!touches) return;
+
+      if (getClosestElement((e.target as HTMLElement), notDraggableClass) && touches.length <= 1) return;
 
       const { top: imageTop, left: imageLeft } = getBoundingRect(this.image)
       const { width: widthDiff, height: heightDiff } = this.getImageDiff()

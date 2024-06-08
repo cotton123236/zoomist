@@ -46,6 +46,11 @@ export const getElement = (value: QueryElement): HTMLElement => {
   return value instanceof HTMLElement ? value : document.querySelector(value)!
 }
 
+// get closest element
+export const getClosestElement = (target: HTMLElement, className: string): HTMLElement | null => {
+  return className ? target.closest(`.${className}`) : null
+}
+
 // get mouse clientX, clientY
 export const getPointer = (e: MouseEvent | AppTouchEvent): PointerData => {
   const event = 'touches' in e ? e.touches[0] : e

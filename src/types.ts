@@ -15,6 +15,8 @@ export interface ZoomistDefaultOptions {
   minScale: number
   maxScale: number
   initScale: number | null
+  notDraggableClass: string
+  notWheelableClass: string
   slider?: boolean | SliderOptions
   zoomer?: boolean | ZoomerOptions
   on?: {

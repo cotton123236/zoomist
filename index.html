@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="./test/styles/normalize.css">
     <style>
       body {
-        min-height: 100vh;
+        min-height: 100dvh;
         display: flex;
         justify-content: center;
         align-items: center;
+        /* padding-bottom: 100vh; */
       }
       .cat-zoomist {
         max-width: 540px;
@@ -52,6 +53,7 @@
         <div class="zoomist-wrapper">
           <div class="zoomist-image">
             <img src="./test/images/cat.jpg" alt="cat" />
+            <!-- <a class="zoomist-not-draggable" href="https://google.com" target="_blank">LINK</a> -->
           </div>
         </div>
       </div>
@@ -68,6 +70,8 @@
     </div>
 
     <script type="module" src="./test/main.ts"></script>
+    <!-- <script src="//cdn.bootcdn.net/ajax/libs/eruda/2.3.3/eruda.js"></script>
+    <script>eruda.init();</script> -->
     <!-- <script>
       const changeImageBtn = document.querySelector('.change-image-btn')
 
