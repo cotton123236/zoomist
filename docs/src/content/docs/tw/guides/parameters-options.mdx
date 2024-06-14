@@ -157,6 +157,40 @@ new Zoomist(zoomistElement)
       </TableCell>
     </TableRow>
     <TableRow>
+      <TableCell>`disableDraggingClass`</TableCell>
+      <TableCell>`string`</TableCell>
+      <TableCell>`'zoomist-not-draggable'`</TableCell>
+      <TableCell>
+        元素擁有這個 class 時，將不會被拖曳。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`disableWheelingClass`</TableCell>
+      <TableCell>`string`</TableCell>
+      <TableCell>`'zoomist-not-wheelable'`</TableCell>
+      <TableCell>
+        當滑鼠滾輪作用在擁有這個 class 的元素時，將不會被縮放。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`dragReleaseOnBounds`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`false`</TableCell>
+      <TableCell>
+        如果設置為 `true`，且當 `.zoomist-image` 在邊界時，啟用釋放觸控事件以允許進一步的頁面滾動。
+        > 只作用在擁有 touch events 的裝置，並且 `bounds` 設定為 `true` 時。
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`wheelReleaseOnMinMax`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`false`</TableCell>
+      <TableCell>
+        如果設置為 `true`，且當 `.zoomist-image` 剛好處於 `mixScale` 或 `maxScale` 時，啟用釋放滾輪事件以允許進一步的頁面滾動。
+        > 只作用在擁有 wheel events 的裝置。
+      </TableCell>
+    </TableRow>
+    <TableRow>
       <TableCell>`slider`</TableCell>
       <TableCell>`boolean | SliderOptions`</TableCell>
       <TableCell></TableCell>

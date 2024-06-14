@@ -10,7 +10,7 @@ import {
   ZoomistModules,
   ZoomistHTMLElement,
   ZoomistTransfrom,
-  AppTouchEvent
+  AppTouchEvent,
 } from '../types'
 import {
   isElementExist,
@@ -57,7 +57,7 @@ import {
   ATTR_SLIDER_BUTTON,
   ATTR_ZOOMER_IN,
   ATTR_ZOOMER_OUT,
-  ATTR_ZOOMER_RESET
+  ATTR_ZOOMER_RESET,
 } from '../shared/constants'
 import {
   DEFAULT_OPTIONS,
@@ -66,7 +66,7 @@ import {
   SLIDER_OPTIONS,
   ZOOMER_OPTIONS,
   SLIDER_AUTO_GENERATED,
-  ZOOMER_AUTO_GENERATED
+  ZOOMER_AUTO_GENERATED,
 } from './options'
 import {
   zoomerIconIn,
@@ -359,19 +359,29 @@ class Zoomist {
 
   // on wheel
   #useWheel(e: WheelEvent) {
-    const { options } = this
-    const { zoomRatio, notWheelableClass } = options
+    const { options: { zoomRatio, wheelReleaseOnMinMax, disableWheelingClass } } = this
 
-    e.preventDefault()
+    const delta = (e.deltaY || e.detail) > 0 ? -1 : 1
+
+    if (wheelReleaseOnMinMax) {
+      const isOnMinScale = this.isOnMinScale()
+      const isOnMaxScale = this.isOnMaxScale()
+      const releasable = isOnMinScale && delta === -1 || isOnMaxScale && delta === 1
+
+      if (!releasable) {
+        e.preventDefault()
+      }
+    }
+    else {
+      e.preventDefault()
+    }
 
     if (this.states.wheeling) return;
-    if (getClosestElement((e.target as HTMLElement), notWheelableClass)) return;
+    if (getClosestElement((e.target as HTMLElement), disableWheelingClass)) return;
 
     // prevent wheeling too fast
     this.states.wheeling = true
     setTimeout(() => { this.states.wheeling = false }, 30)
-
-    const delta = (e.deltaY || e.detail) > 0 ? -1 : 1
 
     this.zoom(delta * zoomRatio, getPointer(e))
 
@@ -380,7 +390,7 @@ class Zoomist {
 
   // on drag (mouse)
   #useDrag(e: MouseEvent) {
-    const { data, transform, options: { notDraggableClass } } = this
+    const { data, transform, options: { disableDraggingClass } } = this
     const { dragData, imageData } = data
 
     if (!dragData || !imageData) return;
@@ -391,7 +401,7 @@ class Zoomist {
 
       e.preventDefault()
 
-      if (getClosestElement((e.target as HTMLElement), notDraggableClass)) return;
+      if (getClosestElement((e.target as HTMLElement), disableDraggingClass)) return;
 
       setObject(dragData, {
         startX: getPointer(e).clientX,
@@ -445,7 +455,7 @@ class Zoomist {
 
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
-    const { data, transform, options: { maxScale, minScale, draggable, pinchable, notDraggableClass } } = this
+    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass } } = this
     const { touchData, imageData } = data
 
     if (!touchData || !imageData) return;
@@ -455,7 +465,21 @@ class Zoomist {
       const touches = e.touches
       if (!touches) return;
 
-      if (getClosestElement((e.target as HTMLElement), notDraggableClass) && touches.length <= 1) return;
+      if (bounds && dragReleaseOnBounds) {
+        const isOnBoundX = this.isOnBoundX()
+        const isOnBoundY = this.isOnBoundY()
+        const releasable = touches.length === 1 && (isOnBoundX || isOnBoundY)
+        console.log(releasable)
+
+        if (!releasable) {
+          e.preventDefault()
+        }
+      }
+      else {
+        e.preventDefault()
+      }
+
+      if (getClosestElement((e.target as HTMLElement), disableDraggingClass) && touches.length <= 1) return;
 
       const { top: imageTop, left: imageLeft } = getBoundingRect(this.image)
       const { width: widthDiff, height: heightDiff } = this.getImageDiff()

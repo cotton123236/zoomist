@@ -10,8 +10,12 @@ const options: ZoomistOptions = {
   // initScale: 2.5,
   // minScale: 0.5,
   // maxScale: 100,
+  // draggable: false,
+  // wheelable: false,
   // pinchable: false,
-  bounds: true,
+  // bounds: false,
+  // wheelReleaseOnMinMax: true,
+  // dragReleaseOnBounds: true,
   slider: true,
   zoomer: true,
   // zoomer: {

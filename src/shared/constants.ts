@@ -31,6 +31,9 @@ export const CLASS_ZOOMER_OUT: string = `${NAME}-zoomer-out`
 export const CLASS_ZOOMER_RESET: string = `${NAME}-zoomer-reset`
 export const CLASS_ZOOMER_DISABLE: string = `${NAME}-zoomer-disabled`
 
+export const CLASS_HIT_BOUNDS_X: string = 'is-bounds-x'
+export const CLASS_HIT_BOUNDS_Y: string = 'is-bounds-y'
+
 export const ATTR_SLIDER_BUTTON: Record<string, string> = {
   tabindex: '0',
   role: 'slider',

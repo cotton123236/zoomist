@@ -156,6 +156,40 @@ All available options and initial value:
       </TableCell>
     </TableRow>
     <TableRow>
+      <TableCell>`disableDraggingClass`</TableCell>
+      <TableCell>`string`</TableCell>
+      <TableCell>`'zoomist-not-draggable'`</TableCell>
+      <TableCell>
+        Elements matched this class will not be dragged.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`disableWheelingClass`</TableCell>
+      <TableCell>`string`</TableCell>
+      <TableCell>`'zoomist-not-wheelable'`</TableCell>
+      <TableCell>
+        Elements matched this class will not be zoomed by mouse wheel.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`dragReleaseOnBounds`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`false`</TableCell>
+      <TableCell>
+        If set to `true`, enable to release touch events to allow for further page scrolling when `.zoomist-image` is on bounds.
+        > Only works on devices have touch events and `bounds` set to `true`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>`wheelReleaseOnMinMax`</TableCell>
+      <TableCell>`boolean`</TableCell>
+      <TableCell>`false`</TableCell>
+      <TableCell>
+        If set to `true`, enable to release wheel events to allow for further page scrolling when `.zoomist-image` is on `mixScale` or `maxScale`.
+        > Only works on devices have wheel events.
+      </TableCell>
+    </TableRow>
+    <TableRow>
       <TableCell>`slider`</TableCell>
       <TableCell>`boolean | SliderOptions`</TableCell>
       <TableCell></TableCell>

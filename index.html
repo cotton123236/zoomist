@@ -7,11 +7,32 @@
     <title>Zoomist Dev</title>
     <link rel="stylesheet" href="./test/styles/normalize.css">
     <style>
+      @media (prefers-color-scheme: dark) {
+        body {
+          --zoomist-slider-bg-color: rgba(12, 12, 12, 0.8);
+          --zoomist-slider-track-color: #444;
+          --zoomist-slider-track-color-hover: #666;
+          --zoomist-slider-button-color: #ccc;
+          --zoomist-zoomer-button-color: rgba(12, 12, 12, .9);
+          --zoomist-zoomer-button-color-hover: rgba(24, 24, 24, .9);
+          --zoomist-zoomer-button-color-disabled: rgba(12, 12, 12, .8);
+          --zoomist-zoomer-icon-color: #ccc;
+          --zoomist-zoomer-icon-color-hover: #eee;
+          --zoomist-zoomer-icon-color-disabled: #666;
+          --body-background-image: linear-gradient(to bottom right, #333, #191919);
+        }
+      }
+      @media (prefers-color-scheme: light) {
+        body {
+          --body-background-image: linear-gradient(to bottom right, #fff, #ccc);
+        }
+      }
       body {
         min-height: 100dvh;
         display: flex;
         justify-content: center;
         align-items: center;
+        background-image: var(--body-background-image);
         /* padding-bottom: 100vh; */
       }
       .cat-zoomist {
@@ -53,7 +74,8 @@
         <div class="zoomist-wrapper">
           <div class="zoomist-image">
             <img src="./test/images/cat.jpg" alt="cat" />
-            <!-- <a class="zoomist-not-draggable" href="https://google.com" target="_blank">LINK</a> -->
+            <a class="zoomist-not-draggable" href="https://google.com" target="_blank">NOT DRAGGABLE</a>
+            <a class="zoomist-not-wheelable" href="https://google.com" target="_blank">NOT WHEELABLE</a>
           </div>
         </div>
       </div>

@@ -21,7 +21,9 @@ import {
   MOVE_TO_KEYWORDS_Y,
   NAME
 } from '../shared/constants';
-import { DEFAULT_OPTIONS } from './options';
+import {
+  DEFAULT_OPTIONS,
+} from './options';
 
 
 export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
@@ -241,6 +243,80 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     const { __modules__: { slider } } = this
 
     return slider && slider.value !== undefined ? slider.value : null
+  },
+
+  isOnBoundTop() {
+    const { options: { bounds } } = this
+    if (!bounds) return false
+
+    const { transform: { translateY } } = this
+    const { height: heightDiff } = this.getImageDiff()
+
+    return translateY * -1 === roundToTwo(heightDiff)
+  },
+
+  isOnBoundBottom() {
+    const { options: { bounds } } = this
+    if (!bounds) return false
+
+    const { transform: { translateY } } = this
+    const { height: heightDiff } = this.getImageDiff()
+
+    return translateY === roundToTwo(heightDiff)
+  },
+
+  isOnBoundLeft() {
+    const { options: { bounds } } = this
+    if (!bounds) return false
+
+    const { transform: { translateX } } = this
+    const { width: widthDiff } = this.getImageDiff()
+
+    return translateX * -1 === roundToTwo(widthDiff)
+  },
+
+  isOnBoundRight() {
+    const { options: { bounds } } = this
+    if (!bounds) return false
+
+    const { transform: { translateX } } = this
+    const { width: widthDiff } = this.getImageDiff()
+
+    return translateX === roundToTwo(widthDiff)
+  },
+
+  isOnBoundX() {
+    const { options: { bounds } } = this
+    if (!bounds) return false
+
+    const { transform: { translateX } } = this
+    const { width: widthDiff } = this.getImageDiff()
+
+    return Math.abs(translateX) === Math.abs(roundToTwo(widthDiff))
+  },
+
+  isOnBoundY() {
+    const { options: { bounds } } = this
+    if (!bounds) return false
+
+    const { transform: { translateY } } = this
+    const { height: heightDiff } = this.getImageDiff()
+
+    return Math.abs(translateY) === Math.abs(roundToTwo(heightDiff))
+  },
+
+  isOnMinScale() {
+    const { options: { minScale } } = this
+    const { transform: { scale } } = this
+
+    return scale === minScale
+  },
+
+  isOnMaxScale() {
+    const { options: { maxScale } } = this
+    const { transform: { scale } } = this
+
+    return scale === maxScale
   },
 
 

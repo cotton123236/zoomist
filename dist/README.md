@@ -147,6 +147,14 @@ new Zoomist('.zoomist-container', {
   minScale: 1,
   // set initial scale of zoomist-image
   initScale: null,
+  // if set to true, enable to release touch events to allow for further page scrolling when .zoomist-image is on bounds.
+  dragReleaseOnBounds: false,
+  // if set to true, enable to release wheel events to allow for further page scrolling when .zoomist-image is on mixScale or maxScale.
+  wheelReleaseOnMinMax: false,
+  // elements matched this class will not be dragged.
+  disableDraggingClass: '.zoomist-not-draggable',
+  // elements matched this class will not be zoomed by mouse wheel.
+  disableWheelingClass: '.zoomist-not-wheelable',
   // zoomist slider module
   slider: {
     // the css selector string or a element of the slider
@@ -192,6 +200,15 @@ zoomist.on(event, handler)
 zoomist.getImageData()
 zoomist.getContainerData()
 zoomist.getSliderValue()
+
+zoomist.isOnBoundX()
+zoomist.isOnBoundY()
+zoomist.isOnBoundTop()
+zoomist.isOnBoundBottom()
+zoomist.isOnBoundLeft()
+zoomist.isOnBoundRight()
+zoomist.isOnMinScale()
+zoomist.isOnMaxScale()
 ```
 
 ### Events

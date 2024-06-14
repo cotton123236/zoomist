@@ -44,7 +44,7 @@ import { t } from 'i18next'
     const { pathname } = window.location
     const [_leadingSlash, langOrGroup, ...rest] = pathname.split('/')
     const locale = locales.includes(langOrGroup) ? langOrGroup : defaultLocale
-    const lang = locale === defaultLocale ? '' : `/${locale}`
+    // const lang = locale === defaultLocale ? '' : `/${locale}`
     const translationJson =
       MODE === 'development'
         ? await import(/* @vite-ignore */ `/public/locales/${locale}/common.json`)
