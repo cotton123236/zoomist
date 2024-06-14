@@ -5,6 +5,7 @@ export declare const isFunction: (value: any) => boolean;
 export declare const isNumber: (value: any) => boolean;
 export declare const isNull: (value: any) => boolean;
 export declare const getElement: (value: QueryElement) => HTMLElement;
+export declare const getClosestElement: (target: HTMLElement, className: string) => HTMLElement | null;
 export declare const getPointer: (e: MouseEvent | AppTouchEvent) => PointerData;
 export declare const getTouchesCenter: (touches: TouchList) => PointerData;
 export declare const getBoundingRect: (target: HTMLElement) => BoundingRect;

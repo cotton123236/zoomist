@@ -12,6 +12,10 @@ export interface ZoomistDefaultOptions {
     minScale: number;
     maxScale: number;
     initScale: number | null;
+    dragReleaseOnBounds: boolean;
+    wheelReleaseOnMinMax: boolean;
+    disableDraggingClass: string;
+    disableWheelingClass: string;
     slider?: boolean | SliderOptions;
     zoomer?: boolean | ZoomerOptions;
     on?: {
@@ -86,6 +90,14 @@ export interface ZoomistMethods {
     getImageData: () => ImageData;
     getContainerData: () => ContainerData;
     getSliderValue: () => number | null;
+    isOnBoundTop: () => boolean;
+    isOnBoundBottom: () => boolean;
+    isOnBoundLeft: () => boolean;
+    isOnBoundRight: () => boolean;
+    isOnBoundX: () => boolean;
+    isOnBoundY: () => boolean;
+    isOnMinScale: () => boolean;
+    isOnMaxScale: () => boolean;
     getImageDiff: () => {
         width: number;
         height: number;
