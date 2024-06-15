@@ -1,4 +1,4 @@
-import { QueryElement, ZoomistOptions, ZoomistDefaultOptions, ZoomistData, ZoomistEvents, ZoomistMethods, ZoomistStates, ZoomistModules, ZoomistTransfrom } from '../types';
+import { ZoomistOptions, ZoomistDefaultOptions, ZoomistData, ZoomistEvents, ZoomistMethods, ZoomistStates, ZoomistModules, ZoomistTransfrom } from '../types';
 interface Zoomist extends ZoomistMethods {
 }
 declare class Zoomist {
@@ -14,7 +14,7 @@ declare class Zoomist {
     controller: AbortController;
     __events__: ZoomistEvents;
     __modules__: ZoomistModules;
-    constructor(element: QueryElement, options?: ZoomistOptions);
+    constructor(element: HTMLElement | string, options?: ZoomistOptions);
     init(): void;
     destroyModules(): void;
     destroySlider(): void;

@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://zoomist.vercel.app/" target="_blank">Documentation</a> | 
-  <a href="https://codesandbox.io/s/intelligent-zeh-lgtttg?file=/src/index.ts" target="_blank">Demo</a>
+  <a href="https://codesandbox.io/p/sandbox/zoomist-demo-4pxlmz" target="_blank">Demo</a>
 </p>
 
 <div align="center">

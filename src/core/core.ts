@@ -1,5 +1,4 @@
 import {
-  QueryElement,
   ZoomistOptions,
   ZoomistDefaultOptions,
   ZoomistData,
@@ -98,7 +97,7 @@ class Zoomist {
   __modules__!: ZoomistModules;
 
 
-  constructor(element: QueryElement, options?: ZoomistOptions) {
+  constructor(element: HTMLElement | string, options?: ZoomistOptions) {
     if (!element) useError('The first argument is required.')
     if (!isElementExist(element)) useError(`Element ${element} is not exist.`)
 

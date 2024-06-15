@@ -35,19 +35,6 @@ $NAME: zoomist;
   position: relative;
   padding: 0 !important;
   user-select: none;
-  // touch-action: none;
-
-  // &.is-bounds-x {
-  //   touch-action: pan-x;
-  // }
-
-  // &.is-bounds-y {
-  //   touch-action: pan-y;
-  // }
-
-  // &.is-bounds-x.is-bounds-y {
-  //   touch-action: pan-x pan-y;
-  // }
 }
 
 .#{$NAME}-wrapper {

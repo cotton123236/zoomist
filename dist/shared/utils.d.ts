@@ -1,10 +1,10 @@
-import { QueryElement, StyleObject, PointerData, BoundingRect, AppTouchEvent } from './../types';
-export declare const isElementExist: (value: QueryElement) => boolean;
+import { StyleObject, PointerData, BoundingRect, AppTouchEvent } from './../types';
+export declare const isElementExist: (value: HTMLElement | string) => boolean;
 export declare const isPlainObject: (value: object | void) => boolean;
 export declare const isFunction: (value: any) => boolean;
 export declare const isNumber: (value: any) => boolean;
 export declare const isNull: (value: any) => boolean;
-export declare const getElement: (value: QueryElement) => HTMLElement;
+export declare const getElement: (value: HTMLElement | string) => HTMLElement;
 export declare const getClosestElement: (target: HTMLElement, className: string) => HTMLElement | null;
 export declare const getPointer: (e: MouseEvent | AppTouchEvent) => PointerData;
 export declare const getTouchesCenter: (touches: TouchList) => PointerData;

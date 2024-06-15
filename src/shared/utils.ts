@@ -1,5 +1,4 @@
 import {
-  QueryElement,
   StyleObject,
   PointerData,
   BoundingRect,
@@ -8,7 +7,7 @@ import {
 
 
 // check element is exist
-export const isElementExist = (value: QueryElement): boolean => {
+export const isElementExist = (value: HTMLElement | string): boolean => {
   return document.contains(getElement(value))
 }
 
@@ -42,7 +41,7 @@ export const isNull = (value: any): boolean => {
 
 
 // if value is an element then return value, if not then query value
-export const getElement = (value: QueryElement): HTMLElement => {
+export const getElement = (value: HTMLElement | string): HTMLElement => {
   return value instanceof HTMLElement ? value : document.querySelector(value)!
 }
 
