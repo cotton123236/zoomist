@@ -26,7 +26,8 @@ module.exports = {
     extend: {
       fontFamily: {
         base: ['Inter', 'Noto Sans TC', 'sans-serif'],
-        code: ['Roboto Mono', 'monospace']
+        code: ['Roboto Mono', 'monospace'],
+        playfair: ['Playfair Display', 'serif']
       },
       colors: {
         gray: {

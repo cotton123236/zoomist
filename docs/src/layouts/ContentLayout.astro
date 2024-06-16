@@ -17,7 +17,9 @@ const { title, description } = data
 ---
 
 <BaseLayout {...{ title, description }}>
-  <SidebarBtn class="px-lr md:hidden" />
+  <div class="sidebar-top px-lr">
+    <SidebarBtn class="px-lr md:hidden" />
+  </div>
   <div class="px-lr">
     <div class="container-content relative flex">
       <aside class="sidebar-left">
@@ -52,8 +54,14 @@ const { title, description } = data
     }
   }
 
+  .sidebar-top {
+    @apply sticky left-0 top-[var(--header-height)] z-50;
+
+    backdrop-filter: saturate(180%) blur(5px);
+  }
+
   .sidebar-btn {
-    @apply sticky left-0 top-[var(--header-height)] z-50 w-full border-b border-solid border-[var(--header-border-color)] bg-white dark:border-[var(--header-border-color-dark)] dark:bg-black;
+    @apply w-full border-b border-solid border-[var(--header-border-color)] bg-white dark:border-[var(--header-border-color-dark)] dark:bg-black;
   }
 
   .sidebar-left {

@@ -43,9 +43,12 @@
     --header-border-color-dark: #222;
     --header-bg-color: 255, 255, 255;
     --header-bg-color-dark: 0, 0, 0;
+    --header-padding-top: 16px;
+    --header-height: calc(var(--nav-height) + var(--header-padding-top));
 
-    --header-height: 4rem;
-    --sidebar-btn-height: 3rem;
+    --nav-height: 4rem;
+
+    --sidebar-btn-height: 3.5rem;
 
     --page-max-width: 90rem;
     --content-max-width: 85rem;
@@ -54,6 +57,18 @@
     --selection-bg-color: #000;
     --selection-color-dark: #000;
     --selection-bg-color-dark: #fff;
+
+    --padding-lr: 16px;
+
+    @media screen and (min-width: 768px) {
+      --padding-lr: 24px;
+    }
+
+    @media screen and (min-width: 1024px) {
+      --header-padding-top: 24px;
+
+      --nav-height: 4.5rem;
+    }
   }
 
   ::selection {
@@ -86,7 +101,7 @@
 /* layer utilities */
 @layer utilities {
   .px-lr {
-    @apply px-4 md:px-6;
+    @apply px-[var(--padding-lr)];
   }
 
   .absolute-fill {
@@ -109,18 +124,26 @@
   }
 
   .text-gradient {
-    --text-gradient-color: linear-gradient(150deg, #000 30%, #aaa);
-    --text-gradient-color-dark: linear-gradient(150deg, #fff 30%, #666);
+    --text-gradient-color: linear-gradient(150deg, #000 25%, #777);
+    --text-gradient-color-dark: linear-gradient(150deg, #fff 25%, #777);
 
     background: var(--text-gradient-color);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
+  .text-gradient::selection {
+    -webkit-text-fill-color: var(--selection-color);
+  }
+
   .dark .text-gradient {
     background: var(--text-gradient-color-dark);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .dark .text-gradient::selection {
+    -webkit-text-fill-color: var(--selection-color-dark);
   }
 
   .split-line {
@@ -206,8 +229,14 @@
     @apply relative;
   }
 
+  .dark .rainbow-bg {
+    @media screen and (min-width: 1024px) {
+      --rainbow-opacity: 0.5;
+    }
+  }
+
   .rainbow-bg::after {
-    @apply absolute-fill z-[-1] block opacity-[var(--rainbow-opacity)];
+    @apply absolute-fill z-[-1] block opacity-[var(--rainbow-opacity,1)];
 
     content: '';
     background-image: radial-gradient(at 27% 37%, #3a8bfd 0, transparent 50%),
@@ -217,6 +246,6 @@
       radial-gradient(at 97% 96%, #e4c795 0, transparent 50%),
       radial-gradient(at 33% 50%, #8ca8e8 0, transparent 50%),
       radial-gradient(at 79% 53%, #eea5ba 0, transparent 50%);
-    filter: blur(100px) saturate(150%);
+    filter: blur(150px) saturate(150%);
   }
 }

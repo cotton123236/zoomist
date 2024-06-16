@@ -1,0 +1,106 @@
+---
+import { changeLanguage, t } from 'i18next'
+import { type I18nLocales } from 'astro-i18next.config'
+import { flatDocsRoutes } from '@routes'
+import Layout from '@layouts/BaseLayout.astro'
+// components
+import { Trans } from 'astro-i18next/components'
+import RectBtn from '@components/btns/RectBtn.astro'
+import CopyBtn from '@components/btns/CopyBtn'
+
+interface Props {
+  lang: I18nLocales
+}
+
+const { lang = 'en' } = Astro.props
+
+changeLanguage(lang)
+
+const zoomistData = await fetch(
+  'https://raw.githubusercontent.com/cotton123236/zoomist/main/package.json'
+).then((res) => res.json())
+---
+
+<Layout>
+  <section class="intro px-lr">
+    <div class="intro-container container-page text-center">
+      <div class="absolute-fill bg-grid -z-[1]"></div>
+      <div class="intro-head mx-auto flex max-w-xl items-end justify-center">
+        <div class="relative">
+          <h1 class="intro-title text-gradient relative font-bold leading-[1]">
+            Zoom<span class="font-playfair">ist</span>
+          </h1>
+          <span class="intro-version">v{zoomistData.version}</span>
+          <div class="intro-title__bg">
+            <div class="absolute-fill rainbow-bg" data-depth="0.6"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-2 flex justify-center md:mt-4">
+        <h2 class="intro-subtitle text-gradient md:text-lg lg:text-xl">
+          {t('index:intro-subtitle')}
+        </h2>
+      </div>
+      <p
+        class="mx-auto mt-16 max-w-md text-sm text-gray-700 dark:text-gray-100 md:mt-20 md:text-base"
+      >
+        <Trans i18nKey="index:intro-brief">
+          <span class="font-medium">Zoomist</span> is a library built with <span class="font-medium"
+            >TypeScript</span
+          > that allows you to create zoom elements on website quickly and easily.
+        </Trans>
+      </p>
+      <div class="mt-10 flex justify-center space-x-4 md:mt-16">
+        <RectBtn href={`${flatDocsRoutes[0]?.path}`}>
+          {t('index:intro-btns.documentation')}
+        </RectBtn>
+        <RectBtn
+          type="stroke"
+          target="_blank"
+          href="https://codesandbox.io/p/sandbox/zoomist-demo-4pxlmz"
+        >
+          {t('index:intro-btns.demo')}
+        </RectBtn>
+      </div>
+      <div class="mt-4 flex justify-center md:mt-6">
+        <CopyBtn client:only="react" copy="npm install zoomist">~ npm install zoomist</CopyBtn>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro {
+    overflow: hidden;
+  }
+
+  .intro-container {
+    @apply relative flex flex-col justify-center py-16 md:py-20;
+
+    min-height: calc(100vh - var(--header-height));
+    min-height: calc(100dvh - var(--header-height));
+  }
+
+  .intro-title {
+    @apply mx-auto w-full max-w-2xl;
+  }
+
+  .intro-title__bg {
+    @apply absolute -left-1/4 -top-1/2 -z-[1] h-[200%] w-[150%];
+  }
+
+  .intro-version {
+    @apply absolute bottom-0 right-0 mb-1 translate-x-[calc(100%+0.5rem)] text-xs text-gray-200 opacity-80 dark:text-gray-500 md:mb-2 md:translate-x-[calc(100%+1rem)] md:text-sm;
+  }
+
+  .intro-title {
+    @apply text-[clamp(4rem,9.5vw,6.5rem)];
+
+    mix-blend-mode: overlay;
+  }
+
+  .intro-subtitle.text-gradient {
+    --text-gradient-color: linear-gradient(150deg, #777 30%, #ccc);
+    --text-gradient-color-dark: linear-gradient(150deg, #888 30%, #444);
+  }
+</style>

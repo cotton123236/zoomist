@@ -81,15 +81,19 @@ const navLinks: NavLinks = [
 
 <style>
   .header {
-    @apply sticky top-0 z-[999] h-[var(--header-height)];
+    @apply sticky top-0 z-[999] w-full px-[var(--padding-lr)] pt-[var(--header-padding-top)];
+
+    transition: 0.4s cubic-bezier(0.85, 0, 0.15, 1);
   }
 
   .nav {
-    @apply relative z-20 h-full w-full;
+    @apply relative z-20 mx-auto h-[var(--nav-height)] w-full max-w-[calc(var(--content-max-width)+var(--padding-lr)*2)] rounded-xl;
 
     background-color: rgba(var(--header-bg-color), 0.85);
-    box-shadow: inset 0 -1px 0 0 var(--header-border-color);
+    /* box-shadow: inset 0 -1px 0 0 var(--header-border-color); */
+    box-shadow: 0 0 16px 8px var(--header-border-color);
     backdrop-filter: saturate(180%) blur(5px);
+    transition: max-width 0.4s cubic-bezier(0.85, 0, 0.15, 1);
   }
 
   .nav-wrap {
@@ -142,7 +146,8 @@ const navLinks: NavLinks = [
 <style is:global>
   .dark .nav {
     background-color: rgba(var(--header-bg-color-dark), 0.85);
-    box-shadow: inset 0 -1px 0 0 var(--header-border-color-dark);
+    /* box-shadow: inset 0 -1px 0 0 var(--header-border-color-dark); */
+    box-shadow: 0 0 16px 8px var(--header-border-color-dark);
   }
 
   .dark .menu {
@@ -152,9 +157,24 @@ const navLinks: NavLinks = [
 </style>
 
 <script>
-  import { $menuState } from '@stores/globals'
+  import { $menuState, $headerActive } from '@stores/globals'
 
+  // const headerActiveClass: string = 'is-active'
   const menuActiveClass: string = 'is-active'
+
+  // const setHeaderActive = (): void => {
+  //   $headerActive.set(window.scrollY > 16)
+  // }
+
+  // const useHeader = (): void => {
+  //   if (!window) return
+  //   window.addEventListener('scroll', setHeaderActive)
+  // }
+
+  // const unmountHeader = (): void => {
+  //   if (!window) return
+  //   window.removeEventListener('scroll', setHeaderActive)
+  // }
 
   const useMenu = (): void => {
     const menu = document.querySelector('header .menu')
@@ -172,6 +192,13 @@ const navLinks: NavLinks = [
     $menuState.set(false)
   }
 
+  // $headerActive.subscribe((val) => {
+  //   const header = document.querySelector('.header')
+  //   header?.classList[val ? 'add' : 'remove'](headerActiveClass)
+  // })
+
+  // document.addEventListener('astro:page-load', useHeader)
+  // document.addEventListener('astro:after-swap', unmountHeader)
   document.addEventListener('astro:page-load', useMenu)
   document.addEventListener('astro:after-swap', useCloseMenu)
 </script>

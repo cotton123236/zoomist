@@ -15,6 +15,7 @@
     "@astrojs/react": "^3.0.2",
     "@astrojs/tailwind": "^5.0.0",
     "@fontsource/inter": "^5.0.12",
+    "@fontsource/playfair-display": "^5.0.24",
     "@fontsource/roboto-mono": "^5.0.12",
     "@nanostores/react": "^0.7.1",
     "@popperjs/core": "^2.11.8",

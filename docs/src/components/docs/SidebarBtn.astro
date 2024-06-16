@@ -20,7 +20,7 @@ const { class: className } = Astro.props as Props
 
 <style>
   .sidebar-btn {
-    @apply h-[var(--sidebar-btn-height)] py-3;
+    @apply -mt-[0.5rem] h-[var(--sidebar-btn-height)]  pb-3 pt-[calc(0.75rem+0.5rem)];
 
     background-color: rgba(var(--header-bg-color), 0.85);
     backdrop-filter: saturate(180%) blur(5px);
