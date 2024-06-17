@@ -99,8 +99,26 @@ const zoomistData = await fetch(
     mix-blend-mode: overlay;
   }
 
-  .intro-subtitle.text-gradient {
-    --text-gradient-color: linear-gradient(150deg, #777 30%, #ccc);
-    --text-gradient-color-dark: linear-gradient(150deg, #888 30%, #444);
+  .intro-subtitle {
+    --text-gradient-color: linear-gradient(to right, #444, #ccc, #444, #ccc);
+
+    background-size: 300% 100%;
+    animation: gradient-infinite-move 4s linear infinite;
+  }
+
+  @keyframes gradient-infinite-move {
+    0% {
+      background-position-x: 0%;
+    }
+
+    100% {
+      background-position-x: 100%;
+    }
+  }
+</style>
+
+<style is:global>
+  .dark .intro-subtitle {
+    --text-gradient-color: linear-gradient(to right, #666, #ccc, #666, #ccc);
   }
 </style>

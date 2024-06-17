@@ -82,18 +82,19 @@ const navLinks: NavLinks = [
 <style>
   .header {
     @apply sticky top-0 z-[999] w-full px-[var(--padding-lr)] pt-[var(--header-padding-top)];
-
-    transition: 0.4s cubic-bezier(0.85, 0, 0.15, 1);
   }
 
   .nav {
     @apply relative z-20 mx-auto h-[var(--nav-height)] w-full max-w-[calc(var(--content-max-width)+var(--padding-lr)*2)] rounded-xl;
 
-    background-color: rgba(var(--header-bg-color), 0.85);
-    /* box-shadow: inset 0 -1px 0 0 var(--header-border-color); */
-    box-shadow: 0 0 16px 8px var(--header-border-color);
+    background-color: var(--header-bg-color);
+    box-shadow: 0 0 12px 4px var(--header-shadow-color);
     backdrop-filter: saturate(180%) blur(5px);
     transition: max-width 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+
+    @media screen and (min-width: 768px) {
+      box-shadow: 0 0 16px 8px var(--header-shadow-color);
+    }
   }
 
   .nav-wrap {
@@ -127,32 +128,20 @@ const navLinks: NavLinks = [
   }
 
   .menu {
-    @apply absolute left-0 top-[var(--header-height)] z-10 w-full -translate-y-full opacity-0 duration-500;
+    @apply absolute left-0 top-0 z-10 w-full -translate-y-full rounded-xl pt-[var(--header-height)] opacity-0 duration-500;
 
-    box-shadow: inset 0 -1px 0 0 var(--header-border-color);
-    background-color: rgba(var(--header-bg-color), 0.85);
+    background-color: var(--header-bg-color);
     backdrop-filter: blur(5px);
   }
 
   .menu.is-active {
     @apply translate-y-0 opacity-100;
+
+    box-shadow: 0 0 8px 4px var(--header-shadow-color);
   }
 
   .menu-wrap {
     @apply mx-auto max-w-[var(--page-max-width)] py-4;
-  }
-</style>
-
-<style is:global>
-  .dark .nav {
-    background-color: rgba(var(--header-bg-color-dark), 0.85);
-    /* box-shadow: inset 0 -1px 0 0 var(--header-border-color-dark); */
-    box-shadow: 0 0 16px 8px var(--header-border-color-dark);
-  }
-
-  .dark .menu {
-    background-color: rgba(var(--header-bg-color-dark), 0.85);
-    box-shadow: inset 0 -1px 0 0 var(--header-border-color-dark);
   }
 </style>
 

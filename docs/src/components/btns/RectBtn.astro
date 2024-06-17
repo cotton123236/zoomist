@@ -4,7 +4,7 @@ import Link from '@components/utils/Link.astro'
 export interface Props {
   class?: string
   href?: string
-  type?: string
+  type?: 'solid' | 'stroke'
   target?: '_self' | '_blank' | '_parent' | '_top' | null
 }
 
@@ -27,9 +27,11 @@ const classList = ['rect-btn', type, className]
 
 <style>
   .rect-btn {
-    @apply inline-flex h-10 items-center justify-center whitespace-nowrap rounded border border-solid border-[var(--btn-border-color)] bg-[var(--btn-bg-color)] px-4 text-sm text-[var(--btn-text-color)] duration-200 hover:border-[var(--btn-border-color-hover)] hover:bg-[var(--btn-bg-color-hover)] hover:text-[var(--btn-text-color-hover)] dark:border-[var(--btn-border-color-dark)] dark:bg-[var(--btn-bg-color-dark)] dark:text-[var(--btn-text-color-dark)] dark:hover:border-[var(--btn-border-color-dark-hover)] dark:hover:bg-[var(--btn-bg-color-dark-hover)] dark:hover:text-[var(--btn-text-color-dark-hover)] md:text-base;
+    @apply inline-flex h-10 items-center justify-center whitespace-nowrap rounded border border-solid border-[var(--btn-border-color)] bg-[var(--btn-bg-color)] px-4 text-sm text-[var(--btn-text-color)] duration-200 hover:border-[var(--btn-border-color-hover)] hover:bg-[var(--btn-bg-color-hover)] hover:text-[var(--btn-text-color-hover)] md:text-base;
   }
+</style>
 
+<style is:global>
   .solid {
     --btn-border-color: #000;
     --btn-text-color: #fff;
@@ -37,13 +39,6 @@ const classList = ['rect-btn', type, className]
     --btn-border-color-hover: #444;
     --btn-text-color-hover: #fff;
     --btn-bg-color-hover: #444;
-
-    --btn-border-color-dark: #fff;
-    --btn-text-color-dark: #000;
-    --btn-bg-color-dark: #fff;
-    --btn-border-color-dark-hover: #ddd;
-    --btn-text-color-dark-hover: #000;
-    --btn-bg-color-dark-hover: #ddd;
   }
 
   .stroke {
@@ -53,12 +48,23 @@ const classList = ['rect-btn', type, className]
     --btn-border-color-hover: #ddd;
     --btn-text-color-hover: #777;
     --btn-bg-color-hover: transparent;
+  }
 
-    --btn-border-color-dark: #333;
-    --btn-text-color-dark: #fff;
-    --btn-bg-color-dark: transparent;
-    --btn-border-color-dark-hover: #333;
-    --btn-text-color-dark-hover: #ccc;
-    --btn-bg-color-dark-hover: transparent;
+  .dark .solid {
+    --btn-border-color: #fff;
+    --btn-text-color: #000;
+    --btn-bg-color: #fff;
+    --btn-border-color-hover: #ddd;
+    --btn-text-color-hover: #000;
+    --btn-bg-color-hover: #ddd;
+  }
+
+  .dark .stroke {
+    --btn-border-color: #333;
+    --btn-text-color: #fff;
+    --btn-bg-color: transparent;
+    --btn-border-color-hover: #333;
+    --btn-text-color-hover: #ccc;
+    --btn-bg-color-hover: transparent;
   }
 </style>

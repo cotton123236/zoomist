@@ -20,7 +20,6 @@ export default defineConfig({
     }),
     react(),
     astroExpressiveCode(),
-    // codeblocks(),
     mdx(),
     astroI18next()
   ],

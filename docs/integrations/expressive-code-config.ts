@@ -6,7 +6,7 @@ type IShikiTheme = ExcludeStringAndUndefined<ShikiConfig['theme']>
 
 export const astroExpressiveCode = () =>
   expressiveCode({
-    theme: 'vitesse-dark', // min-dark, rose-pine-dawn, vitesse-dark, material-theme-lighter
+    theme: 'material-theme-lighter', // min-dark, rose-pine-dawn, vitesse-dark, material-theme-lighter
     customizeTheme(theme) {
       const customizeTheme: Partial<IShikiTheme> = {
         ...theme,

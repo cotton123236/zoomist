@@ -17,8 +17,8 @@ const { title, description } = data
 ---
 
 <BaseLayout {...{ title, description }}>
-  <div class="sidebar-top px-lr">
-    <SidebarBtn class="px-lr md:hidden" />
+  <div class="sidebar-top px-lr md:hidden">
+    <SidebarBtn class="px-lr" />
   </div>
   <div class="px-lr">
     <div class="container-content relative flex">
@@ -55,13 +55,14 @@ const { title, description } = data
   }
 
   .sidebar-top {
-    @apply sticky left-0 top-[var(--header-height)] z-50;
+    @apply sticky left-0 top-0 z-50 mt-[calc(var(--header-height)*-1)] pt-[var(--header-height)];
 
+    background-color: var(--header-bg-color);
     backdrop-filter: saturate(180%) blur(5px);
   }
 
   .sidebar-btn {
-    @apply w-full border-b border-solid border-[var(--header-border-color)] bg-white dark:border-[var(--header-border-color-dark)] dark:bg-black;
+    @apply w-full;
   }
 
   .sidebar-left {
@@ -90,12 +91,15 @@ const { title, description } = data
 </style>
 
 <style is:global>
-  :root {
+  html {
     --heading-border-color: #f4f4f4;
-    --heading-border-color-dark: #222;
 
     --link-color: #1985ff;
     --link-color-hover: #68b5fb;
+  }
+
+  html.dark {
+    --heading-border-color: #222;
   }
 
   article > p {
@@ -117,7 +121,7 @@ const { title, description } = data
   }
 
   article hr {
-    @apply my-8 border-[var(--heading-border-color)] dark:border-[var(--heading-border-color-dark)] md:my-12;
+    @apply my-8 border-[var(--heading-border-color)] md:my-12;
 
     border-top-width: 1px;
   }
@@ -156,10 +160,6 @@ const { title, description } = data
 
   .level-h3 {
     @apply mb-3 mt-6 font-medium md:mb-4 md:mt-8 md:text-lg;
-  }
-
-  .dark .level-h2 {
-    border-top: 1px solid var(--heading-border-color-dark);
   }
 
   .heading-wrapper {
