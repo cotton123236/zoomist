@@ -18,6 +18,7 @@ const options: ZoomistOptions = {
   // dragReleaseOnBounds: true,
   slider: true,
   zoomer: true,
+  dblClickable: true,
   // zoomer: {
   //   inEl: '.in-zoomer'
   // },

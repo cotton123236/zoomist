@@ -18,6 +18,8 @@ import {
 
 
 export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
+  // set is dblClickable or not
+  dblClickable: false,
   // set is draggable or not
   draggable: true,
   // set is wheelable or not
@@ -28,6 +30,8 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   bounds: true,
   // the ratio of zooming at one time
   zoomRatio: 0.1,
+  // the ratio of zooming when double-clicked on image
+  dbClickZoomRatio: 1,
   // the max scale of zoomist-image (must be number larger then initScale)
   maxScale: 10,
   // the min scale of zoomist-image (must be number smaller then initScale)
@@ -86,6 +90,10 @@ export const ZOOMIST_EVENTS: ZoomistEvents = {
   beforeDestroy: null,
   // invoked after destroy methods be used
   destroy: null,
+  // invoked after double click on image
+  dblClick: null,
+  // same as dblClick but for mobile
+  dblTouch: null,
   // invoked before update methods be used
   beforeUpdate: null,
   // invoked when update methods be used

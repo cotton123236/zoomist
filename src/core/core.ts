@@ -155,7 +155,10 @@ class Zoomist {
       containerData: {
         width: containerWidth,
         height: containerHeight
-      }
+      },
+      dblTouchData: {
+        lastTouchTime: 0
+      },
     }
 
     if (IS_TOUCH && (draggable || pinchable)) {
@@ -319,8 +322,8 @@ class Zoomist {
 
   // resize, drag, pinch, wheel
   #interact() {
-    const { wrapper, options, controller: { signal } } = this
-    const { draggable, pinchable, wheelable } = options
+    const { wrapper, image, options, controller: { signal } } = this
+    const { draggable, pinchable, wheelable, dblClickable } = options
 
     this.states = {}
 
@@ -350,6 +353,13 @@ class Zoomist {
       const useDrag = (e: MouseEvent) => this.#useDrag(e)
 
       wrapper.addEventListener('mousedown', useDrag, { signal })
+    }
+
+    if (dblClickable && image) {
+        const useDblTouch = (e: TouchEvent) => this.#useDblTouch(e);
+        const useDblClick = (e: MouseEvent) => this.#useDblClick(e);
+        image.addEventListener('touchstart', useDblTouch);
+        image.addEventListener('dblclick', useDblClick, { signal })
     }
 
     // resize observer
@@ -385,6 +395,40 @@ class Zoomist {
     this.zoom(delta * zoomRatio, getPointer(e))
 
     this.emit('wheel', this, this.transform.scale, e)
+  }
+
+  #useDblClick(e: MouseEvent) {
+    e.preventDefault();
+    setStyle(this.image, {transition: 'transform ease 0.3s'});
+    const {options: {dbClickZoomRatio}} = this
+    if (this.isOnMinScale()) {
+      this.zoom(dbClickZoomRatio, getPointer(e))
+    } else {
+      this.zoom(-1);
+    }
+    this.emit('dblClick', this, this.transform.scale, e)
+    setTimeout(() => setStyle(this.image, {transition: ''}), 300)
+  }
+
+  #useDblTouch(e: TouchEvent) {
+    e.preventDefault();
+    if (e.touches.length !== 1) {
+      return;
+    }
+    if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
+      setStyle(this.image, {transition: 'transform ease 0.3s'});
+      const {options: {dbClickZoomRatio}} = this
+      if (this.isOnMinScale()) {
+        this.zoom(dbClickZoomRatio, getPointer(e))
+      } else {
+        this.zoom(-1);
+      }
+      this.data.dblTouchData.lastTouchTime = 0;
+      this.emit('dblTouch', this, this.transform.scale, e);
+      setTimeout(() => setStyle(this.image, {transition: ''}), 300);
+    } else {
+      this.data.dblTouchData.lastTouchTime = Date.now();
+    }
   }
 
   // on drag (mouse)
