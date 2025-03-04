@@ -6,11 +6,6 @@ import {
 } from './../types'
 
 
-// check element is exist
-export const isElementExist = (value: HTMLElement | string): boolean => {
-  return document.contains(getElement(value))
-}
-
 // check value is a plain object
 export const isPlainObject = (value: object | void): boolean => {
   if (!value) return false
@@ -41,8 +36,8 @@ export const isNull = (value: any): boolean => {
 
 
 // if value is an element then return value, if not then query value
-export const getElement = (value: HTMLElement | string): HTMLElement => {
-  return value instanceof HTMLElement ? value : document.querySelector(value)!
+export const getElement = (value: HTMLElement | string): HTMLElement | null => {
+  return value instanceof HTMLElement ? value : document.querySelector<HTMLElement>(value)
 }
 
 // get closest element
