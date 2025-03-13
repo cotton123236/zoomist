@@ -7,16 +7,10 @@ import {
 
 
 // check value is a plain object
-export const isPlainObject = (value: object | void): boolean => {
-  if (!value) return false
-  try {
-    const { constructor } = value
-    const { prototype } = constructor
-    const { hasOwnProperty } = Object.prototype
-    return constructor && prototype && hasOwnProperty.call(prototype, 'isPrototypeOf')
-  } catch (error) {
-    return false
-  }
+export const isPlainObject = (value: unknown): boolean => {
+  if (!value || typeof value !== 'object') return false
+  const proto = Object.getPrototypeOf(value)
+  return proto === Object.prototype || proto === null
 }
 
 // check value is function
@@ -47,19 +41,17 @@ export const getClosestElement = (target: HTMLElement, className: string): HTMLE
 
 // get mouse clientX, clientY
 export const getPointer = (e: MouseEvent | AppTouchEvent): PointerData => {
-  const event = 'touches' in e ? e.touches[0] : e
-  return {
-    clientX: event.clientX,
-    clientY: event.clientY
-  }
-}
+  if ('touches' in e) {
+    if (e.touches.length === 0) return { clientX: 0, clientY: 0 }
+    if (e.touches.length === 1) return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY }
 
-// get pinch pointer center
-export const getTouchesCenter = (touches: TouchList): PointerData => {
-  return {
-    clientX: [...touches].map(touch => touch.clientX).reduce((prev, current) => prev + current) / touches.length,
-    clientY: [...touches].map(touch => touch.clientY).reduce((prev, current) => prev + current) / touches.length
+    return {
+      clientX: [...e.touches].reduce((sum, touch) => (sum + touch.clientX), 0) / e.touches.length,
+      clientY: [...e.touches].reduce((sum, touch) => (sum + touch.clientY), 0) / e.touches.length
+    }
   }
+
+  return { clientX: e.clientX, clientY: e.clientY }
 }
 
 // getBoundingClientRect
@@ -75,8 +67,8 @@ export const getBoundingRect = (target: HTMLElement): BoundingRect => {
 }
 
 // get two fingers center
-export const getPinchHypot = (touches: AppTouchEvent['touches']): number => {
-  return touches.length >= 2 ? Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY) : 0
+export const getPinchHypot = (e: AppTouchEvent): number => {
+  return e.touches.length >= 2 ? Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY) : 0
 }
 
 
@@ -116,8 +108,8 @@ export const minmax = (value: number, min: number, max: number): number => {
 
 // like .toFixed(2)
 export const roundToTwo = (value: number): number => {
-  const roundValue = +(Math.round(Number(value + "e+2"))  + "e-2")
-  return isNaN(roundValue) ? 0 : roundValue
+  if (isNaN(value)) return 0
+  return Math.round(value * 100) / 100
 }
 
 // throw Error msg

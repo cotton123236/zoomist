@@ -182,10 +182,10 @@ export interface DragData {
 
 export interface TouchData {
   hypot: number
-  startX: number
-  startY: number
   prevX: number
   prevY: number
+  offsetX: number
+  offsetY: number
   imageTop: number
   imageLeft: number
   widthDiff: number
