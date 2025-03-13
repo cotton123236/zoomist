@@ -130,6 +130,13 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
       this.transform.translateX = translateX
     }
 
+    // y is number | string-number
+    if (isNumber(y)) {
+      const parseY = Number(y)
+      const translateY = bounds ? minmax(parseY, heightDiff, -heightDiff) : parseY
+      this.transform.translateY = translateY
+    }
+
     // x is one of keywords
     if (MOVE_TO_KEYWORDS_X.some(item => item === x)) {
       const keywordsValue = {
@@ -139,13 +146,6 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
       }
       const translateX = keywordsValue[x as MoveToKeywordsX]
       this.transform.translateX = translateX
-    }
-
-    // y is number | string-number
-    if (isNumber(y)) {
-      const parseY = Number(y)
-      const translateY = bounds ? minmax(parseY, heightDiff, -heightDiff) : parseY
-      this.transform.translateY = translateY
     }
 
     // y is one of keywords
@@ -354,4 +354,45 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
 
     return minmax(ratio, minScale, maxScale)
   },
+
+  // private methods
+  // animation
+  useAnimate(data) {
+    const { options: { smooth }, transform } = this
+
+    const damping = typeof smooth === 'object' ? Math.max(0.1, Math.min(1, smooth.damping)) : 0.6
+    const duration = (1100 - (damping * 1000)) * 0.5
+
+    const animate = () => {
+      if (!this.states.dragging && (Math.abs(data.velocityX) > 0.01 || Math.abs(data.velocityY) > 0.01)) {
+        const now = Date.now()
+        const elapsed = now - data.lastTime
+        const deceleration = Math.exp(-elapsed / duration)
+        
+        // deceleration velocity
+        data.velocityX *= deceleration
+        data.velocityY *= deceleration
+        data.lastTime = now
+
+        // calculate new position
+        const deltaX = data.velocityX * elapsed
+        const deltaY = data.velocityY * elapsed
+
+        this.moveTo({ 
+          x: transform.translateX + deltaX, 
+          y: transform.translateY + deltaY 
+        })
+
+        // if velocity is too small, stop animation
+        if (Math.abs(data.velocityX) < 0.01 && Math.abs(data.velocityY) < 0.01) {
+          data.frame = null
+          return
+        }
+      }
+      
+      data.frame = requestAnimationFrame(animate)
+    }
+
+    return animate
+  }
 }

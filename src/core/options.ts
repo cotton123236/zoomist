@@ -41,7 +41,9 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   // elements matched this class will not be dragged.
   disableDraggingClass: CLASS_NOT_DRAGGABLE,
   // elements matched this class will not be zoomed by mouse wheel.
-  disableWheelingClass: CLASS_NOT_WHEELABLE
+  disableWheelingClass: CLASS_NOT_WHEELABLE,
+  // if set to true, enable to smooth drag
+  smooth: false,
 }
 
 export const SLIDER_OPTIONS: SliderOptions = {

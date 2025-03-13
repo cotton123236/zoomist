@@ -173,14 +173,22 @@ class Zoomist {
         imageTop: 0,
         imageLeft: 0,
         widthDiff: 0,
-        heightDiff: 0
+        heightDiff: 0,
+        lastTime: 0,
+        velocityX: 0,
+        velocityY: 0,
+        frame: null
       }
     }
 
     if (!IS_TOUCH && draggable) {
       this.data.dragData = {
-        startX: 0,
-        startY: 0
+        prevX: 0,
+        prevY: 0,
+        lastTime: 0,
+        velocityX: 0,
+        velocityY: 0,
+        frame: null
       }
     }
 
@@ -394,7 +402,7 @@ class Zoomist {
 
   // on drag (mouse)
   #useDrag(e: MouseEvent) {
-    const { data, transform, options: { disableDraggingClass } } = this
+    const { data, transform, options: { disableDraggingClass, smooth } } = this
     const { dragData, imageData } = data
 
     if (!dragData || !imageData) return;
@@ -407,12 +415,31 @@ class Zoomist {
 
       if (getClosestElement((e.target as HTMLElement), disableDraggingClass)) return;
 
+      // 取消之前的動畫
+      if (dragData.frame !== null) {
+        cancelAnimationFrame(dragData.frame)
+      }
+
+      const currentTime = Date.now()
+      const { clientX, clientY } = getPointer(e)
+
       setObject(dragData, {
-        startX: getPointer(e).clientX,
-        startY: getPointer(e).clientY,
+        prevX: clientX,
+        prevY: clientY,
+        lastTime: currentTime,
+        velocityX: 0,
+        velocityY: 0,
+        frame: null
       })
 
       this.states.dragging = true
+
+      // if draggable smooth
+      if (smooth) {
+        const animate = this.useAnimate(dragData)
+        
+        dragData.frame = requestAnimationFrame(animate)
+      }
 
       this.emit('dragStart', this, { x: transform.translateX, y: transform.translateY }, e)
 
@@ -427,16 +454,26 @@ class Zoomist {
 
       e.preventDefault()
 
-      const clientX = getPointer(e).clientX
-      const clientY = getPointer(e).clientY
-      const translateX = clientX - dragData.startX + transform.translateX
-      const translateY = clientY - dragData.startY + transform.translateY
+      const currentTime = Date.now()
+      const { clientX, clientY } = getPointer(e)
+
+      const deltaX = clientX - dragData.prevX
+      const deltaY = clientY - dragData.prevY
+      const deltaTime = currentTime - dragData.lastTime
+      const translateX = transform.translateX + deltaX
+      const translateY = transform.translateY + deltaY
 
       this.moveTo({ x: translateX, y: translateY })
 
+      if (smooth && deltaTime > 0) {
+        dragData.velocityX = 0.8 * (deltaX / deltaTime) + 0.2 * dragData.velocityX
+        dragData.velocityY = 0.8 * (deltaY / deltaTime) + 0.2 * dragData.velocityY
+      }
+
       setObject(dragData, {
-        startX: getPointer(e).clientX,
-        startY: getPointer(e).clientY
+        prevX: clientX,
+        prevY: clientY,
+        lastTime: currentTime
       })
 
       this.emit('drag', this, { x: translateX, y: translateY }, e)
@@ -459,7 +496,7 @@ class Zoomist {
 
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
-    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass } } = this
+    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, smooth } } = this
     const { touchData, imageData } = data
 
     if (!touchData || !imageData) return;
@@ -473,7 +510,6 @@ class Zoomist {
         const isOnBoundX = this.isOnBoundX()
         const isOnBoundY = this.isOnBoundY()
         const releasable = touches.length === 1 && (isOnBoundX || isOnBoundY)
-        console.log(releasable)
 
         if (!releasable) {
           e.preventDefault()
@@ -485,23 +521,41 @@ class Zoomist {
 
       if (getClosestElement((e.target as HTMLElement), disableDraggingClass) && touches.length <= 1) return;
 
+      if (touchData.frame !== null) {
+        cancelAnimationFrame(touchData.frame)
+      }
+
+      const currentTime = Date.now()
       const { top: imageTop, left: imageLeft } = getBoundingRect(this.image)
       const { width: widthDiff, height: heightDiff } = this.getImageDiff()
+      const { clientX, clientY } = getTouchesCenter(touches)
 
       setObject(touchData, {
         hypot: getPinchHypot(touches),
-        startX: getTouchesCenter(touches).clientX,
-        startY: getTouchesCenter(touches).clientY,
+        startX: clientX,
+        startY: clientY,
         prevX: 0,
         prevY: 0,
         imageTop,
         imageLeft,
         widthDiff,
-        heightDiff
+        heightDiff,
+        lastTime: currentTime,
+        velocityX: 0,
+        velocityY: 0,
+        frame: null
       })
 
       if (draggable) {
         this.states.dragging = true
+
+        // if draggable smooth
+        if (smooth) {
+          const animate = this.useAnimate(touchData)
+
+          touchData.frame = requestAnimationFrame(animate)
+        }
+
         this.emit('dragStart', this, { x: transform.translateX, y: transform.translateY }, e)
       }
 
@@ -519,9 +573,13 @@ class Zoomist {
       const touches = e.touches
       if (!touches) return;
 
+      const currentTime = Date.now()
       const { states: { dragging, pinching } } = this
       const { top: imageTop, left: imageLeft } = getBoundingRect(this.image)
       const { width: widthDiff, height: heightDiff } = this.getImageDiff()
+
+      // detect finger count changed
+      const fingerCountChanged = (pinching && touches.length !== 2) || (!pinching && touches.length === 2)
 
       const hypot = getPinchHypot(touches)
       const hypotScale = hypot ? hypot / touchData.hypot : 1
@@ -529,16 +587,40 @@ class Zoomist {
       const clientX = getTouchesCenter(touches).clientX + touchData.prevX
       const clientY = getTouchesCenter(touches).clientY + touchData.prevY
 
-      if (pinching && touches.length === 2) {
+      if (pinchable && touches.length === 2) {
+        if (!pinching) {
+          // switch from single to double finger, update state
+          this.states.pinching = true
+          this.emit('pinchStart', this, transform.scale, e)
+        }
+        
         this.zoomTo(scaleTo, false)
       }
 
       if (dragging) {
-        const scaleDiff = scaleTo !== maxScale && scaleTo !== minScale && pinchable ? hypotScale : 1
+        // if finger count changed, reset velocity calculation
+        if (fingerCountChanged) {
+          touchData.velocityX = 0
+          touchData.velocityY = 0
+        }
+
+        const scaleDiff = scaleTo !== maxScale && scaleTo !== minScale && pinchable && touches.length === 2 ? hypotScale : 1
         const translateX = roundToTwo((clientX - touchData.imageLeft) - (widthDiff - touchData.widthDiff) - ((touchData.startX - touchData.imageLeft) * scaleDiff) + transform.translateX)
         const translateY = roundToTwo((clientY - touchData.imageTop) - (heightDiff - touchData.heightDiff) - ((touchData.startY - touchData.imageTop) * scaleDiff) + transform.translateY)
 
         this.moveTo({ x: translateX, y: translateY })
+
+        // calculate velocity (for inertia effect) - only calculate when single finger dragging
+        if (smooth && touches.length === 1 && !fingerCountChanged) {
+          const deltaTime = currentTime - touchData.lastTime
+          if (deltaTime > 0) {
+            const deltaX = clientX - (touchData.startX + touchData.prevX)
+            const deltaY = clientY - (touchData.startY + touchData.prevY)
+
+            touchData.velocityX = 0.8 * (deltaX / deltaTime) + 0.2 * touchData.velocityX
+            touchData.velocityY = 0.8 * (deltaY / deltaTime) + 0.2 * touchData.velocityY
+          }
+        }
       }
 
       setObject(touchData, {
@@ -548,11 +630,17 @@ class Zoomist {
         imageTop,
         imageLeft,
         widthDiff,
-        heightDiff
+        heightDiff,
+        lastTime: currentTime
       })
 
-      pinching && touches.length === 2 && this.emit('pinch', this, transform.scale, e)
-      dragging && this.emit('drag', this, { x: transform.translateX, y: transform.translateY }, e)
+      if (pinching && touches.length === 2) {
+        this.emit('pinch', this, transform.scale, e)
+      }
+
+      if (dragging) {
+        this.emit('drag', this, { x: transform.translateX, y: transform.translateY }, e)
+      }
     }
 
     // touchEnd
@@ -562,19 +650,31 @@ class Zoomist {
 
       const { states: { dragging, pinching } } = this
 
+      if (pinching && touches.length === 1) {
+        this.states.pinching = false
+
+        const { clientX, clientY } = getPointer(e)
+
+        setObject(touchData, {
+          startX: clientX,
+          startY: clientY,
+          prevX: 0,
+          prevY: 0,
+          velocityX: 0,
+          velocityY: 0,
+          lastTime: Date.now(),
+        })
+
+        this.emit('pinchEnd', this, transform.scale, e)
+      }
+
       if (dragging && !touches.length) {
         this.states.dragging = false
         this.emit('dragEnd', this, { x: transform.translateX, y: transform.translateY }, e)
       }
 
-      if (pinching && touches.length < 2) {
-        this.states.pinching = false
-        this.emit('pinchEnd', this, transform.scale, e)
-      }
-
       if (dragging && touches.length === 1) {
-        const clientX = getPointer(e).clientX
-        const clientY = getPointer(e).clientY
+        const { clientX, clientY } = getPointer(e)
 
         setObject(touchData, {
           prevX: touchData.startX - clientX,

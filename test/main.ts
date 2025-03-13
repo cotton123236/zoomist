@@ -14,6 +14,7 @@ const options: ZoomistOptions = {
   // wheelable: false,
   // pinchable: false,
   // bounds: false,
+  smooth: true,
   // wheelReleaseOnMinMax: true,
   // dragReleaseOnBounds: true,
   slider: true,
