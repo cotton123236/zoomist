@@ -37,8 +37,13 @@
   "author": "Wilson Wu",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3",
     "sass": "^1.64.1",
     "typescript": "^5.0.2",
+    "typescript-eslint": "^8.26.1",
     "vite": "^4.3.0",
     "vite-plugin-dts": "^3.5.4"
   }

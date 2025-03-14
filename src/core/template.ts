@@ -1,4 +1,4 @@
-import { CLASS_ZOOMER_ICON } from "../shared/constants"
+import { CLASS_ZOOMER_ICON } from '../shared/constants'
 
 export const zoomerIconIn = `
 <svg viewBox="0 0 12 12" class="${CLASS_ZOOMER_ICON}">

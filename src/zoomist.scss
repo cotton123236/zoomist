@@ -3,7 +3,7 @@ $NAME: zoomist;
 :root {
   --zoomist-wrapper-bg-color: #efefef;
 
-  --zoomist-slider-bg-color: rgba(255, 255, 255, .8);
+  --zoomist-slider-bg-color: rgba(255, 255, 255, 0.8);
   --zoomist-slider-border-radius: 0 0 4px 0;
   --zoomist-slider-padding-x: 20px;
   --zoomist-slider-padding-y: 20px;
@@ -18,9 +18,9 @@ $NAME: zoomist;
   --zoomist-slider-button-color: #fff;
 
   --zoomist-zoomer-button-size: 48px;
-  --zoomist-zoomer-button-color: rgba(255, 255, 255, .8);
-  --zoomist-zoomer-button-color-hover: rgba(255, 255, 255, .9);
-  --zoomist-zoomer-button-color-disabled: rgba(255, 255, 255, .8);
+  --zoomist-zoomer-button-color: rgba(255, 255, 255, 0.8);
+  --zoomist-zoomer-button-color-hover: rgba(255, 255, 255, 0.9);
+  --zoomist-zoomer-button-color-disabled: rgba(255, 255, 255, 0.8);
   --zoomist-zoomer-button-opacity-disabled: 0.7;
   --zoomist-zoomer-icon-size: 14px;
   --zoomist-zoomer-icon-color: #333;
@@ -70,11 +70,11 @@ $NAME: zoomist;
     }
 
     .#{$NAME}-slider-bar {
-      background-color: var(--zoomist-slider-bar-color-hover)
+      background-color: var(--zoomist-slider-bar-color-hover);
     }
 
     .#{$NAME}-slider-button::before {
-      box-shadow: 0 0 8px rgba(0, 0, 0, .6);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     }
   }
 }
@@ -151,7 +151,7 @@ $NAME: zoomist;
     display: block;
     background-color: var(--zoomist-slider-button-color, #fff);
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 0, 0, .4);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
     transition: box-shadow var(--zoomist-modules-tranistion-duration);
   }
 }

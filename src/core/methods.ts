@@ -1,41 +1,21 @@
 import { Zoomist } from './core'
-import {
-  EventTypes,
-  MoveToKeywordsX,
-  MoveToKeywordsY,
-  ZoomistEvents,
-  ZoomistHTMLElement,
-  ZoomistMethods
-} from './../types'
-import {
-  getBoundingRect,
-  isFunction,
-  roundToTwo,
-  minmax,
-  isNumber,
-  setObject,
-  isPlainObject
-} from './../shared/utils'
-import {
-  MOVE_TO_KEYWORDS_X,
-  MOVE_TO_KEYWORDS_Y,
-  NAME
-} from '../shared/constants';
-import {
-  DEFAULT_OPTIONS,
-} from './options';
-
+import { EventTypes, MoveToKeywordsX, MoveToKeywordsY, ZoomistHTMLElement, ZoomistMethods } from './../types'
+import { getBoundingRect, isFunction, roundToTwo, minmax, isNumber, setObject, isPlainObject } from './../shared/utils'
+import { MOVE_TO_KEYWORDS_X, MOVE_TO_KEYWORDS_Y, NAME } from '../shared/constants'
+import { DEFAULT_OPTIONS } from './options'
 
 export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   on(event, handler) {
-    if (!handler || !isFunction(handler)) return this;
+    if (!handler || !isFunction(handler)) return this
 
     const { __events__ } = this
 
-    event.split(' ').forEach(evt => {
+    event.split(' ').forEach((evt) => {
       const eventName = evt as EventTypes
-      if (!__events__[eventName]) __events__[eventName] = [];
-      (__events__[eventName] as NonNullable<ZoomistEvents[typeof eventName]>).push(handler as any)
+      if (!__events__[eventName]) {
+        __events__[eventName] = []
+      }
+      __events__[eventName].push(handler as any)
     })
 
     return this
@@ -44,10 +24,12 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   emit(event, ...args) {
     const { __events__ } = this
 
-    if (!__events__[event]) return this;
+    if (!__events__[event]) return this
 
-    (__events__[event] as NonNullable<ZoomistEvents[typeof event]>).forEach(handler => {
-      if (isFunction(handler)) (handler as any).apply(this, args)
+    __events__[event].forEach((handler) => {
+      if (isFunction(handler)) {
+        ;(handler as (...args: any[]) => void).apply(this, args)
+      }
     })
 
     return this
@@ -65,7 +47,11 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   zoomTo(ratio, pointer = true) {
-    const { image, transform: { scale, translateX: oldTranslateX, translateY: oldTranslateY }, options: { bounds } } = this
+    const {
+      image,
+      transform: { scale, translateX: oldTranslateX, translateY: oldTranslateY },
+      options: { bounds }
+    } = this
     ratio = this.useFixedRatio(ratio)
     if (ratio === scale) return this
 
@@ -99,7 +85,10 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   move(params) {
-    const { options: { bounds }, transform: { translateX: oldTranslateX, translateY: oldTanslateY } } = this
+    const {
+      options: { bounds },
+      transform: { translateX: oldTranslateX, translateY: oldTanslateY }
+    } = this
     const { x, y } = params
     const { width: widthDiff, height: heightDiff } = this.getImageDiff()
 
@@ -119,7 +108,9 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   moveTo(params) {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     const { x, y } = params
     const { width: widthDiff, height: heightDiff } = this.getImageDiff()
 
@@ -138,7 +129,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     }
 
     // x is one of keywords
-    if (MOVE_TO_KEYWORDS_X.some(item => item === x)) {
+    if (MOVE_TO_KEYWORDS_X.some((item) => item === x)) {
       const keywordsValue = {
         left: -widthDiff,
         right: widthDiff,
@@ -149,7 +140,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     }
 
     // y is one of keywords
-    if (MOVE_TO_KEYWORDS_Y.some(item => item === y)) {
+    if (MOVE_TO_KEYWORDS_Y.some((item) => item === y)) {
       const keywordsValue = {
         top: -heightDiff,
         bottom: heightDiff,
@@ -163,8 +154,10 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   slideTo(value) {
-    const { options: { minScale, maxScale } } = this
-    const scale = (maxScale - minScale) * value / 100 + minScale
+    const {
+      options: { minScale, maxScale }
+    } = this
+    const scale = ((maxScale - minScale) * value) / 100 + minScale
 
     this.zoomTo(scale)
 
@@ -172,7 +165,9 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   reset() {
-    const { options: { initScale } } = this
+    const {
+      options: { initScale }
+    } = this
 
     setObject(this.transform, {
       scale: initScale!,
@@ -181,14 +176,14 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     })
 
     this.emit('reset', this)
-    
+
     return this
   },
 
   destroy(cleanStyle = false) {
     const { element, image, controller } = this
 
-    if (!this.mounted) return null;
+    if (!this.mounted) return null
 
     this.emit('beforeDestroy', this)
 
@@ -200,7 +195,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
       image.removeAttribute('style')
     }
 
-    (element as ZoomistHTMLElement)[NAME] = null
+    ;(element as ZoomistHTMLElement)[NAME] = null
 
     this.mounted = false
     this.emit('destroy', this)
@@ -211,9 +206,8 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   update(options) {
     const { element, controller } = this
 
-    this.emit('beforeUpdate', this);
-
-    (element as ZoomistHTMLElement)[NAME] = null
+    this.emit('beforeUpdate', this)
+    ;(element as ZoomistHTMLElement)[NAME] = null
 
     this.mounted = false
 
@@ -240,85 +234,118 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   getSliderValue() {
-    const { __modules__: { slider } } = this
+    const {
+      __modules__: { slider }
+    } = this
 
     return slider && slider.value !== undefined ? slider.value : null
   },
 
   isOnBoundTop() {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     if (!bounds) return false
 
-    const { transform: { translateY } } = this
+    const {
+      transform: { translateY }
+    } = this
     const { height: heightDiff } = this.getImageDiff()
 
     return translateY * -1 === roundToTwo(heightDiff)
   },
 
   isOnBoundBottom() {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     if (!bounds) return false
 
-    const { transform: { translateY } } = this
+    const {
+      transform: { translateY }
+    } = this
     const { height: heightDiff } = this.getImageDiff()
 
     return translateY === roundToTwo(heightDiff)
   },
 
   isOnBoundLeft() {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     if (!bounds) return false
 
-    const { transform: { translateX } } = this
+    const {
+      transform: { translateX }
+    } = this
     const { width: widthDiff } = this.getImageDiff()
 
     return translateX * -1 === roundToTwo(widthDiff)
   },
 
   isOnBoundRight() {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     if (!bounds) return false
 
-    const { transform: { translateX } } = this
+    const {
+      transform: { translateX }
+    } = this
     const { width: widthDiff } = this.getImageDiff()
 
     return translateX === roundToTwo(widthDiff)
   },
 
   isOnBoundX() {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     if (!bounds) return false
 
-    const { transform: { translateX } } = this
+    const {
+      transform: { translateX }
+    } = this
     const { width: widthDiff } = this.getImageDiff()
 
     return Math.abs(translateX) === Math.abs(roundToTwo(widthDiff))
   },
 
   isOnBoundY() {
-    const { options: { bounds } } = this
+    const {
+      options: { bounds }
+    } = this
     if (!bounds) return false
 
-    const { transform: { translateY } } = this
+    const {
+      transform: { translateY }
+    } = this
     const { height: heightDiff } = this.getImageDiff()
 
     return Math.abs(translateY) === Math.abs(roundToTwo(heightDiff))
   },
 
   isOnMinScale() {
-    const { options: { minScale } } = this
-    const { transform: { scale } } = this
+    const {
+      options: { minScale }
+    } = this
+    const {
+      transform: { scale }
+    } = this
 
     return scale === minScale
   },
 
   isOnMaxScale() {
-    const { options: { maxScale } } = this
-    const { transform: { scale } } = this
+    const {
+      options: { maxScale }
+    } = this
+    const {
+      transform: { scale }
+    } = this
 
     return scale === maxScale
   },
-
 
   // private methods
   getImageDiff() {
@@ -343,14 +370,19 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
 
   // private methods
   getScaleRatio() {
-    const { transform: { scale }, options: { minScale, maxScale } } = this
+    const {
+      transform: { scale },
+      options: { minScale, maxScale }
+    } = this
 
     return (scale - minScale) / (maxScale - minScale)
   },
 
   // private methods
   useFixedRatio(ratio) {
-    const { options: { minScale, maxScale } } = this
+    const {
+      options: { minScale, maxScale }
+    } = this
 
     return minmax(ratio, minScale, maxScale)
   },
@@ -358,17 +390,20 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   // private methods
   // animation
   useAnimate(data) {
-    const { options: { smooth }, transform } = this
+    const {
+      options: { smooth },
+      transform
+    } = this
 
     const damping = typeof smooth === 'object' ? Math.max(0.1, Math.min(1, smooth.damping)) : 0.6
-    const duration = (1100 - (damping * 1000)) * 0.5
+    const duration = (1100 - damping * 1000) * 0.5
 
     const animate = () => {
       if (!this.states.dragging && (Math.abs(data.velocityX) > 0.01 || Math.abs(data.velocityY) > 0.01)) {
         const now = Date.now()
         const elapsed = now - data.lastTime
         const deceleration = Math.exp(-elapsed / duration)
-        
+
         // deceleration velocity
         data.velocityX *= deceleration
         data.velocityY *= deceleration
@@ -378,9 +413,9 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
         const deltaX = data.velocityX * elapsed
         const deltaY = data.velocityY * elapsed
 
-        this.moveTo({ 
-          x: transform.translateX + deltaX, 
-          y: transform.translateY + deltaY 
+        this.moveTo({
+          x: transform.translateX + deltaX,
+          y: transform.translateY + deltaY
         })
 
         // if velocity is too small, stop animation
@@ -389,7 +424,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
           return
         }
       }
-      
+
       data.frame = requestAnimationFrame(animate)
     }
 

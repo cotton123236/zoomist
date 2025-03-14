@@ -1,10 +1,4 @@
-import {
-  ZoomistDefaultOptions,
-  SliderOptions,
-  ZoomerOptions,
-  ZoomistEvents,
-  ZoomistModules,
-} from './../types'
+import { ZoomistDefaultOptions, SliderOptions, ZoomerOptions, ZoomistEvents, ZoomistModules } from './../types'
 import {
   CLASS_NOT_DRAGGABLE,
   CLASS_NOT_WHEELABLE,
@@ -13,9 +7,8 @@ import {
   CLASS_ZOOMER_IN,
   CLASS_ZOOMER_OUT,
   CLASS_ZOOMER_RESET,
-  CLASS_ZOOMER_DISABLE,
+  CLASS_ZOOMER_DISABLE
 } from '../shared/constants'
-
 
 export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   // set is draggable or not
@@ -43,7 +36,7 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   // elements matched this class will not be zoomed by mouse wheel.
   disableWheelingClass: CLASS_NOT_WHEELABLE,
   // if set to true, enable to smooth drag
-  smooth: false,
+  smooth: false
 }
 
 export const SLIDER_OPTIONS: SliderOptions = {
@@ -75,7 +68,6 @@ export const ZOOMER_AUTO_GENERATED: Partial<ZoomerOptions> = {
   outEl: `.${CLASS_ZOOMER_OUT}`,
   resetEl: `.${CLASS_ZOOMER_RESET}`
 }
-
 
 export const ZOOMIST_EVENTS: ZoomistEvents = {
   // invoked when zoomist instance ready
@@ -115,7 +107,6 @@ export const ZOOMIST_EVENTS: ZoomistEvents = {
   // invoked when mouseup on slider
   slideEnd: null
 }
-
 
 export const ZOOMIST_MODULES: ZoomistModules = {
   // slider options

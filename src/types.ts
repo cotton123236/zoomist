@@ -44,7 +44,6 @@ export interface ZoomerOptions {
   disabledClass: string | false | null
 }
 
-
 export interface EventOptions {
   drag: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
   dragStart: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
@@ -66,21 +65,18 @@ export interface EventOptions {
   update: (zoomist: Zoomist) => void
 }
 
-
 export type EventTypes = keyof EventOptions
-
 
 export type ZoomistEvents = {
   [event in EventTypes]: EventOptions[event][] | null
 }
 
-
 export interface ZoomistMethods {
   on: <T extends EventTypes>(event: T, handler: EventOptions[T]) => Zoomist
   emit: <T extends EventTypes>(event: T, ...args: Parameters<EventOptions[T]>) => Zoomist
-  zoom: (ratio: number, pointer?: { clientX: number, clientY: number } | boolean) => Zoomist
-  zoomTo: (ratio: number, pointer?: { clientX: number, clientY: number } | boolean) => Zoomist
-  move: (params: { x: number, y: number }) => Zoomist
+  zoom: (ratio: number, pointer?: { clientX: number; clientY: number } | boolean) => Zoomist
+  zoomTo: (ratio: number, pointer?: { clientX: number; clientY: number } | boolean) => Zoomist
+  move: (params: { x: number; y: number }) => Zoomist
   moveTo: (params: MoveToParams) => Zoomist
   slideTo: (value: number) => Zoomist
   reset: () => Zoomist
@@ -97,13 +93,12 @@ export interface ZoomistMethods {
   isOnBoundY: () => boolean
   isOnMinScale: () => boolean
   isOnMaxScale: () => boolean
-  getImageDiff: () => { width: number, height: number }
-  getContainerCenterClient: () => { clientX: number, clientY: number }
+  getImageDiff: () => { width: number; height: number }
+  getContainerCenterClient: () => { clientX: number; clientY: number }
   getScaleRatio: () => number
   useFixedRatio: (ratio: number) => number
-  useAnimate: (data: DragData | TouchData) => (() => void)
+  useAnimate: (data: DragData | TouchData) => () => void
 }
-
 
 export interface ZoomistSlider {
   options: SliderOptions
@@ -132,7 +127,6 @@ export interface ZoomistModules {
   zoomer: ZoomistZoomer | null
 }
 
-
 export interface ZoomistTransfrom {
   scale: number
   translateX: number
@@ -142,13 +136,11 @@ export interface ZoomistTransfrom {
   __translateY__?: number
 }
 
-
 export interface ZoomistStates {
   dragging?: boolean
-  pinching?: boolean,
+  pinching?: boolean
   wheeling?: boolean
 }
-
 
 export type ConstEventTouchStart = 'touchstart' | 'mousedown'
 
@@ -157,7 +149,6 @@ export type ConstEventTouchMove = 'touchmove' | 'mousemove'
 export type ConstEventTouchEnd = 'touchend' | 'mouseup'
 
 export type ConstEventWheel = 'wheel'
-
 
 export interface ImageData {
   originWidth: number
@@ -229,4 +220,4 @@ export interface MoveToParams {
   y?: number | MoveToKeywordsY
 }
 
-export type AppTouchEvent = TouchEvent;
+export type AppTouchEvent = TouchEvent

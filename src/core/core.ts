@@ -9,7 +9,7 @@ import {
   ZoomistModules,
   ZoomistHTMLElement,
   ZoomistTransfrom,
-  AppTouchEvent,
+  AppTouchEvent
 } from '../types'
 import {
   isPlainObject,
@@ -26,7 +26,7 @@ import {
   getPinchHypot,
   createElement,
   setAttributes,
-  isNull,
+  isNull
 } from '../shared/utils'
 import {
   NAME,
@@ -54,7 +54,7 @@ import {
   ATTR_SLIDER_BUTTON,
   ATTR_ZOOMER_IN,
   ATTR_ZOOMER_OUT,
-  ATTR_ZOOMER_RESET,
+  ATTR_ZOOMER_RESET
 } from '../shared/constants'
 import {
   DEFAULT_OPTIONS,
@@ -63,37 +63,29 @@ import {
   SLIDER_OPTIONS,
   ZOOMER_OPTIONS,
   SLIDER_AUTO_GENERATED,
-  ZOOMER_AUTO_GENERATED,
+  ZOOMER_AUTO_GENERATED
 } from './options'
-import {
-  zoomerIconIn,
-  zoomerIconOut,
-  zoomerIconReset
-} from './template'
+import { zoomerIconIn, zoomerIconOut, zoomerIconReset } from './template'
 import { ZOOMIST_METHODS } from './methods'
 
-
 const { defineProperty } = Object
-
 
 // define Zoomist prototype
 interface Zoomist extends ZoomistMethods {}
 
-
 // class Zoomist
 class Zoomist {
-  element!: HTMLElement;
-  options!: ZoomistDefaultOptions;
-  wrapper!: HTMLElement;
-  image!: HTMLElement;
-  mounted!: boolean;
-  data!: ZoomistData;
-  transform!: ZoomistTransfrom;
-  states!: ZoomistStates;
-  controller!: AbortController;
-  __events__!: ZoomistEvents;
-  __modules__!: ZoomistModules;
-
+  element!: HTMLElement
+  options!: ZoomistDefaultOptions
+  wrapper!: HTMLElement
+  image!: HTMLElement
+  mounted!: boolean
+  data!: ZoomistData
+  transform!: ZoomistTransfrom
+  states!: ZoomistStates
+  controller!: AbortController
+  __events__!: ZoomistEvents
+  __modules__!: ZoomistModules
 
   constructor(element: HTMLElement | string, options?: ZoomistOptions) {
     if (!element) {
@@ -114,10 +106,11 @@ class Zoomist {
   // check zoomist-image is exist
   init() {
     const { element } = this
-    const { options: { bounds, minScale, maxScale, initScale } } = this
-    if ((element as ZoomistHTMLElement)[NAME]) return;
-
-    (element as ZoomistHTMLElement)[NAME] = this
+    const {
+      options: { bounds, minScale, maxScale, initScale }
+    } = this
+    if ((element as ZoomistHTMLElement)[NAME]) return
+    ;(element as ZoomistHTMLElement)[NAME] = this
 
     const wrapper: HTMLElement | null = element.querySelector(`.${CLASS_WRAPPER}`)
     const image: HTMLElement | null = element.querySelector(`.${CLASS_IMAGE}`)
@@ -141,7 +134,8 @@ class Zoomist {
     const { offsetWidth: containerWidth, offsetHeight: containerHeight } = element
     const { offsetWidth: originImageWidth, offsetHeight: originImageHeight } = image
     const { width: imageWidth, height: imageHeight } = getBoundingRect(image)
-    if (!originImageWidth || !originImageHeight) return useWarn(`The width or height of ${CLASS_IMAGE} should not be 0.`)
+    if (!originImageWidth || !originImageHeight)
+      return useWarn(`The width or height of ${CLASS_IMAGE} should not be 0.`)
 
     this.transform = {
       scale: 0,
@@ -224,10 +218,14 @@ class Zoomist {
 
   // mount elements and bind events
   #mount() {
-    if (this.mounted) return;
+    if (this.mounted) return
 
-    const { element, image, options: { minScale, maxScale, initScale }, __modules__: { slider, zoomer } } = this
-    const zoomist = this
+    const {
+      element,
+      image,
+      options: { minScale, maxScale, initScale },
+      __modules__: { slider, zoomer }
+    } = this
 
     setStyle(image, {
       transform: `
@@ -237,31 +235,34 @@ class Zoomist {
 
     // define scale
     defineProperty(this.transform, 'scale', {
-      get() {
-        return zoomist.transform.__scale__
-      },
-      set(val: number) {
-        const scale = zoomist.useFixedRatio(val)
-        if (isNull(scale) || zoomist.transform.__scale__ === scale) return;
+      get: () => this.transform.__scale__,
+      set: (val: number) => {
+        const scale = this.useFixedRatio(val)
+        if (isNull(scale) || this.transform.__scale__ === scale) return
 
-        zoomist.transform.__scale__ = scale
+        this.transform.__scale__ = scale
 
         setStyle(image, { [CSSVAR_IMAGE_SCALE]: scale.toString() })
 
-        setObject(zoomist.data.imageData, {
+        setObject(this.data.imageData, {
           width: getBoundingRect(image).width,
-          height: getBoundingRect(image).height,
+          height: getBoundingRect(image).height
         })
 
         // set slider value
         if (slider) {
-          const sliderValue = Math.round(zoomist.getScaleRatio() * 100)
+          const sliderValue = Math.round(this.getScaleRatio() * 100)
           slider.value = sliderValue
         }
 
         // set zoomer buttons status
         if (zoomer && zoomer.options.disabledClass) {
-          const { zoomerInEl, zoomerOutEl, zoomerResetEl, options: { disabledClass } } = zoomer
+          const {
+            zoomerInEl,
+            zoomerOutEl,
+            zoomerResetEl,
+            options: { disabledClass }
+          } = zoomer
 
           if (zoomerInEl) {
             zoomerInEl.classList[scale === maxScale ? 'add' : 'remove'](disabledClass)
@@ -281,32 +282,28 @@ class Zoomist {
 
     // define translateX
     defineProperty(this.transform, 'translateX', {
-      get() {
-        return zoomist.transform.__translateX__
-      },
-      set(val: number) {
+      get: () => this.transform.__translateX__,
+      set: (val: number) => {
         const translateX = roundToTwo(val)
-        if (isNull(translateX) || zoomist.transform.__translateX__ === translateX) return;
+        if (isNull(translateX) || this.transform.__translateX__ === translateX) return
 
-        zoomist.transform.__translateX__ = translateX
+        this.transform.__translateX__ = translateX
 
         setStyle(image, { [CSSVAR_IMAGE_TRANSLATE_X]: `${translateX}px` })
-      },
+      }
     })
 
     // define translateY
     defineProperty(this.transform, 'translateY', {
-      get() {
-        return zoomist.transform.__translateY__
-      },
-      set(val: number) {
+      get: () => this.transform.__translateY__,
+      set: (val: number) => {
         const translateY = roundToTwo(val)
-        if (isNull(translateY) || zoomist.transform.__translateY__ === translateY) return;
+        if (isNull(translateY) || this.transform.__translateY__ === translateY) return
 
-        zoomist.transform.__translateY__ = translateY
+        this.transform.__translateY__ = translateY
 
         setStyle(image, { [CSSVAR_IMAGE_TRANSLATE_Y]: `${translateY}px` })
-      },
+      }
     })
 
     // interaction events
@@ -331,7 +328,11 @@ class Zoomist {
 
   // resize, drag, pinch, wheel
   #interact() {
-    const { wrapper, options, controller: { signal } } = this
+    const {
+      wrapper,
+      options,
+      controller: { signal }
+    } = this
     const { draggable, pinchable, wheelable } = options
 
     this.states = {}
@@ -347,8 +348,8 @@ class Zoomist {
 
     // if is mobile device && (draggable || pinchable)
     if (IS_TOUCH && (draggable || pinchable)) {
-      draggable && (this.states.dragging = false)
-      pinchable && (this.states.pinching = false)
+      if (draggable) this.states.dragging = false
+      if (pinchable) this.states.pinching = false
 
       const useTouch = (e: AppTouchEvent) => this.#useTouch(e)
 
@@ -370,29 +371,32 @@ class Zoomist {
 
   // on wheel
   #useWheel(e: WheelEvent) {
-    const { options: { zoomRatio, wheelReleaseOnMinMax, disableWheelingClass } } = this
+    const {
+      options: { zoomRatio, wheelReleaseOnMinMax, disableWheelingClass }
+    } = this
 
     const delta = (e.deltaY || e.detail) > 0 ? -1 : 1
 
     if (wheelReleaseOnMinMax) {
       const isOnMinScale = this.isOnMinScale()
       const isOnMaxScale = this.isOnMaxScale()
-      const releasable = isOnMinScale && delta === -1 || isOnMaxScale && delta === 1
+      const releasable = (isOnMinScale && delta === -1) || (isOnMaxScale && delta === 1)
 
       if (!releasable) {
         e.preventDefault()
       }
-    }
-    else {
+    } else {
       e.preventDefault()
     }
 
-    if (this.states.wheeling) return;
-    if (getClosestElement((e.target as HTMLElement), disableWheelingClass)) return;
+    if (this.states.wheeling) return
+    if (getClosestElement(e.target as HTMLElement, disableWheelingClass)) return
 
     // prevent wheeling too fast
     this.states.wheeling = true
-    setTimeout(() => { this.states.wheeling = false }, 30)
+    setTimeout(() => {
+      this.states.wheeling = false
+    }, 30)
 
     this.zoom(delta * zoomRatio, getPointer(e))
 
@@ -401,18 +405,22 @@ class Zoomist {
 
   // on drag (mouse)
   #useDrag(e: MouseEvent) {
-    const { data, transform, options: { disableDraggingClass, smooth } } = this
+    const {
+      data,
+      transform,
+      options: { disableDraggingClass, smooth }
+    } = this
     const { dragData, imageData } = data
 
-    if (!dragData || !imageData) return;
+    if (!dragData || !imageData) return
 
     // dragStart
     const dragStart = (e: MouseEvent) => {
-      if (e && e.button !== 0) return;
+      if (e && e.button !== 0) return
 
       e.preventDefault()
 
-      if (getClosestElement((e.target as HTMLElement), disableDraggingClass)) return;
+      if (getClosestElement(e.target as HTMLElement, disableDraggingClass)) return
 
       // 取消之前的動畫
       if (dragData.frame !== null) {
@@ -436,7 +444,7 @@ class Zoomist {
       // if draggable smooth
       if (smooth) {
         const animate = this.useAnimate(dragData)
-        
+
         dragData.frame = requestAnimationFrame(animate)
       }
 
@@ -448,8 +456,8 @@ class Zoomist {
 
     // dragMove
     const dragMove = (e: MouseEvent | AppTouchEvent) => {
-      if ((e as AppTouchEvent).touches) return;
-      if (!this.states.dragging) return;
+      if ((e as AppTouchEvent).touches) return
+      if (!this.states.dragging) return
 
       e.preventDefault()
 
@@ -480,7 +488,7 @@ class Zoomist {
 
     // dragEnd
     const dragEnd = (e: MouseEvent | AppTouchEvent) => {
-      if ((e as AppTouchEvent).touches) return;
+      if ((e as AppTouchEvent).touches) return
 
       this.states.dragging = false
 
@@ -495,14 +503,18 @@ class Zoomist {
 
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
-    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, smooth } } = this
+    const {
+      data,
+      transform,
+      options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, smooth }
+    } = this
     const { touchData, imageData } = data
 
-    if (!touchData || !imageData) return;
+    if (!touchData || !imageData) return
 
     // touchStart
     const touchStart = (e: AppTouchEvent) => {
-      if (!e.touches) return;
+      if (!e.touches) return
 
       if (bounds && dragReleaseOnBounds) {
         const isOnBoundX = this.isOnBoundX()
@@ -512,12 +524,11 @@ class Zoomist {
         if (!releasable) {
           e.preventDefault()
         }
-      }
-      else {
+      } else {
         e.preventDefault()
       }
 
-      if (getClosestElement((e.target as HTMLElement), disableDraggingClass) && e.touches.length <= 1) return;
+      if (getClosestElement(e.target as HTMLElement, disableDraggingClass) && e.touches.length <= 1) return
 
       if (touchData.frame !== null) {
         cancelAnimationFrame(touchData.frame)
@@ -568,10 +579,12 @@ class Zoomist {
 
     // touchMove
     const touchMove = (e: AppTouchEvent) => {
-      if (!e.touches) return;
+      if (!e.touches) return
 
       const currentTime = Date.now()
-      const { states: { dragging, pinching } } = this
+      const {
+        states: { dragging, pinching }
+      } = this
       const { top: imageTop, left: imageLeft } = getBoundingRect(this.image)
       const { width: widthDiff, height: heightDiff } = this.getImageDiff()
 
@@ -591,7 +604,7 @@ class Zoomist {
           this.states.pinching = true
           this.emit('pinchStart', this, transform.scale, e)
         }
-        
+
         this.zoomTo(scaleTo, false)
       }
 
@@ -602,9 +615,22 @@ class Zoomist {
           touchData.velocityY = 0
         }
 
-        const scaleDiff = scaleTo !== maxScale && scaleTo !== minScale && pinchable && e.touches.length === 2 ? hypotScale : 1
-        const translateX = roundToTwo((clientX - touchData.imageLeft) - (widthDiff - touchData.widthDiff) - ((touchData.prevX - touchData.imageLeft) * scaleDiff) + transform.translateX)
-        const translateY = roundToTwo((clientY - touchData.imageTop) - (heightDiff - touchData.heightDiff) - ((touchData.prevY - touchData.imageTop) * scaleDiff) + transform.translateY)
+        const scaleDiff =
+          scaleTo !== maxScale && scaleTo !== minScale && pinchable && e.touches.length === 2 ? hypotScale : 1
+        const translateX = roundToTwo(
+          clientX -
+            touchData.imageLeft -
+            (widthDiff - touchData.widthDiff) -
+            (touchData.prevX - touchData.imageLeft) * scaleDiff +
+            transform.translateX
+        )
+        const translateY = roundToTwo(
+          clientY -
+            touchData.imageTop -
+            (heightDiff - touchData.heightDiff) -
+            (touchData.prevY - touchData.imageTop) * scaleDiff +
+            transform.translateY
+        )
 
         this.moveTo({ x: translateX, y: translateY })
 
@@ -643,9 +669,11 @@ class Zoomist {
 
     // touchEnd
     const touchEnd = (e: AppTouchEvent) => {
-      if (!e.touches) return;
+      if (!e.touches) return
 
-      const { states: { dragging, pinching } } = this
+      const {
+        states: { dragging, pinching }
+      } = this
 
       if (pinching && e.touches.length === 1) {
         this.states.pinching = false
@@ -657,7 +685,7 @@ class Zoomist {
           prevY: clientY,
           velocityX: 0,
           velocityY: 0,
-          lastTime: Date.now(),
+          lastTime: Date.now()
         })
 
         this.emit('pinchEnd', this, transform.scale, e)
@@ -693,19 +721,19 @@ class Zoomist {
     const observer = new ResizeObserver(() => {
       const { offsetWidth: containerWidth, offsetHeight: containerHeight } = element
       const { width: containerDataWidth, height: containerDataHeight } = this.getContainerData()
-      if (containerWidth === containerDataWidth && containerHeight === containerDataHeight) return;
+      if (containerWidth === containerDataWidth && containerHeight === containerDataHeight) return
 
       const oldTanslateX = transform.translateX
       const oldTanslateY = transform.translateY
 
       if (oldTanslateX) {
-        const translateX = containerWidth / containerDataWidth * oldTanslateX
+        const translateX = (containerWidth / containerDataWidth) * oldTanslateX
 
         this.transform.translateX = translateX
       }
 
       if (oldTanslateY) {
-        const translateY = containerHeight / containerDataHeight * oldTanslateY
+        const translateY = (containerHeight / containerDataHeight) * oldTanslateY
 
         this.transform.translateY = translateY
       }
@@ -722,7 +750,7 @@ class Zoomist {
         originWidth: originImageWidth,
         originHeight: originImageHeight,
         width: imageWidth,
-        height: imageHeight,
+        height: imageHeight
       })
 
       this.emit('resize', this)
@@ -759,19 +787,27 @@ class Zoomist {
 
   // mount slider
   #createSlider() {
-    const { element, __modules__: { slider } } = this
-    if (!slider || slider.mounted) return;
+    const {
+      element,
+      __modules__: { slider }
+    } = this
+    if (!slider || slider.mounted) return
 
-    const { options: { el, direction } } = slider
-    if (!el) return;
+    const {
+      options: { el, direction }
+    } = slider
+    if (!el) return
 
     const isAutoGenerated = el === `.${CLASS_SLIDER}`
     const sliderEl = isAutoGenerated ? createElement('div', CLASS_SLIDER) : getElement(el)
-    if (!sliderEl) return;
+    if (!sliderEl) return
 
     const sliderTrack = createElement('div', CLASS_SLIDER_TRACK)
     const sliderBar = createElement('span', CLASS_SLIDER_BAR)
-    const sliderButton = createElement('span', CLASS_SLIDER_BUTTON, { ...ATTR_SLIDER_BUTTON, 'aria-orientation': direction})
+    const sliderButton = createElement('span', CLASS_SLIDER_BUTTON, {
+      ...ATTR_SLIDER_BUTTON,
+      'aria-orientation': direction
+    })
 
     sliderEl.classList.add(`${CLASS_SLIDER}-${direction}`)
 
@@ -780,7 +816,7 @@ class Zoomist {
         return slider.__value__
       },
       set(val: number) {
-        if (slider.__value__ === val) return;
+        if (slider.__value__ === val) return
 
         slider.__value__ = val
 
@@ -795,7 +831,7 @@ class Zoomist {
       sliding: false,
       sliderEl,
       sliderTrack,
-      sliderButton,
+      sliderButton
     })
 
     this.#useSlider()
@@ -810,21 +846,29 @@ class Zoomist {
 
   // slider events
   #useSlider() {
-    const { options: { minScale, maxScale }, __modules__: { slider } } = this
-    if (!slider) return;
+    const {
+      options: { minScale, maxScale },
+      __modules__: { slider }
+    } = this
+    if (!slider) return
 
-    const { options: { direction }, controller, sliderEl, sliderTrack } = slider
+    const {
+      options: { direction },
+      controller,
+      sliderEl,
+      sliderTrack
+    } = slider
 
-    if (!sliderEl || !sliderTrack) return;
+    if (!sliderEl || !sliderTrack) return
 
     const isVertical = direction === 'vertical'
-    
+
     const getScale = (e: MouseEvent | AppTouchEvent): number => {
       const wrapperRect = getBoundingRect(sliderTrack)
       const total = wrapperRect[isVertical ? 'height' : 'width']
       const start = wrapperRect[isVertical ? 'bottom' : 'left']
       const pointer = getPointer(e)[isVertical ? 'clientY' : 'clientX']
-      const value = roundToTwo(minmax((pointer - start) * (isVertical ? -1 : 1) / total, 0, 1))
+      const value = roundToTwo(minmax(((pointer - start) * (isVertical ? -1 : 1)) / total, 0, 1))
 
       const scale = (maxScale - minScale) * value + minScale
 
@@ -833,7 +877,7 @@ class Zoomist {
 
     // slideStart
     const slideStart = (e: MouseEvent | AppTouchEvent) => {
-      if (e instanceof MouseEvent && e.button !== 0) return;
+      if (e instanceof MouseEvent && e.button !== 0) return
 
       slider.sliding = true
 
@@ -848,7 +892,7 @@ class Zoomist {
 
     // slideMove
     const slideMove = (e: MouseEvent | AppTouchEvent) => {
-      if (!slider.sliding) return;
+      if (!slider.sliding) return
 
       const scale = getScale(e)
 
@@ -871,17 +915,21 @@ class Zoomist {
 
   // destroy slider
   destroySlider() {
-    const { __modules__: { slider } } = this
+    const {
+      __modules__: { slider }
+    } = this
 
-    if (!slider || !slider.mounted) return;
+    if (!slider || !slider.mounted) return
 
-    const { options: { el }, controller } = slider
+    const {
+      options: { el },
+      controller
+    } = slider
     const isAutoGenerated = el === `.${CLASS_SLIDER}`
 
     if (isAutoGenerated) {
       slider.sliderEl?.remove()
-    }
-    else {
+    } else {
       slider.sliderTrack?.remove()
     }
 
@@ -892,10 +940,15 @@ class Zoomist {
 
   // mount zoomer
   #createZoomer() {
-    const { element, __modules__: { zoomer } } = this
-    if (!zoomer || zoomer.mounted) return;
+    const {
+      element,
+      __modules__: { zoomer }
+    } = this
+    if (!zoomer || zoomer.mounted) return
 
-    const { options: { el, inEl, outEl, resetEl } } = zoomer
+    const {
+      options: { el, inEl, outEl, resetEl }
+    } = zoomer
     const zoomerButtons = [inEl, outEl, resetEl]
 
     const createZoomerEl = (
@@ -905,8 +958,8 @@ class Zoomist {
       attr?: Record<string, string>,
       icon?: string
     ) => {
-      if (!target) return null;
-      
+      if (!target) return null
+
       const isAutoGenerated = target === `.${className}`
       className = zoomerButtons.includes(target) ? `${className} ${CLASS_ZOOMER_BUTTON}` : className
       return isAutoGenerated ? createElement(tag, className, attr, icon) : getElement(target)
@@ -915,8 +968,8 @@ class Zoomist {
     const zoomerEl = createZoomerEl(el, 'div', CLASS_ZOOMER)
     const zoomerInEl = createZoomerEl(inEl, 'button', CLASS_ZOOMER_IN, ATTR_ZOOMER_IN, zoomerIconIn)
     const zoomerOutEl = createZoomerEl(outEl, 'button', CLASS_ZOOMER_OUT, ATTR_ZOOMER_OUT, zoomerIconOut)
-    const zoomerResetEl = createZoomerEl(resetEl, 'button', CLASS_ZOOMER_RESET, ATTR_ZOOMER_RESET, zoomerIconReset);
-    
+    const zoomerResetEl = createZoomerEl(resetEl, 'button', CLASS_ZOOMER_RESET, ATTR_ZOOMER_RESET, zoomerIconReset)
+
     setObject(zoomer, {
       controller: new AbortController(),
       zoomerEl,
@@ -926,10 +979,10 @@ class Zoomist {
     })
 
     if (zoomerEl) {
-      zoomerInEl && zoomerEl.append(zoomerInEl)
-      zoomerOutEl && zoomerEl.append(zoomerOutEl)
-      zoomerResetEl && zoomerEl.append(zoomerResetEl)
-      el === `.${CLASS_ZOOMER}` && element.append(zoomerEl)
+      if (zoomerInEl) zoomerEl.append(zoomerInEl)
+      if (zoomerOutEl) zoomerEl.append(zoomerOutEl)
+      if (zoomerResetEl) zoomerEl.append(zoomerResetEl)
+      if (el === `.${CLASS_ZOOMER}`) element.append(zoomerEl)
     }
 
     this.#useZoomer()
@@ -939,48 +992,77 @@ class Zoomist {
 
   // zoomer event
   #useZoomer() {
-    const { options: { zoomRatio }, __modules__: { zoomer } } = this
+    const {
+      options: { zoomRatio },
+      __modules__: { zoomer }
+    } = this
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const zoomist = this
-    if (!zoomer) return;
+    if (!zoomer) return
 
     const { controller, zoomerInEl, zoomerOutEl, zoomerResetEl } = zoomer
 
-    zoomerInEl && zoomerInEl.addEventListener('click', () => {
-      zoomist.zoom(zoomRatio)
-    }, { signal: controller?.signal })
-    zoomerOutEl && zoomerOutEl.addEventListener('click', () => {
-      zoomist.zoom(-zoomRatio)
-    }, { signal: controller?.signal })
-    zoomerResetEl && zoomerResetEl.addEventListener('click', () => {
-      zoomist.reset()
-    }, { signal: controller?.signal })
+    if (zoomerInEl) {
+      zoomerInEl.addEventListener(
+        'click',
+        () => {
+          zoomist.zoom(zoomRatio)
+        },
+        { signal: controller?.signal }
+      )
+    }
+
+    if (zoomerOutEl) {
+      zoomerOutEl.addEventListener(
+        'click',
+        () => {
+          zoomist.zoom(-zoomRatio)
+        },
+        { signal: controller?.signal }
+      )
+    }
+
+    if (zoomerResetEl) {
+      zoomerResetEl.addEventListener(
+        'click',
+        () => {
+          zoomist.reset()
+        },
+        { signal: controller?.signal }
+      )
+    }
   }
 
   // destroy zoomer
   destroyZoomer() {
-    const { __modules__: { zoomer } } = this
+    const {
+      __modules__: { zoomer }
+    } = this
 
-    if (!zoomer || !zoomer.mounted) return;
+    if (!zoomer || !zoomer.mounted) return
 
-    const { options: { el, inEl, outEl, resetEl }, controller, zoomerEl, zoomerInEl, zoomerOutEl, zoomerResetEl } = zoomer
+    const {
+      options: { el, inEl, outEl, resetEl },
+      controller,
+      zoomerEl,
+      zoomerInEl,
+      zoomerOutEl,
+      zoomerResetEl
+    } = zoomer
 
-    const destoryZoomerEl = (
-      target: string | HTMLElement | null,
-      className: string,
-      el: HTMLElement | null | void
-    ) => {
+    const destoryZoomerEl = (target: string | HTMLElement | null, className: string, el: HTMLElement | null | void) => {
       const isAutoGenerated = target === `.${className}`
       if (isAutoGenerated) {
         el?.remove()
       }
-    };
+    }
 
-    [
+    ;[
       { target: el, className: CLASS_ZOOMER, el: zoomerEl },
       { target: inEl, className: CLASS_ZOOMER_IN, el: zoomerInEl },
       { target: outEl, className: CLASS_ZOOMER_OUT, el: zoomerOutEl },
       { target: resetEl, className: CLASS_ZOOMER_RESET, el: zoomerResetEl }
-    ].forEach(item => destoryZoomerEl(item.target, item.className, item.el))
+    ].forEach((item) => destoryZoomerEl(item.target, item.className, item.el))
 
     controller?.abort()
 
@@ -988,8 +1070,6 @@ class Zoomist {
   }
 }
 
-
 Object.assign(Zoomist.prototype, ZOOMIST_METHODS)
-
 
 export { Zoomist }
