@@ -1,7 +1,7 @@
 import { ZoomistDefaultOptions, SliderOptions, ZoomerOptions, ZoomistEvents, ZoomistModules } from './../types'
 import {
-  CLASS_NOT_DRAGGABLE,
-  CLASS_NOT_WHEELABLE,
+  // CLASS_NOT_DRAGGABLE,
+  // CLASS_NOT_WHEELABLE,
   CLASS_SLIDER,
   CLASS_ZOOMER,
   CLASS_ZOOMER_IN,
@@ -27,16 +27,8 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   minScale: 1,
   // set initial scale of zoomist-image
   initScale: null,
-  // if set to true, enable to release touch events to allow for further page scrolling when .zoomist-image is on bounds.
-  dragReleaseOnBounds: false,
-  // if set to true, enable to release wheel events to allow for further page scrolling when .zoomist-image is on mixScale or maxScale.
-  wheelReleaseOnMinMax: false,
-  // elements matched this class will not be dragged.
-  disableDraggingClass: CLASS_NOT_DRAGGABLE,
-  // elements matched this class will not be zoomed by mouse wheel.
-  disableWheelingClass: CLASS_NOT_WHEELABLE,
   // if set to true, enable to smooth drag
-  smooth: false
+  smooth: true
 }
 
 export const SLIDER_OPTIONS: SliderOptions = {

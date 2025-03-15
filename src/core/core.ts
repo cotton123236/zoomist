@@ -42,6 +42,8 @@ import {
   CSSVAR_IMAGE_TRANSLATE_Y,
   CSSVAR_IMAGE_SCALE,
   CSSVAR_SLIDER_VALUE,
+  CLASS_NOT_WHEELABLE,
+  CLASS_NOT_DRAGGABLE,
   CLASS_SLIDER,
   CLASS_SLIDER_TRACK,
   CLASS_SLIDER_BAR,
@@ -372,8 +374,10 @@ class Zoomist {
   // on wheel
   #useWheel(e: WheelEvent) {
     const {
-      options: { zoomRatio, wheelReleaseOnMinMax, disableWheelingClass }
+      options: { zoomRatio, wheelable }
     } = this
+    const wheelReleaseOnMinMax = typeof wheelable === 'object' ? wheelable.releaseOnMinMax : false
+    const disableWheelingClass = typeof wheelable === 'object' ? wheelable.disableClass : CLASS_NOT_WHEELABLE
 
     const delta = (e.deltaY || e.detail) > 0 ? -1 : 1
 
@@ -406,11 +410,11 @@ class Zoomist {
   // on drag (mouse)
   #useDrag(e: MouseEvent) {
     const {
-      data,
       transform,
-      options: { disableDraggingClass, smooth }
+      data: { dragData, imageData },
+      options: { draggable, smooth }
     } = this
-    const { dragData, imageData } = data
+    const disableDraggingClass = typeof draggable === 'object' ? draggable.disableClass : CLASS_NOT_DRAGGABLE
 
     if (!dragData || !imageData) return
 
@@ -504,11 +508,12 @@ class Zoomist {
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
     const {
-      data,
       transform,
-      options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, smooth }
+      data: { touchData, imageData },
+      options: { maxScale, minScale, draggable, pinchable, bounds, smooth }
     } = this
-    const { touchData, imageData } = data
+    const dragReleaseOnBounds = typeof draggable === 'object' ? draggable.releaseOnBounds : false
+    const disableDraggingClass = typeof draggable === 'object' ? draggable.disableClass : CLASS_NOT_DRAGGABLE
 
     if (!touchData || !imageData) return
 

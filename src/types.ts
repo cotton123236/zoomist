@@ -5,18 +5,14 @@ export interface ZoomistHTMLElement extends HTMLElement {
 }
 
 export interface ZoomistDefaultOptions {
-  draggable: boolean
-  wheelable: boolean
+  draggable: boolean | DraggableOptions
+  wheelable: boolean | WheelableOptions
   pinchable: boolean
   bounds: boolean
   zoomRatio: number
   minScale: number
   maxScale: number
   initScale: number | null
-  dragReleaseOnBounds: boolean
-  wheelReleaseOnMinMax: boolean
-  disableDraggingClass: string
-  disableWheelingClass: string
   smooth: boolean | SmoothOptions
   slider?: boolean | SliderOptions
   zoomer?: boolean | ZoomerOptions
@@ -26,6 +22,16 @@ export interface ZoomistDefaultOptions {
 }
 
 export type ZoomistOptions = Partial<ZoomistDefaultOptions>
+
+export interface DraggableOptions {
+  releaseOnBounds: boolean
+  disableClass: string
+}
+
+export interface WheelableOptions {
+  releaseOnMinMax: boolean
+  disableClass: string
+}
 
 export interface SmoothOptions {
   damping: number

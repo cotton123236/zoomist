@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zoomist Dev</title>
-    <link rel="stylesheet" href="./test/styles/normalize.css">
+    <link rel="stylesheet" href="./test/styles/normalize.css" />
     <style>
       @media (prefers-color-scheme: dark) {
         body {
@@ -13,9 +13,9 @@
           --zoomist-slider-track-color: #444;
           --zoomist-slider-track-color-hover: #666;
           --zoomist-slider-button-color: #ccc;
-          --zoomist-zoomer-button-color: rgba(12, 12, 12, .9);
-          --zoomist-zoomer-button-color-hover: rgba(24, 24, 24, .9);
-          --zoomist-zoomer-button-color-disabled: rgba(12, 12, 12, .8);
+          --zoomist-zoomer-button-color: rgba(12, 12, 12, 0.9);
+          --zoomist-zoomer-button-color-hover: rgba(24, 24, 24, 0.9);
+          --zoomist-zoomer-button-color-disabled: rgba(12, 12, 12, 0.8);
           --zoomist-zoomer-icon-color: #ccc;
           --zoomist-zoomer-icon-color-hover: #eee;
           --zoomist-zoomer-icon-color-disabled: #666;
@@ -74,13 +74,23 @@
         <div class="zoomist-wrapper">
           <div class="zoomist-image">
             <img src="./test/images/cat.jpg" alt="cat" />
-            <!-- <a class="zoomist-not-draggable" href="https://google.com" target="_blank">NOT DRAGGABLE</a>
-            <a class="zoomist-not-wheelable" href="https://google.com" target="_blank">NOT WHEELABLE</a> -->
+            <!-- <div
+              style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: rgba(0, 0, 0, 0.5);
+              "
+            >
+              <a class="zoomist-not-draggable" href="https://google.com" target="_blank">NOT DRAGGABLE</a>
+              <a class="zoomist-not-wheelable" href="https://google.com" target="_blank">NOT WHEELABLE</a>
+            </div> -->
           </div>
         </div>
       </div>
 
-    <!-- <button class="change-image-btn">CHANGE</button> -->
+      <!-- <button class="change-image-btn">CHANGE</button> -->
 
       <!-- <div class="zoomist-custom-zoomer">
         <button class="in-zoomer zoomer-btn">+</button>
