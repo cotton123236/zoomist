@@ -15,6 +15,7 @@ export interface ZoomistDefaultOptions {
     wheelReleaseOnMinMax: boolean;
     disableDraggingClass: string;
     disableWheelingClass: string;
+    smooth: boolean | SmoothOptions;
     slider?: boolean | SliderOptions;
     zoomer?: boolean | ZoomerOptions;
     on?: {
@@ -22,6 +23,9 @@ export interface ZoomistDefaultOptions {
     };
 }
 export type ZoomistOptions = Partial<ZoomistDefaultOptions>;
+export interface SmoothOptions {
+    damping: number;
+}
 export interface SliderOptions {
     el: string | HTMLElement | null;
     direction: 'horizontal' | 'vertical';
@@ -107,6 +111,7 @@ export interface ZoomistMethods {
     };
     getScaleRatio: () => number;
     useFixedRatio: (ratio: number) => number;
+    useAnimate: (data: DragData | TouchData) => () => void;
 }
 export interface ZoomistSlider {
     options: SliderOptions;
@@ -160,25 +165,33 @@ export interface ContainerData {
     height: number;
 }
 export interface DragData {
-    startX: number;
-    startY: number;
-}
-export interface touchData {
-    hypot: number;
-    startX: number;
-    startY: number;
     prevX: number;
     prevY: number;
+    lastTime: number;
+    velocityX: number;
+    velocityY: number;
+    frame: number | null;
+}
+export interface TouchData {
+    hypot: number;
+    prevX: number;
+    prevY: number;
+    offsetX: number;
+    offsetY: number;
     imageTop: number;
     imageLeft: number;
     widthDiff: number;
     heightDiff: number;
+    lastTime: number;
+    velocityX: number;
+    velocityY: number;
+    frame: number | null;
 }
 export interface ZoomistData {
     imageData: ImageData;
     containerData: ContainerData;
     dragData?: DragData;
-    touchData?: touchData;
+    touchData?: TouchData;
 }
 export interface StyleObject {
     [key: string]: string;

@@ -1,5 +1,12 @@
 import { Zoomist } from './core'
-import { EventTypes, MoveToKeywordsX, MoveToKeywordsY, ZoomistHTMLElement, ZoomistMethods } from './../types'
+import {
+  EventTypes,
+  MoveToKeywordsX,
+  MoveToKeywordsY,
+  ZoomistHTMLElement,
+  ZoomistMethods,
+  ZoomistEvents
+} from './../types'
 import { getBoundingRect, isFunction, roundToTwo, minmax, isNumber, setObject, isPlainObject } from './../shared/utils'
 import { MOVE_TO_KEYWORDS_X, MOVE_TO_KEYWORDS_Y, NAME } from '../shared/constants'
 import { DEFAULT_OPTIONS } from './options'
@@ -15,7 +22,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
       if (!__events__[eventName]) {
         __events__[eventName] = []
       }
-      __events__[eventName].push(handler as any)
+      ;(__events__[eventName] as NonNullable<ZoomistEvents[typeof eventName]>).push(handler as any)
     })
 
     return this
@@ -25,8 +32,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     const { __events__ } = this
 
     if (!__events__[event]) return this
-
-    __events__[event].forEach((handler) => {
+    ;(__events__[event] as NonNullable<ZoomistEvents[typeof event]>).forEach((handler) => {
       if (isFunction(handler)) {
         ;(handler as (...args: any[]) => void).apply(this, args)
       }
