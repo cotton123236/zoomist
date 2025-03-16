@@ -21,10 +21,13 @@
 </div>
 
 ## 🚀 Installation
+
 There are few ways to import Zoomist into your project:
 
 ### Install from NPM
+
 You can easily install Zoomist from NPM.
+
 ```
 npm i zoomist
 ```
@@ -40,9 +43,11 @@ const zoomist = new Zoomist(...)
 ```
 
 ### Using CDN
+
 There are two ways to include Zoomist by using CDN.
 
 UMD:
+
 ```html
 <!-- styles -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
@@ -53,7 +58,9 @@ UMD:
   const zoomist = new Zoomist(...)
 </script>
 ```
+
 ES modules in browser:
+
 ```html
 <!-- styles -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
@@ -67,15 +74,19 @@ ES modules in browser:
 ```
 
 ### Download assets
+
 Or you can use Zoomist locally by [DOWNLOAD](https://github.com/cotton123236/zoomist/archive/refs/heads/next.zip) assets.
 
 ---
 
 ## 📝 Basic usage
+
 After downloading Zoomist, there are a few steps to create a Zoomist:
 
 ### Add Zoomist HTML layout
+
 You need to add Zoomist layout in your HTML:
+
 ```html
 <!-- zoomist-container -->
 <div class="zoomist-container">
@@ -89,8 +100,11 @@ You need to add Zoomist layout in your HTML:
   </div>
 </div>
 ```
+
 ### Custom Zoomist styles
+
 You may want to add some custom styles:
+
 ```css
 .zoomist-container {
   width: 100%;
@@ -111,7 +125,9 @@ You may want to add some custom styles:
 ```
 
 ### Initialize Zoomist
+
 Finally, initialize Zoomist in your js file:
+
 ```js
 const zoomist = new Zoomist('.zoomist-container', {
   // Optional parameters
@@ -123,12 +139,15 @@ const zoomist = new Zoomist('.zoomist-container', {
   zoomer: true
 })
 ```
+
 ---
 
 ## 📖 Documentation
 
 ### Parameters
+
 All available parameters and initial value:
+
 ```js
 new Zoomist('.zoomist-container', {
   // set is draggable or not
@@ -155,6 +174,8 @@ new Zoomist('.zoomist-container', {
   disableDraggingClass: '.zoomist-not-draggable',
   // elements matched this class will not be zoomed by mouse wheel.
   disableWheelingClass: '.zoomist-not-wheelable',
+  // if set to true, enable to smooth drag
+  smooth: false
   // zoomist slider module
   slider: {
     // the css selector string or a element of the slider
@@ -179,7 +200,9 @@ new Zoomist('.zoomist-container', {
 ```
 
 ### Methods
+
 All available methods:
+
 ```js
 const zoomist = new Zoomist(...)
 
@@ -212,6 +235,7 @@ zoomist.isOnMaxScale()
 ```
 
 ### Events
+
 ```js
 // Using on parameter before initialization.
 const zoomist = new Zoomist('.zoomist-container', {
