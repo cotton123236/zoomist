@@ -1,10 +1,10 @@
 import './../src/zoomist.scss'
 
-import Zoomist from './../src/zoomist'
-import { ZoomistOptions } from './../src/types'
+// import Zoomist from './../src/zoomist'
+// import { ZoomistOptions } from './../src/types'
 
-// import Zoomist from './../dist/zoomist.js'
-// import { ZoomistOptions } from './../dist/types'
+import Zoomist from './../dist/zoomist.js'
+import { ZoomistOptions } from './../dist/types'
 
 const options: ZoomistOptions = {
   // initScale: 2.5,
