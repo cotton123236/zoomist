@@ -1,4 +1,5 @@
 import { ConstEventTouchStart, ConstEventTouchMove, ConstEventTouchEnd, ConstEventWheel, MoveToKeywordsX, MoveToKeywordsY } from './../types';
+
 export declare const NAME: "zoomist";
 export declare const MODULES: string[];
 export declare const CLASS_CONTAINER: string;

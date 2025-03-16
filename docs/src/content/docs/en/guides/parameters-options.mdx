@@ -2,14 +2,8 @@
 title: Parameters & Options
 description: All available parameters and initial value of Zoomist.
 ---
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@components/ui/table'
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 
 # Parameters & Options
 
@@ -19,7 +13,7 @@ After you import Zoomist into your project, you can initialize it by using Zoomi
 
 Zoomist can receive two parameters (<span class="hilight">`zoomistElement`</span> & <span class="hilight">`zoomistOptions`</span>), and <span class="hilight">returns initialized Zoomist instance</span>.
 
-For example: 
+For example:
 
 ```js
 const zoomist = new Zoomist('.zoomist-container', {
@@ -29,7 +23,7 @@ const zoomist = new Zoomist('.zoomist-container', {
 
 After you initialize Zoomist, you can access Zoomist [methods](/guides/methods-properties#methods) and [properties](/guides/methods-properties#properties) from the instance. And you can also get the instance from your <span class="hilight">`zoomistElement`'s zoomist property</span>:
 
-For example: 
+For example:
 
 ```js
 const zoomist = new Zoomist('.zoomist-container')
@@ -54,12 +48,17 @@ There are two parameters for class <span class="hilight">Zoomist</span>:
     <TableRow>
       <TableCell>`zoomistElement`</TableCell>
       <TableCell>`HTMLElement | string`</TableCell>
-      <TableCell><span class="hilight">First parameter, Required.</span> HTMLElement or string (CSS Selector) of zoomist container HTML element.</TableCell>
+      <TableCell>
+        <span class="hilight">First parameter, Required.</span> HTMLElement or string (CSS Selector) of zoomist
+        container HTML element.
+      </TableCell>
     </TableRow>
     <TableRow>
       <TableCell>`zoomistOptions`</TableCell>
       <TableCell>`object`</TableCell>
-      <TableCell><span class="hilight">Second parameter, Optional.</span> A `Object` with Zoomist options.</TableCell>
+      <TableCell>
+        <span class="hilight">Second parameter, Optional.</span> A `Object` with Zoomist options.
+      </TableCell>
     </TableRow>
   </TableBody>
 </Table>
@@ -190,6 +189,16 @@ All available options and initial value:
       </TableCell>
     </TableRow>
     <TableRow>
+      <TableCell>`smooth`</TableCell>
+      <TableCell>`boolean | SmoothOptions`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        Set to `true` to enable smooth dragging.
+        You can also set `smooth: { damping: 0.5 }` to modify the damping coefficient.
+        > Note that damping must be set between `0.1` and `1`.
+      </TableCell>
+    </TableRow>
+    <TableRow>
       <TableCell>`slider`</TableCell>
       <TableCell>`boolean | SliderOptions`</TableCell>
       <TableCell></TableCell>
@@ -248,9 +257,7 @@ All available slider options:
       <TableCell>`direction`</TableCell>
       <TableCell>`'horizontal' | 'vertical'`</TableCell>
       <TableCell>`'horizontal'`</TableCell>
-      <TableCell>
-        Set your slider horizontal or vertical.
-      </TableCell>
+      <TableCell>Set your slider horizontal or vertical.</TableCell>
     </TableRow>
   </TableBody>
 </Table>
@@ -301,16 +308,15 @@ All available zoomer options:
       <TableCell>`el`</TableCell>
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
-      <TableCell>
-        Define the container of all zoomer buttons.
-      </TableCell>
+      <TableCell>Define the container of all zoomer buttons.</TableCell>
     </TableRow>
     <TableRow>
       <TableCell>`inEl`</TableCell>
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
       <TableCell>
-        Define the zoom-in button.<br/>
+        Define the zoom-in button.
+        <br />
         If you set it to keyword `.zoomist-zoomer-in`, Zoomist will generate a zoom-in button for you.
       </TableCell>
     </TableRow>
@@ -319,7 +325,8 @@ All available zoomer options:
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
       <TableCell>
-        Define the zoom-out button.<br/>
+        Define the zoom-out button.
+        <br />
         If you set it to keyword `.zoomist-zoomer-out`, Zoomist will generate a zoom-out button for you.
       </TableCell>
     </TableRow>
@@ -328,7 +335,8 @@ All available zoomer options:
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
       <TableCell>
-        Define the reset button.<br/>
+        Define the reset button.
+        <br />
         If you set it to keyword `.zoomist-zoomer-reset`, Zoomist will generate a reset button for you.
       </TableCell>
     </TableRow>
@@ -337,8 +345,10 @@ All available zoomer options:
       <TableCell>`string | false | null`</TableCell>
       <TableCell>`'zoomist-zoomer-disabled'`</TableCell>
       <TableCell>
-        Set the disable class.<br/>
-        It will be added on `inEl` when scale reaches the `maxScale`, be added on `outEl` when scale reaches the `minScale`, and be added on `resetEl` when scale reaches the `initScale`.
+        Set the disable class.
+        <br />
+        It will be added on `inEl` when scale reaches the `maxScale`, be added on `outEl` when scale reaches the
+        `minScale`, and be added on `resetEl` when scale reaches the `initScale`.
       </TableCell>
     </TableRow>
   </TableBody>

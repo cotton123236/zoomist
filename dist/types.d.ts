@@ -1,4 +1,5 @@
 import { Zoomist } from './core/core';
+
 export interface ZoomistHTMLElement extends HTMLElement {
     zoomist: Zoomist | null;
 }

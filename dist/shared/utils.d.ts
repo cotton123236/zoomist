@@ -1,4 +1,5 @@
 import { StyleObject, PointerData, BoundingRect, AppTouchEvent } from './../types';
+
 export declare const isPlainObject: (value: unknown) => boolean;
 export declare const isFunction: (value: any) => boolean;
 export declare const isNumber: (value: any) => boolean;

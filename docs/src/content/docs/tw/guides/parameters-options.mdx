@@ -2,15 +2,8 @@
 title: 參數與選項
 description: 所有 Zoomist 的參數與初始設定。
 ---
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@components/ui/table'
+
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 
 # 參數與選項
 
@@ -55,12 +48,17 @@ document.querySelector('.zoomist-container').zoomist.zoom(0.1)
     <TableRow>
       <TableCell>`zoomistElement`</TableCell>
       <TableCell>`HTMLElement | string`</TableCell>
-      <TableCell><span class="hilight">第一個參數，必要。</span> Zoomist 容器元素對應的 `HTMLElement` 或 `string (CSS Selector)`。</TableCell>
+      <TableCell>
+        <span class="hilight">第一個參數，必要。</span> Zoomist 容器元素對應的 `HTMLElement` 或 `string (CSS
+        Selector)`。
+      </TableCell>
     </TableRow>
     <TableRow>
       <TableCell>`zoomistOptions`</TableCell>
       <TableCell>`object`</TableCell>
-      <TableCell><span class="hilight">第二個參數，選填。</span> 一個 Zoomist 選項的 `object`。</TableCell>
+      <TableCell>
+        <span class="hilight">第二個參數，選填。</span> 一個 Zoomist 選項的 `object`。
+      </TableCell>
     </TableRow>
   </TableBody>
 </Table>
@@ -191,6 +189,16 @@ new Zoomist(zoomistElement)
       </TableCell>
     </TableRow>
     <TableRow>
+      <TableCell>`smooth`</TableCell>
+      <TableCell>`boolean | SmoothOptions`</TableCell>
+      <TableCell></TableCell>
+      <TableCell>
+        設定成 `true` 可以快速的啟用平滑拖曳。
+        你還可以設定 `smooth: { damping: 0.5 }` 來修改阻尼係數。
+        > 注意 damping 必須設定在 0.1 ~ 1 之間
+      </TableCell>
+    </TableRow>
+    <TableRow>
       <TableCell>`slider`</TableCell>
       <TableCell>`boolean | SliderOptions`</TableCell>
       <TableCell></TableCell>
@@ -241,17 +249,13 @@ Zoomist 內建一個簡單的滑桿工具供你使用。你可以將選項 <span
       <TableCell>`el`</TableCell>
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
-      <TableCell>
-        接收一個 `HTMLElement` 或 `string (CSS Selector)` 並將其作為滑桿工具的容器。
-      </TableCell>
+      <TableCell>接收一個 `HTMLElement` 或 `string (CSS Selector)` 並將其作為滑桿工具的容器。</TableCell>
     </TableRow>
     <TableRow>
       <TableCell>`direction`</TableCell>
       <TableCell>`'horizontal' | 'vertical'`</TableCell>
       <TableCell>`'horizontal'`</TableCell>
-      <TableCell>
-        設定滑桿工具的方向為水平或垂直。
-      </TableCell>
+      <TableCell>設定滑桿工具的方向為水平或垂直。</TableCell>
     </TableRow>
   </TableBody>
 </Table>
@@ -302,16 +306,15 @@ Zoomist 也為你提供一些縮放工具，像是 <span class="hilight">放大�
       <TableCell>`el`</TableCell>
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
-      <TableCell>
-        定義縮放按鈕的容器。
-      </TableCell>
+      <TableCell>定義縮放按鈕的容器。</TableCell>
     </TableRow>
     <TableRow>
       <TableCell>`inEl`</TableCell>
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
       <TableCell>
-        定義你的放大按鈕。<br/>
+        定義你的放大按鈕。
+        <br />
         若將其設定為關鍵字 `.zoomist-zoomer-in`, Zoomist 將會自動生產一個按鈕給你。
       </TableCell>
     </TableRow>
@@ -320,7 +323,8 @@ Zoomist 也為你提供一些縮放工具，像是 <span class="hilight">放大�
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
       <TableCell>
-        定義你的縮小按鈕。<br/>
+        定義你的縮小按鈕。
+        <br />
         若將其設定為關鍵字 `.zoomist-zoomer-out`, Zoomist 將會自動生產一個按鈕給你。
       </TableCell>
     </TableRow>
@@ -329,7 +333,8 @@ Zoomist 也為你提供一些縮放工具，像是 <span class="hilight">放大�
       <TableCell>`HTMLElement | string | null`</TableCell>
       <TableCell>`null`</TableCell>
       <TableCell>
-        定義你的重置按鈕。<br/>
+        定義你的重置按鈕。
+        <br />
         若將其設定為關鍵字 `.zoomist-zoomer-reset`, Zoomist 將會自動生產一個按鈕給你。
       </TableCell>
     </TableRow>
@@ -338,8 +343,10 @@ Zoomist 也為你提供一些縮放工具，像是 <span class="hilight">放大�
       <TableCell>`string | false | null`</TableCell>
       <TableCell>`'zoomist-zoomer-disabled'`</TableCell>
       <TableCell>
-        設定禁用時的 class。<br/>
-        當縮放值到達 `maxScale` 時，`inEl` 會被加上此 class；當縮放值到達 `minScale` 時，`outEl` 會被加上此 class；當縮放值為 `initScale` 時，`resetEl` 會被加上此 class。
+        設定禁用時的 class。
+        <br />
+        當縮放值到達 `maxScale` 時，`inEl` 會被加上此 class；當縮放值到達 `minScale` 時，`outEl` 會被加上此
+        class；當縮放值為 `initScale` 時，`resetEl` 會被加上此 class。
       </TableCell>
     </TableRow>
   </TableBody>

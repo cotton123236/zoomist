@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.2.0] - 2024-03-16
+
+### New Features
+
+- Add `smooth` option for smoother dragging experience.
+
+### Patch
+
+- Fix ShadowRoot support
+
 ## [2.1.1] - 2024-06-15
 
 ### Patch
