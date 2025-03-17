@@ -2,14 +2,8 @@
 title: 使用 TypeScript
 description: 在 TypeScript 專案中使用 Zoomist。
 ---
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@components/ui/table'
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 
 # 使用 TypeScript
 
@@ -47,11 +41,24 @@ interface ZoomistOptions {
   minScale?: number
   maxScale?: number
   initScale?: number | null
+  dragReleaseOnBounds: boolean
+  wheelReleaseOnMinMax: boolean
+  disableDraggingClass: string
+  disableWheelingClass: string
+  smooth: boolean | SmoothOptions
   slider?: boolean | SliderOptions
   zoomer?: boolean | ZoomerOptions
   on?: {
     [event in EventTypes]?: EventOptions[event]
   }
+}
+```
+
+### SmoothOptions
+
+```ts
+interface SmoothOptions {
+  damping: number
 }
 ```
 
